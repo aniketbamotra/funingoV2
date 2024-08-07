@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 import {
   Box,
   Divider,
@@ -22,6 +23,9 @@ import { useNavigate } from 'react-router-dom';
 import FreebiesMascot from '../freebies-modal/freebies-mascot';
 
 const Footer = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const isMobile = useMediaQuery('(max-width:900px)');
   const navigate = useNavigate();
   const { phone_numbers = [] } = useSelector(state => state.appSlice);

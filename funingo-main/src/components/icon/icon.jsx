@@ -47,14 +47,14 @@ const SocialMediaIcons = () => {
     <Grid style={containerStyle}>
       <div style={iconContainerStyle} className='icon-container'>
         <IconButton aria-label='Phone'>
-          <a href="">
+          <a href="tel:+917879333731">
             <PhoneIcon className='icon' />
           </a>
         </IconButton>
       </div>
       <div style={iconContainerStyle} className='icon-container'>
         <IconButton aria-label='WhatsApp'>
-          <a href="https://wa.me/919755716305?text=Hey%20Get%20In! %20Touch%20=%20">
+          <a target='_' href="whatsapp://send?text=Hey I want to know more!&phone=+917879333731">
           <WhatsAppIcon className='icon' variant='filled' />
           </a>
         </IconButton>
