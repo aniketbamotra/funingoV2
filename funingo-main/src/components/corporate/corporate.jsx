@@ -1,11 +1,16 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import bg3Light from './images/bg3Light.png';
 import bg3 from './images/bg3.png';
 import './styles.scss';
 import { useNavigate } from 'react-router';
 import { scrollToBottom } from '../../utils';
-import { bookNow, profile1, profile2, profile3, profile4, profileHeading1, profileHeading2, profileHeading3, profileHeading4 } from '../../assets';
+import { profile1, profile2, profile3, profile4, profileHeading1, profileHeading2, profileHeading3, profileHeading4 } from '../../assets';
+
+
+import { heart, loaderGif, bookNow } from "../../assets";
+import {scrollToTop} from '../../utils/index';
 
 const corporateData = [
   {
@@ -35,7 +40,54 @@ const corporateData = [
 ];
 
 const Corporate = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
   const navigate = useNavigate();
+
+  const renderButton = () => (
+    <button
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={() => {navigate('/book');scrollToTop();}}
+      style={{ position: 'relative' }}
+      className="mt-8 flex max-sm:justify-center max-sm:mt-2"
+    >
+      <img src={bookNow} className='commonButton' alt="Book Now" />
+      {isHovered && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '70%',
+            left: '80%',
+            transform: 'translateX(-50%)',
+            marginTop: '0px',
+            padding: '5px 10px',
+            borderRadius: '4px',
+            cursor: 'grab',
+            color: 'red',
+            fontSize: '20px',
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: 'transparent',
+            zIndex: '1',
+          }}
+        >
+          <img src={loaderGif} className='h-20 w-20' alt="Loader" style={{ marginRight: '-5px' }} />
+          <img
+            src={heart}
+            alt="Heart"
+            style={{ width: '15px', height: '15px', position: 'absolute', top: '50%', left: '26%', transform: 'translate(-50%, -50%)' }}
+          />
+          <span style={{ marginLeft: '0px' }}>Unload Ultimate Fun</span>
+        </div>
+      )}
+    </button>
+  );
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Grid className='corporate'>
       {/* {First Box} */}
@@ -77,9 +129,9 @@ const Corporate = () => {
             <Grid className='content-box'>
               {data.text}
             </Grid>
-            <img className='lg:mt-5' onClick={() => {
-                scrollToBottom();
-              }} src={bookNow} alt="" />
+            <div className='flex max-sm:justify-center max-sm:items-center'>
+              {renderButton()}
+            </div>
           </Grid>
         </Grid>
       ))}

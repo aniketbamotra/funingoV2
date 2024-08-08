@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './pages.css'
 
 import { P1000, P1500, P2000, P2500, P3000, P500, P5000, activityZoneMobileText, activityZoneText, bookNow, heart, keyIcon, loaderGif, sec11, sec12, sec21, sec22, sec31, sec32, sec41, sec42, sec43, sec44, sec45, sec46, sec51, sec52, sec53, sec54, sec55, sec61, sec62, sec71, sec81, sec82, sec83, unload, zone1Point, zone21Point, zone22Point, zone31Point, zone32Point, zone41Point, zone42Point, zone43Point, zone44Point, zone45Point, zone46Point, zone51Point, zone52Point, zone53Point, zone54Point, zone55Point, zone61Point, zone62Point, zone7, zone7Point, zone81Point, zone82Point, zone83Point } from '../../assets'
@@ -7,10 +7,13 @@ import { useNavigate } from 'react-router-dom'
 
 import {scrollToTop} from '../../utils/index';
 const Zone = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [isHovered, setIsHovered] = useState(false);
-  const navigate = useNavigate(false);
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
+  const navigate = useNavigate(false);
 
   const renderButton = () => (
     <button

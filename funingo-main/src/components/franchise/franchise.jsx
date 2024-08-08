@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -15,6 +16,9 @@ import back from './images/back.png';
 import FranchiseDataForm from './franchise-data-form';
 
 const Franchise = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Grid className='franchise'>
       {/* first box */}

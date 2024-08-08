@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Grid, Typography, Button, useMediaQuery } from '@mui/material';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -117,6 +117,9 @@ const Albums = ({ slidesData }) => {
 };
 
 const Gallery = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const isMobile = useMediaQuery('(max-width:900px)');
 
   return (
