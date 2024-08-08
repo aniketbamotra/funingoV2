@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { Grid, Typography, Button, Box } from "@mui/material";
 import birthday from "./images/birthday.jpg";
 import bg6 from "./images/bg6.png";
@@ -12,6 +13,11 @@ import babyshowerheading from "./images/babyshowerheading.png";
 import babyshower from "./images/kittyparty.jpg";
 import prewedding from "./images/prewedding.png";
 import { scrollToBottom } from "../../utils";
+
+import { heart, loaderGif, bookNow } from "../../assets";
+
+
+import {scrollToTop} from '../../utils/index';
 
 const eventData = [
   {
@@ -49,7 +55,55 @@ laughter, joy, and shared memories`,
 ];
 
 const Events = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
   const navigate = useNavigate();
+
+  const renderButton = () => (
+    <button
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={() => {navigate('/book');scrollToTop();}}
+      style={{ position: 'relative' }}
+      className="mt-8 flex max-sm:justify-center max-sm:mt-2"
+    >
+      <img src={bookNow} className='commonButton' alt="Book Now" />
+      {isHovered && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '70%',
+            left: '80%',
+            transform: 'translateX(-50%)',
+            marginTop: '0px',
+            padding: '5px 10px',
+            borderRadius: '4px',
+            cursor: 'grab',
+            color: 'red',
+            fontSize: '20px',
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: 'transparent',
+            zIndex: '1',
+          }}
+        >
+          <img src={loaderGif} className='h-20 w-20' alt="Loader" style={{ marginRight: '-5px' }} />
+          <img
+            src={heart}
+            alt="Heart"
+            style={{ width: '15px', height: '15px', position: 'absolute', top: '50%', left: '26%', transform: 'translate(-50%, -50%)' }}
+          />
+          <span style={{ marginLeft: '0px' }}>Unload Ultimate Fun</span>
+        </div>
+      )}
+    </button>
+  );
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   return (
     <Grid className="events">
       {/* first box */}
@@ -91,28 +145,9 @@ const Events = () => {
             <Grid className="content-box">
               <h4>{data.content}</h4>
             </Grid>
-            <Button
-              variant="contained"
-              sx={{
-                background: "#2CC248",
-                boxShadow: "0px 2.5 9 0px rgba(0, 0, 0, 0.25)",
-                borderRadius: "50px",
-                padding: "20px 50px",
-                fontFamily: "Luckiest Guy",
-                fontSize: "24px",
-                marginTop: "20px",
-                marginLeft: "20px",
-
-                "&:hover": {
-                  background: "#1e8e33",
-                },
-              }}
-              onClick={() => {
-                scrollToBottom();
-              }}
-            >
-              <p> Book Now </p>
-            </Button>
+            <div className="flex max-sm:justify-center max-sm:items-center">
+              {renderButton()}
+            </div>
           </Grid>
         </Grid>
       ))}

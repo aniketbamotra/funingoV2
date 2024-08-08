@@ -16,7 +16,7 @@ import stroke from './images/paint-stroke.png';
 import Gallery from './carousel';
 import './styles.scss';
 import FranchiseDataForm from '../franchise/franchise-data-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'; // Importing the icon
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'; // Importing the icon
 import { homeBG, mobileHomeBG, zone1, zone2, zone3, zone4, zone5, zone6, zone7, zone8 } from '../../assets';
@@ -25,6 +25,10 @@ function Home({ }) {
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width:900px)');
   const [showAllZones, setShowAllZones] = useState(false);
+
+  const handleZoneClick = (zoneTitle) => {
+    navigate(`/zone/${zoneTitle.toLowerCase().replace(' ', '-')}`);
+  };
 
   const zones = [
     { img: zone1, title: 'Zone 1' },
@@ -66,13 +70,12 @@ function Home({ }) {
                   >
                 {
                   displayedZones.map((zone, index) => (
-                    <div key={index} className='example'>
-                      <img src={zone.img} alt='house' />
-                      <h1>{zone.title}</h1>
-                      <div className='fadedbox'>
-                        <div className='title text'> Book Now </div>
+                    <Link to={'/zone'}>
+                      <div key={index} className='example' onClick={() => handleZoneClick(zone.title)}>
+                        <img src={zone.img} alt='house' />
+                        <h1>{zone.title}</h1>
                       </div>
-                    </div>
+                    </Link>
                   ))
                 }
               </Grid>

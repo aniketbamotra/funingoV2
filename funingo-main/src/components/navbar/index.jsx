@@ -628,7 +628,7 @@ const Navbar = () => {
                           : () => closeModal()
                       }
                     >
-                      Corporate X
+                      Corporate
                     </Button>
                   </Grid>
                 </Link>
@@ -651,7 +651,7 @@ const Navbar = () => {
                             : () => closeModal()
                         }
                       >
-                        School X
+                        Packages
                       </Button>
                     </Grid>
                   </Link>

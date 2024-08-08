@@ -12,7 +12,6 @@ import {
   FormControlLabel,
   FormControl,
   Box,
-  Autocomplete,
   InputAdornment,
 } from "@mui/material";
 import "./styles.scss";
@@ -46,8 +45,6 @@ import Ticket from "./ticket";
 import ConfirmationModal from "../windowPurchase/modal";
 import { P1000, P1500, P2000, P2500, P3000, P500, P5000, arrow } from "../../assets";
 import { red } from "@mui/material/colors";
-import { openAuthModal } from '../../utils/store/slice/appSlice';
-
 
 export const genderOptions = [
   { value: "male", label: "Male" },
@@ -172,6 +169,7 @@ const initialErrorMsg = {
   error: false,
 };
 const Booknow = () => {
+  
   const dispatch = useDispatch();
 
   const {
@@ -206,7 +204,6 @@ const Booknow = () => {
   // const [isChecked, setIsChecked] = useState(false);
   const today = new Date().getDay(); // Get the current day of the week (0 for Sunday, 1 for Monday, and so on)
   const isWeekend = today === 0 || today === 6;
-  const [promoCodeOptions, setPromoCodeOptions] = useState([]);
 
 
   useEffect(() => {
@@ -220,12 +217,7 @@ const Booknow = () => {
     setInputValue(event.target.value);
   };
 
-  const disablevariable=()=>{
-    // if(!isLoggedIn)
-    //   {
-    //     dispatch(openAuthModal());
-    //     return;
-    //   }
+  const disablevariable = () => {
     setdisablevar(true);
   }
 
@@ -361,37 +353,13 @@ const Booknow = () => {
       }
     },
   });
-
-  useEffect(() => {
-    const fetchDiscount = async () => {
-      try {
-        const resp = await getDiscount({
-          token,
-          code,
-          total_amount: totalPrice - totalPremiumDiscount,
-        });
-        const prcodes = resp.allcoupons.map((coupon) =>coupon.code).filter((code) => code.startsWith('bulk'));;
-        // console.log("prcodes",prcodes);
-        setPromoCodeOptions(prcodes);
-      } catch (error) {
-        console.error("Error fetching promo codes:", error);
-      }
-    };
-    fetchDiscount();
-  }, [isLoggedIn,totalPrice]);
-
   const getDiscountUsingCoupon = async () => {
-    if(!isLoggedIn)
-      {
-        dispatch(openAuthModal());
-        return;
-      }
-      const resp = await getDiscount({
-        token,
-        code,
-        total_amount: totalPrice - totalPremiumDiscount,
-      })
-      setCouponDiscount({ discount: resp.discount, message: resp.msg, code });
+    const resp = await getDiscount({
+      token,
+      code,
+      total_amount: totalPrice - totalPremiumDiscount,
+    })
+    setCouponDiscount({ discount: resp.discount, message: resp.msg, code });
   };
 
   // const handleCheckbox = () => {
@@ -662,7 +630,7 @@ const Booknow = () => {
             bg-[#03ea2e] buttonText
             cursor-pointer absolute left-8
           ">
-          VIEW COINS PER ACTIVITY
+          VIEW ACTIVITY COSTS
         </button>
         {/* Left Information Grid Mobile Version  */}
         {isVisible && (
@@ -881,8 +849,6 @@ const Booknow = () => {
                       }}
                     />
                     <Typography
-                    sx={{
-                      color: "white"}}
                       component={"label"}
                       htmlFor="50%"
                       display={"block"}
@@ -908,8 +874,6 @@ const Booknow = () => {
                       }}
                     />
                     <Typography
-                    sx={{
-                      color: "white"}}
                       component={"label"}
                       htmlFor="100%"
                       display={"block"}
@@ -1459,6 +1423,7 @@ const Booknow = () => {
                     onChange={(e) => {
                       setIsTimeSelected(!!e);
                       setFieldValue("time", e?.value || "");
+
                       // handleChange(e?.value || '');
                     }}
                     onBlur={handleBlur}
@@ -1496,7 +1461,7 @@ const Booknow = () => {
 
 
 
-              {/* <Grid width={"100%"} mb={"15px"} gap={"0px"} className="max-md:mt-[60px]">
+              <Grid width={"100%"} mb={"15px"} gap={"0px"} className="max-md:mt-[60px]">
                 <label className="book-now-label">Promo Code</label>
                 <TextField
                   fullWidth
@@ -1552,79 +1517,7 @@ const Booknow = () => {
                     Promo code applied!!
                   </Typography>
                 )}
-              </Grid>  */}
-
-
-
-<Grid width={"100%"} mb={"15px"} gap={"0px"}>
-      <label className="book-now-label">Promo Code</label>
-      <Autocomplete
-        freeSolo
-        options={promoCodeOptions}
-        value={code}
-        onChange={(event, newValue) => {
-          setCode(newValue);
-        }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            sx={{
-              background: "white",
-              borderRadius: "5px",
-              mt: "5px",
-              zIndex: 0,
-              "&:hover": {
-                "& fieldset": {
-                  borderColor: "rgba(0, 0, 0, 0.23)",
-                },
-              },
-            }}
-            placeholder="Have a promo code?"
-            onChange={(e) => setCode(e.target.value)}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Button onClick={() => getDiscountUsingCoupon()}>
-                    Apply
-                  </Button>
-                </InputAdornment>
-              ),
-            }}
-            inputProps={{
-              ...params.inputProps,
-              sx: {
-                border: "none !important",
-                zIndex: "0 !important",
-              },
-            }}
-          />
-        )}
-      />
-      {!!couponDiscount.message && (
-        <Typography
-          sx={{
-            color: "red",
-            fontSize: "12px",
-            mt: "5px",
-          }}
-        >
-          {couponDiscount.message}
-        </Typography>
-      )}
-      {!!couponDiscount.discount && (
-        <Typography
-          sx={{
-            color: "green",
-            fontSize: "12px",
-            mt: "5px",
-          }}
-        >
-          Promo code applied!!
-        </Typography>
-      )}
-    </Grid>
+              </Grid>
 
               <Grid
                 className="pricing-card"

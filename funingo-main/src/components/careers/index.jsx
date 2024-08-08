@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { Grid, Typography, Button, TextField, Box } from '@mui/material';
 
 import './styles.scss';
@@ -10,6 +11,9 @@ import { useDispatch } from 'react-redux';
 import { sendApplication } from '../../actions/career';
 
 const Careers = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const {
     register,
     handleSubmit,
