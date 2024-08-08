@@ -1,5 +1,5 @@
-export const apiUrl = 'http://localhost:8000';
-// export const apiUrl = 'https://api.funingo.fun';
+// export const apiUrl = 'http://localhost:8000';
+export const apiUrl = 'https://api.funingo.fun';
 export const payment_modes = ['online', 'cash', 'card'];
 export const percent_of_fm_to_use = '20';
 export const razorpayKey = 'rzp_test_bLPDNSXFTlyBgG';
