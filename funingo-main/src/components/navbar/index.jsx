@@ -837,7 +837,7 @@ const Navbar = () => {
                             setNavExpanded(false);
                           }}
                         >
-                          Signup
+                          Signup / Login
                         </Button>
                       )}
                  </Grid>
