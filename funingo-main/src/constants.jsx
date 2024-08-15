@@ -1,7 +1,5 @@
-<<<<<<< HEAD
+
 // export const apiUrl = 'http://localhost:8001';
-=======
->>>>>>> 8376ebd97a1943de1d157a6ac8f3f2304bd936e6
 export const apiUrl = 'https://api.funingo.fun';
 export const payment_modes = ['online', 'cash', 'card'];
 export const percent_of_fm_to_use = '20';

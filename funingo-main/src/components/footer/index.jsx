@@ -20,6 +20,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import './styles.scss';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import FreebiesMascot from '../freebies-modal/freebies-mascot';
 
 const Footer = () => {
@@ -50,6 +51,12 @@ const Footer = () => {
           <Typography className='heading'>Contact Us</Typography>
           <a href="tel:+917879333731"><Typography>+91 787-9333-731</Typography></a>
           <a href="tel:+919425850422"><Typography>+91 942-5850-422</Typography></a>
+        </Grid>
+	<Grid className='container-footer' display={'flex'}>
+          <Typography className='heading'>Policies</Typography>
+          <a href="/policies"><Typography>Terms and Conditions</Typography></a>
+          <HashLink to="/policies/#privacy-policy"><Typography>Privacy Policy</Typography></HashLink>
+          <HashLink to="/policies/#refund-policy"><Typography>Refund Policy</Typography></HashLink>
         </Grid>
         <Grid className='container-footer' display={{ xs: 'none', md: 'flex' }}>
           {isLoggedIn ? (

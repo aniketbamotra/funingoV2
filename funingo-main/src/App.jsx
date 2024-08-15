@@ -47,6 +47,7 @@ import PremiumSubscriptionModal from './components/premium-subscription';
 import Register from './components/auth/signup';
 import { getFreebies } from './actions/ticket';
 import { openPremiumSubscriptionModal } from './utils/store/slice/appSlice';
+import Policy from './components/policies';
 
 const App = () => {
   return (
@@ -223,6 +224,10 @@ export const router = createBrowserRouter([
           {
             path: '/careers',
             element: <Careers />
+          },
+	{
+            path: '/policies',
+            element: <Policy />
           },
           {
             path: '/qr/:id',
