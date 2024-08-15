@@ -122,16 +122,24 @@ const Footer = () => {
       >
         <Typography>Follow Us:</Typography>
         <IconButton>
-          <FacebookIcon />
+          <a href="">
+            <FacebookIcon />
+          </a>
         </IconButton>
         <IconButton>
-          <InstagramIcon />
+          <a target='_' href="https://www.instagram.com/funingo.fun?igsh=eG01azR6ZGY2ZXEw">
+            <InstagramIcon />
+          </a>
         </IconButton>
         <IconButton>
-          <YouTubeIcon />
+          <a target='_' href="https://youtube.com/@funingoadventurearena-0761?si=yy9N-RwCDKdStDgM">
+            <YouTubeIcon />
+          </a>
         </IconButton>
         <IconButton>
-          <LinkedInIcon />
+          <a href="">
+            <LinkedInIcon />
+          </a>
         </IconButton>
 
         <Divider orientation='vertical' sx={{ mx: '20px' }} />

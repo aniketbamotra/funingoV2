@@ -92,7 +92,7 @@ import corporateHoverImage from "./img/corporateHoverImage.png"
 import homeBookNow from "./homeImage/bookNow.png"
 
 
-
+import perRide2500 from "./zonePointImages/4000perRide.png"
 import zone1Point from "./zonePointImages/zone1.png"
 import zone21Point from "./zonePointImages/zone21.png"
 import zone22Point from "./zonePointImages/zone22.png"
@@ -188,5 +188,5 @@ export {
     mobileHomeBG,homeBG,downArrow, eventHoverImage, corporateHoverImage,
     homeBookNow,
 
-    zone1Point, zone21Point, zone22Point, zone31Point, zone32Point, zone41Point, zone42Point, zone43Point, zone44Point, zone45Point, zone46Point, zone51Point, zone52Point, zone53Point, zone54Point, zone55Point, zone61Point, zone62Point, zone7Point, zone81Point, zone82Point, zone83Point,
+    perRide2500,zone1Point, zone21Point, zone22Point, zone31Point, zone32Point, zone41Point, zone42Point, zone43Point, zone44Point, zone45Point, zone46Point, zone51Point, zone52Point, zone53Point, zone54Point, zone55Point, zone61Point, zone62Point, zone7Point, zone81Point, zone82Point, zone83Point,
 };
