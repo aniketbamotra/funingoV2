@@ -82,6 +82,18 @@ const packageInfo = [
     image: P3000,
   },
   {
+    text: "Zipline",
+    image: P2500,
+  },
+  {
+    text: "Burma Bridge",
+    image: P1500,
+  },
+  {
+    text: "Peak Rock Climb",
+    image: P2000,
+  },
+  {
     text: "Commando Climb",
     image: P500,
   },
@@ -118,20 +130,8 @@ const packageInfo = [
     image: P1000,
   },
   {
-    text: "Sumo Showdown",
-    image: P500,
-  },
-  {
-    text: "Archery Alley",
-    image: P500,
-  },
-  {
-    text: "Shooter's Range",
-    image: P1000,
-  },
-  {
-    text: "Pedal Go Kart",
-    image: P1000,
+    text: "Rocket Ejector",
+    image: P2500,
   },
 ];
 
@@ -400,11 +400,17 @@ const Booknow = () => {
     }));
 
   const timeOptions = [
-    { value: "10-12", label: "10am-12am" },
-    { value: "12-14", label: "12am-2pm" },
-    { value: "14-16", label: "2pm-4pm" },
-    { value: "16-18", label: "4pm-6pm" },
-    { value: "18-20", label: "6pm-8pm" },
+    { value: "11-12", label: "11 AM - 12 PM" },
+    { value: "12-13", label: "12 PM - 01 PM" },
+    { value: "13-14", label: "01 PM - 02 PM" },
+    { value: "14-15", label: "02 PM - 03 PM" },
+    { value: "15-16", label: "03 PM - 04 PM" },
+    { value: "16-17", label: "04 PM - 05 PM" },
+    { value: "17-18", label: "05 PM - 06 PM" },
+    { value: "18-19", label: "06 PM - 07 PM" },
+    { value: "19-20", label: "07 PM - 08 PM" },
+    { value: "20-21", label: "08 PM - 09 PM" },
+    { value: "21-22", label: "09 PM - 10 PM" },
   ];
 
   const handleSelectedPremiumChange = (event) => {
