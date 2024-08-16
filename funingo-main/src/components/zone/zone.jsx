@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import './pages.css'
 
-import { perRide2500, P1000, P1500, P2000, P2500, P3000, P500, P5000, activityZoneMobileText, activityZoneText, bookNow, heart, keyIcon, loaderGif, sec11, sec12, sec21, sec22, sec31, sec32, sec41, sec42, sec43, sec44, sec45, sec46, sec51, sec52, sec53, sec54, sec55, sec61, sec62, sec71, sec81, sec82, sec83, unload, zone1Point, zone21Point, zone22Point, zone31Point, zone32Point, zone41Point, zone42Point, zone43Point, zone44Point, zone45Point, zone46Point, zone51Point, zone52Point, zone53Point, zone54Point, zone55Point, zone61Point, zone62Point, zone7, zone7Point, zone81Point, zone82Point, zone83Point } from '../../assets'
+import { perRide2500, P1000, P1500, P2000, P2500, P3000, P500, P5000, activityZoneMobileText, activityZoneText, bookNow, heart, keyIcon, loaderGif, sec11, sec12, sec21, sec22, sec31, sec32, sec41, sec42, sec43, sec44, sec45, sec46, sec51, sec52, sec53, sec54, sec55, sec61, sec62, sec71, sec81, sec82, sec83, unload, zone1Point, zone21Point, zone22Point, zone31Point, zone32Point, zone41Point, zone42Point, zone43Point, zone44Point, zone45Point, zone46Point, zone51Point, zone52Point, zone53Point, zone54Point, zone55Point, zone61Point, zone62Point, zone7, zone7Point, zone81Point, zone82Point, zone83Point, zone1 } from '../../assets'
 import { useNavigate } from 'react-router-dom'
 
 import {scrollToTop} from '../../utils/index';
@@ -243,14 +243,14 @@ const Zone = () => {
                 <div className="flex-grow">
                   <p className="text-2xl keys max-sm:hidden">Giant Swing <br /> Skybound <span className='spanHeading'>[ Age- 11+ ]</span></p>
                 </div>
-                <img className='self-start lg:self-center pointIcon' src={perRide2500} alt="" />
+                <img className='self-start lg:self-center pointIcon' src={zone42Point} alt="" />
               </div>
               <div className='flex flex-row items-center space-x-2 mt-4'>
                 <img src={keyIcon} alt="" className="mr-2" />
                 <div className="flex-grow">
                   <p className='text-2xl keys'>Sky Cyclist's <br /> Trail <span className='spanHeading'>[ Age- 7+ ]</span></p>
                 </div>
-                <img className='self-start lg:self-center pointIcon' src={zone42Point} alt="" />
+                <img className='self-start lg:self-center pointIcon' src={zone43Point} alt="" />
               </div>
               <div className="flex flex-row items-center space-x-2 mt-4">
                 <img src={keyIcon} alt="" className="mr-2" />
@@ -291,7 +291,7 @@ const Zone = () => {
                   <img src={keyIcon} alt="" className="mr-2" />
                   <p className="keys lg:hidden">Giant&nbsp;Swing&nbsp;Skybound <br /> <span className='spanHeadingMobile'>[ Age- 11+ ]</span></p>
                 </div>
-                <img className='pointIcon' src={perRide2500} alt="" />
+                <img className='pointIcon' src={zone42Point} alt="" />
               </div>
               <div className='flex flex-row items-center justify-between px-20' id='secondContainer'>
                 <div className='flex flex-row items-center'>
@@ -299,7 +299,7 @@ const Zone = () => {
                   <p className='keys lg:hidden'>Sky&nbsp;Cyclist's&nbsp;Trail <br /> <span className='spanHeadingMobile'>[ Age- 7+ ]</span></p>
                 </div>
                 <div className=' flex'>
-                  <img className='pointIcon' src={zone42Point} alt="" />
+                  <img className='pointIcon' src={zone43Point} alt="" />
                 </div>
               </div>
               <div className='flex flex-row items-center justify-between px-20' id='secondContainer'>

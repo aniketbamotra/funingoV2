@@ -224,30 +224,41 @@ const PremiumSubscriptionModal = () => {
               }}
             >
               <TitleBox
+              sx={{
+                padding: '28px 4px',
+              }}
                 active={selectedPremium === '50%$6_months'}
                 onClick={() => setSelectedPremium('50%$6_months')}
               >
                 <Title>6 Months</Title>
                 <Title>50% Off Plan</Title>
+                <Title>Rs. 5,000</Title>
               </TitleBox>
               <TitleBox
-              // sx={{
-                // borderRadius: '2px',
-              //   width:'15px',
-              //   color:'white',
-              // }}
+              sx={{
+                color:'white',
+                padding: '28px 4px',
+                active:{
+                  color: 'black',
+                },
+              }}
                 active={selectedPremium === '50%$1_year'}
                 onClick={() => setSelectedPremium('50%$1_year')}
               >
                 <Title>1 Year</Title>
-                <Title>50% Off Plan</Title>           
+                <Title>50% Off Plan</Title>     
+                <Title>Rs. 8,000</Title>      
               </TitleBox>
               <TitleBox
+              sx={{
+                padding: '28px 4px',
+              }}
                 active={selectedPremium === '50%$100_years'}
                 onClick={() => setSelectedPremium('50%$100_years')}
               >
                 <Title>Life Long</Title>
                 <Title>50% Off Plan</Title>
+                <Title>Rs. 20,000</Title>
               </TitleBox>
             </Grid>
             <Grid

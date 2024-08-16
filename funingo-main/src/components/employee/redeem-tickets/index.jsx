@@ -647,17 +647,17 @@ const RedeemTicket = () => {
               <Coin/>
               </div>
             </div>
-            <div className="option" onClick={() => handleSelection(5000,"Giant Swing Skybound")}>
+            <div className="option" onClick={() => handleSelection(3000,"Giant Swing Skybound")}>
               <span>Giant Swing Skybound</span>
               <div className='funingo-icon-container'>
-              <span>5000</span>
+              <span>3000</span>
               <Coin/>
               </div>
             </div>
-            <div className="option" onClick={() => handleSelection(3000,"Sky Cyclist's Trail")}>
+            <div className="option" onClick={() => handleSelection(2500,"Sky Cyclist's Trail")}>
               <span>Sky Cyclist's Trail</span>
               <div className='funingo-icon-container'>
-              <span>3000</span>
+              <span>2500</span>
               <Coin/>
               </div>
             </div>

@@ -75,11 +75,11 @@ const packageInfo = [
   },
   {
     text: "Giant Swing",
-    image: P5000,
+    image: P3000,
   },
   {
     text: "Sky Cycle",
-    image: P3000,
+    image: P2500,
   },
   {
     text: "Zipline",
