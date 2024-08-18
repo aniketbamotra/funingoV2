@@ -51,6 +51,8 @@ const Footer = () => {
           <Typography className='heading'>Contact Us</Typography>
           <a href="tel:+917879333731"><Typography>+91 787-9333-731</Typography></a>
           <a href="tel:+919425850422"><Typography>+91 942-5850-422</Typography></a>
+          <Typography>Funingo Adventure Park, 83/2/2,</Typography>
+          <Typography>Manegaon, Nagpur Road, Jabalpur</Typography>
         </Grid>
 	<Grid className='container-footer' display={'flex'}>
           <Typography className='heading'>Policies</Typography>

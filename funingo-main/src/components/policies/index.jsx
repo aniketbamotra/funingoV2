@@ -158,7 +158,7 @@ const Policy = () => {
                 <li className="mb-4 mt-4">
                   You have the right to access, correct, or delete your personal
                   information stored by us. If you wish to exercise any of these
-                  rights, please contact us at [Contact Information].
+                  rights, please contact us.
                 </li>
               </ul>
             </li>
@@ -190,9 +190,8 @@ const Policy = () => {
               Ticket Refunds:
               <ul className=" list-disc pl-4">
                 <li className="mb-4 mt-4">
-                  All ticket sales are final, and no refunds will be provided
-                  unless the park is closed due to unforeseen circumstances,
-                  such as extreme weather or other emergencies.
+                  All ticket sales are final, and no refunds will be provided.
+                  We don't provide any refund, whatsoever.
                 </li>
                 <li className="mb-4">
                   In the event of a park closure, tickets may be rescheduled for
