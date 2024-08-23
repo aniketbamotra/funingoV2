@@ -86,7 +86,9 @@ const Policy = () => {
 
       {/* Privacy Policy */}
 
-      <div className="heading mb-6 mt-24 text-4xl" id="privacy-policy">Privacy Policy</div>
+      <div className="heading mb-6 mt-24 text-4xl" id="privacy-policy">
+        Privacy Policy
+      </div>
       <div className="sm:w-[600px] w-[400px]">
         <div>
           Your privacy is important to us. <br />
@@ -178,24 +180,27 @@ const Policy = () => {
 
       {/* Refund Policy */}
 
-      <div className="heading mb-6 mt-24 text-4xl" id="refund-policy">Refund Policy</div>
+      <div className="heading mb-6 mt-24 text-4xl" id="refund-policy">
+        Refund Policy
+      </div>
       <div className="sm:w-[600px] w-[400px]">
         <div>
-          Thank you for purchasing tickets to Funingo. <br />
+          Thank You for Choosing Funingo Adventure Arena! <br />
           <br />
-          We want you to have a wonderful experience, but we understand that
-          sometimes plans change. Please review our refund policy below.
+          We want you to have a great time with us. However, if plans change,
+          please check our refund policy:
           <ul className=" list-decimal mt-4">
             <li className="mb-4">
               Ticket Refunds:
               <ul className=" list-disc pl-4">
                 <li className="mb-4 mt-4">
-                  All ticket sales are final, and no refunds will be provided.
-                  We don't provide any refund, whatsoever.
+                  <strong>No Refunds:</strong> All ticket sales are final. We do
+                  not offer refunds.
                 </li>
                 <li className="mb-4">
-                  In the event of a park closure, tickets may be rescheduled for
-                  a different date, subject to availability.
+                  <strong>Park Closures:</strong> If the park closes, you can
+                  reschedule your tickets for another date, based on
+                  availability.
                 </li>
               </ul>
             </li>
@@ -203,9 +208,9 @@ const Policy = () => {
               Special Events:
               <ul className=" list-disc pl-4">
                 <li className="mb-4 mt-4">
-                  Tickets purchased for special events, including but not
-                  limited to concerts, shows, and seasonal activities, are
-                  non-refundable.
+                  <strong>Non-Refundable:</strong> Tickets for special events
+                  (like concerts, shows, and seasonal activities) cannot be
+                  refunded.
                 </li>
               </ul>
             </li>
@@ -213,10 +218,14 @@ const Policy = () => {
               Merchandise and Food Purchases:
               <ul className=" list-disc pl-4">
                 <li className="mb-4 mt-4">
-                  Refunds on merchandise and food purchases within the park are
-                  not provided, except in the case of defective products or
-                  errors in service. Requests for refunds must be made within 30
-                  days of purchase and accompanied by a valid receipt.
+                  <strong>No Refunds:</strong> We don’t offer refunds on
+                  merchandise unless there’s a defect or mistake.
+                </li>
+                <li className="mb-4 mt-4">
+                  In case of defect one needs to raise a refund request within
+                  15 days along with the receipt, if request is accepted, refund
+                  will be processed with 15 working days from the time of
+                  request aprooval.
                 </li>
               </ul>
             </li>
@@ -224,10 +233,10 @@ const Policy = () => {
               Cancellation Policy:
               <ul className=" list-disc pl-4">
                 <li className="mb-4 mt-4">
-                  If you need to cancel or reschedule your visit, please contact
-                  us at least 48 hours before your scheduled visit. We will do
-                  our best to accommodate your request, but changes are subject
-                  to availability and park policies.
+                  <strong>Rescheduling:</strong> If you need to cancel or change
+                  your visit, contact us at least 48 hours before your scheduled
+                  date. We’ll try to help, but changes depend on availability
+                  and our policies.
                 </li>
               </ul>
             </li>
