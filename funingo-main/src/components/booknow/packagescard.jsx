@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Typography } from "@mui/material";
 // import { Tour } from "@mui/icons-material";
-import Coin from '../admin/Coin.jsx'
+import Coin from "../admin/Coin.jsx";
 
 const capitalizeFirstLetter = (inputString) => {
   return (
@@ -37,12 +37,7 @@ const Packagecard = ({ data, boolFlag }) => {
           <Typography fontWeight={"600"}>Rs.{data?.price}</Typography>
         </Grid>
       )}
-      <Grid
-        display={"flex"}
-        gap="10px"
-        paddingX={"4px"}
-        alignItems={"center"}
-      >
+      <Grid display={"flex"} gap="10px" paddingX={"4px"} alignItems={"center"}>
         <Typography>{boolFlag ? "Flags :- " : "Freebies :- "}</Typography>
         {/* <Typography
           fontWeight={"600"}
@@ -77,8 +72,7 @@ const Packagecard = ({ data, boolFlag }) => {
           justifyContent={"center"}
           alignItems={"center"}
         >
-          {data?.yellow}&nbsp;{" "}
-          <Coin/>
+          {data?.coins}&nbsp; <Coin />
         </Typography>
       </Grid>
     </Grid>

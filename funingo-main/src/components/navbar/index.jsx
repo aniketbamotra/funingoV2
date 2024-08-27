@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Backdrop,
   Box,
@@ -6,61 +6,57 @@ import {
   Grid,
   Typography,
   useMediaQuery,
-  TextField 
-} from '@mui/material';
-import { getuser_funingomoney } from '../freebies-modal/freebies-mascot';
+  TextField,
+} from "@mui/material";
 
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 
-
-
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
-
-import { useDispatch, useSelector } from 'react-redux';
-import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
-import DehazeIcon from '@mui/icons-material/Dehaze';
-import { Link, useNavigate } from 'react-router-dom';
-import Logo from '../../assets/logo.svg';
-import { useTheme } from '@emotion/react';
-import './styles.scss';
-import Login from '../auth/signup';
-import ZoneHoverComponent from '../hover/first';
-import EventHoverComponent from '../hover/second';
-import CorporateHoverComponent from '../hover/third';
-import Packages from '../package/package';
-import { setLoggedIn, removeUser } from '../../utils/store/slice/userSlice';
-import MoneyBg from '../../assets/money-logo-bg.svg';
+import { useDispatch, useSelector } from "react-redux";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
+import DehazeIcon from "@mui/icons-material/Dehaze";
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../assets/logo.svg";
+import { useTheme } from "@emotion/react";
+import "./styles.scss";
+import Login from "../auth/signup";
+import ZoneHoverComponent from "../hover/first";
+import EventHoverComponent from "../hover/second";
+import CorporateHoverComponent from "../hover/third";
+import Packages from "../package/package";
+import { setLoggedIn, removeUser } from "../../utils/store/slice/userSlice";
+import MoneyBg from "../../assets/money-logo-bg.svg";
 import {
   getProfile,
   isAdmin,
   isEmployee,
   isWindowEmployee,
   scrollToBottom,
-  scrollToTop
-} from '../../utils';
+  scrollToTop,
+} from "../../utils";
 import {
   closeAuthModal,
   openAuthModal,
-  openPremiumSubscriptionModal
-} from '../../utils/store/slice/appSlice';
-import { downArrow } from '../../assets';
+  openPremiumSubscriptionModal,
+} from "../../utils/store/slice/appSlice";
+import { downArrow } from "../../assets";
 
 const ProfileDialog = ({ handleLogout, setShowProfileDialog }) => {
   const navigate = useNavigate();
   useEffect(() => {
-    window.addEventListener('click', () => {
+    window.addEventListener("click", () => {
       setShowProfileDialog(false);
     });
     return () => {
-      window.removeEventListener('click', null);
+      window.removeEventListener("click", null);
     };
   }, []);
   return (
-    <Grid className='profile-dialog'>
-      <Typography className='action-link' onClick={() => navigate('/profile')}>
+    <Grid className="profile-dialog">
+      <Typography className="action-link" onClick={() => navigate("/profile")}>
         Profile
       </Typography>
-      <Typography className='action-link' onClick={() => handleLogout()}>
+      <Typography className="action-link" onClick={() => handleLogout()}>
         Logout
       </Typography>
     </Grid>
@@ -71,13 +67,13 @@ const Navbar = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLaptop = useMediaQuery(theme.breakpoints.up('lg'));
+  const isLaptop = useMediaQuery(theme.breakpoints.up("lg"));
   // const [open, setOpen] = useState(false);
   const {
     isLoggedIn,
     userData: user,
-    isPremium
-  } = useSelector(store => store.userSlice);
+    isPremium,
+  } = useSelector((store) => store.userSlice);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
 
   const employee = isEmployee(user?.user_type);
@@ -91,153 +87,159 @@ const Navbar = () => {
   //   setOpen(false);
   // };
 
-
-
   const [navExpanded, setNavExpanded] = useState(false);
 
   const handleLogout = () => {
     dispatch(removeUser());
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     dispatch(setLoggedIn(false));
   };
-
-  if(isLoggedIn)
-    getuser_funingomoney(user.funingo_money);
 
   return (
     <>
       <Grid
         sx={{
-          position: 'fixed',
-          width: '100vw',
-          top: '0px',
+          position: "fixed",
+          width: "100vw",
+          top: "0px",
           zIndex: 1000,
         }}
-        className='nav'
+        className="nav"
       >
         <Grid
-          display='flex'
-          justifyContent='space-between'
-          alignItems={'center'}
-          flexDirection={'row'}
-          mx={{ lg: '100px', xs: '20px' }}
-          height={'88px'}
+          display="flex"
+          justifyContent="space-between"
+          alignItems={"center"}
+          flexDirection={"row"}
+          mx={{ lg: "100px", xs: "20px" }}
+          height={"88px"}
         >
-          <Link to='/' onClick={() => setNavExpanded(false)}>
-            <img src={Logo} alt='funingo-logo' width={'130px'} />
+          <Link to="/" onClick={() => setNavExpanded(false)}>
+            <img src={Logo} alt="funingo-logo" width={"130px"} />
           </Link>
           <Grid
-            className='font'
-            display={{ xs: 'none', lg: 'flex' }}
-            gap='20px'
-            alignItems={'center'}
-            height='100%'
+            className="font"
+            display={{ xs: "none", lg: "flex" }}
+            gap="20px"
+            alignItems={"center"}
+            height="100%"
           >
             <Button
-              name='zone-btn'
-              onClick={() => navigate('/zone')}
+              name="zone-btn"
+              onClick={() => navigate("/zone")}
               sx={{
-                fontWeight: '600',
-                color: '#2474D2',
-                height: '100%',
-                position: 'relative',
-                textTransform: 'capitalize',
-                '&:hover': {
-                  '& #zone-hover-box': {
-                    display: 'flex'
-                  }
-                }
+                fontWeight: "600",
+                color: "#2474D2",
+                height: "100%",
+                position: "relative",
+                textTransform: "capitalize",
+                "&:hover": {
+                  "& #zone-hover-box": {
+                    display: "flex",
+                  },
+                },
               }}
             >
               Zones
-              <img className='arrow-image ml-1 h-[10px] w-4' src={downArrow} alt="" />
+              <img
+                className="arrow-image ml-1 h-[10px] w-4"
+                src={downArrow}
+                alt=""
+              />
               <Grid
-                className='hover-box'
-                id='zone-hover-box'
+                className="hover-box"
+                id="zone-hover-box"
                 sx={{
-                  position: 'absolute',
-                  top: '88px',
-                  left: '-23vw',
-                  display: 'none',
-                  width: '84rem',
-                  justifyContent: 'center',
-                  overflowY: 'auto',
-                  overflowX: 'hidden',
-                  background: '#2474d2'
+                  position: "absolute",
+                  top: "88px",
+                  left: "-23vw",
+                  display: "none",
+                  width: "84rem",
+                  justifyContent: "center",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                  background: "#2474d2",
                 }}
               >
                 <ZoneHoverComponent />
               </Grid>
             </Button>
             <Button
-              onClick={() => navigate('/events')}
+              onClick={() => navigate("/events")}
               sx={{
-                fontWeight: '600',
-                color: '#2474D2',
-                height: '100%',
-                textTransform: 'capitalize',
-                '&:hover': {
-                  '& #event-hover-box': {
-                    display: 'flex'
-                  }
-                }
+                fontWeight: "600",
+                color: "#2474D2",
+                height: "100%",
+                textTransform: "capitalize",
+                "&:hover": {
+                  "& #event-hover-box": {
+                    display: "flex",
+                  },
+                },
               }}
-              name='events-btn'
-              className='navText'
+              name="events-btn"
+              className="navText"
             >
               Events
-              <img className='arrow-image ml-1 h-[10px] w-4' src={downArrow} alt="" />
+              <img
+                className="arrow-image ml-1 h-[10px] w-4"
+                src={downArrow}
+                alt=""
+              />
               <Grid
-                className='hover-box'
-                id='event-hover-box'
+                className="hover-box"
+                id="event-hover-box"
                 sx={{
-                  position: 'absolute',
-                  top: '88px',
-                  left: '-18vw',
-                  width: '50rem',
-                  justifyContent: 'center',
-                  overflowY: 'auto',
-                  overflowX: 'hidden',
-                  display: 'none',
-                  background: '#2474d2'
-                  
+                  position: "absolute",
+                  top: "88px",
+                  left: "-18vw",
+                  width: "50rem",
+                  justifyContent: "center",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                  display: "none",
+                  background: "#2474d2",
                 }}
               >
                 <EventHoverComponent />
               </Grid>
             </Button>
             <Button
-              onClick={() => navigate('/corporate')}
+              onClick={() => navigate("/corporate")}
               sx={{
-                fontWeight: '600',
-                height: '100%',
-                color: '#2474D2',
-                textTransform: 'capitalize',
-                '&:hover': {
-                  '& #corporate-hover-box': {
-                    display: 'flex'
-                  }
-                }
+                fontWeight: "600",
+                height: "100%",
+                color: "#2474D2",
+                textTransform: "capitalize",
+                "&:hover": {
+                  "& #corporate-hover-box": {
+                    display: "flex",
+                  },
+                },
               }}
-              name='corporate-btn'
-              className='navText'
+              name="corporate-btn"
+              className="navText"
             >
-              Corporate 
-              <img className='arrow-image ml-1 h-[10px] w-4' src={downArrow} alt="" />
+              Corporate
+              <img
+                className="arrow-image ml-1 h-[10px] w-4"
+                src={downArrow}
+                alt=""
+              />
               <Grid
-                className='hover-box'
-                id='corporate-hover-box'
+                className="hover-box"
+                id="corporate-hover-box"
                 sx={{
-                  position: 'absolute',
-                  top: '88px',
-                  left: '-18vw',
-                  display: 'none',
+                  position: "absolute",
+                  top: "88px",
+                  left: "-18vw",
+                  display: "none",
                   // height: '52vh',
-                  width: '63rem',
-                  justifyContent: 'center',
-                  overflowY: 'auto',
-                  overflowX: 'hidden',
-                  background: '#2474d2'
+                  width: "63rem",
+                  justifyContent: "center",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                  background: "#2474d2",
                 }}
               >
                 <CorporateHoverComponent />
@@ -245,35 +247,48 @@ const Navbar = () => {
             </Button>
             {admin ? (
               <Button
-                onClick={() => navigate('/admin/stats')}
-                sx={{ fontWeight: '600', color: '#2474D2', height: '100%' }}
-                className='navText'
+                onClick={() => navigate("/admin/stats")}
+                sx={{ fontWeight: "600", color: "#2474D2", height: "100%" }}
+                className="navText"
               >
                 Statistics
               </Button>
             ) : (
               <Button
-                onClick={() => navigate('/packages')}
-                sx={{ fontWeight: '600', color: '#2474D2', height: '100%',textTransform: 'capitalize', }}
-                className='navText'
+                onClick={() => navigate("/packages")}
+                sx={{
+                  fontWeight: "600",
+                  color: "#2474D2",
+                  height: "100%",
+                  textTransform: "capitalize",
+                }}
+                className="navText"
               >
                 Packages
               </Button>
             )}
-            
+
             {employee ? (
               <Button
-                onClick={() => {navigate('/e/redeem');scrollToTop();}}
-                sx={{ fontWeight: '600', color: '#2474D2', height: '100%' }}
-                className='navText'
+                onClick={() => {
+                  navigate("/e/redeem");
+                  scrollToTop();
+                }}
+                sx={{ fontWeight: "600", color: "#2474D2", height: "100%" }}
+                className="navText"
               >
                 Redeem
               </Button>
             ) : (
               <Button
-                onClick={() => navigate('/franchise')}
-                sx={{ fontWeight: '600', color: '#2474D2', height: '100%',textTransform: 'capitalize', }}
-                className='navText'
+                onClick={() => navigate("/franchise")}
+                sx={{
+                  fontWeight: "600",
+                  color: "#2474D2",
+                  height: "100%",
+                  textTransform: "capitalize",
+                }}
+                className="navText"
               >
                 Franchise
               </Button>
@@ -281,26 +296,37 @@ const Navbar = () => {
 
             {windowEmployee ? (
               <Button
-                onClick={() => {navigate('/we/get-qr-tickets');scrollToTop()}}
-                sx={{ fontWeight: '600', color: '#2474D2', height: '100%' }}
-                className='navText'
+                onClick={() => {
+                  navigate("/we/get-qr-tickets");
+                  scrollToTop();
+                }}
+                sx={{ fontWeight: "600", color: "#2474D2", height: "100%" }}
+                className="navText"
               >
                 Generate QR
               </Button>
             ) : (
               <Button
-                onClick={() => navigate('/gallery')}
-                sx={{ fontWeight: '600', color: '#2474D2', height: '100%',textTransform: 'capitalize', }}
-                className='navText'
+                onClick={() => navigate("/gallery")}
+                sx={{
+                  fontWeight: "600",
+                  color: "#2474D2",
+                  height: "100%",
+                  textTransform: "capitalize",
+                }}
+                className="navText"
               >
                 Gallery
               </Button>
             )}
             {windowEmployee ? (
               <Button
-                onClick={() => {navigate('/we/window-purchase');scrollToTop();}}
-                sx={{ fontWeight: '600', color: '#2474D2', height: '100%' }}
-                className='navText'
+                onClick={() => {
+                  navigate("/we/window-purchase");
+                  scrollToTop();
+                }}
+                sx={{ fontWeight: "600", color: "#2474D2", height: "100%" }}
+                className="navText"
               >
                 Book tickets
               </Button>
@@ -310,8 +336,13 @@ const Navbar = () => {
                   //  navigate("/contact")
                   scrollToBottom()
                 }
-                sx={{ fontWeight: '600', color: '#2474D2', height: '100%',textTransform: 'capitalize'}}
-                className='navText'
+                sx={{
+                  fontWeight: "600",
+                  color: "#2474D2",
+                  height: "100%",
+                  textTransform: "capitalize",
+                }}
+                className="navText"
               >
                 Contact
               </Button>
@@ -319,9 +350,9 @@ const Navbar = () => {
           </Grid>
           <Grid
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: isLaptop ? '0px' : '5px'
+              display: "flex",
+              alignItems: "center",
+              gap: isLaptop ? "0px" : "5px",
             }}
           >
             {/* {!isLaptop && !isLoggedIn && (
@@ -351,87 +382,94 @@ const Navbar = () => {
               </Button>
             )} */}
 
-
-
-
-      {/* CHANGE 3-> FOR SEARCH ICON  */}
-               {
-                 !isLaptop && (
-                   <Link to="/search">
-                  <Grid container alignItems="center">
-                   <Grid item>
-                    <SearchIcon sx={{ fontSize: '1.4rem', marginRight: 'auto',color: 'black' }} />
-                   </Grid>
-                   </Grid>
-                  </Link>
-                 )
-               }
+            {/* CHANGE 3-> FOR SEARCH ICON  */}
+            {!isLaptop && (
+              <Link to="/search">
+                <Grid container alignItems="center">
+                  <Grid item>
+                    <SearchIcon
+                      sx={{
+                        fontSize: "1.4rem",
+                        marginRight: "auto",
+                        color: "black",
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+              </Link>
+            )}
 
             {!isLoggedIn && (
               <Button
-                variant='contained'
+                variant="contained"
                 sx={{
-                  background: isLaptop ? '#2474D2' : 'transparent',
-                  borderRadius: '2em',
-                  fontWeight: '600',
-                  boxShadow: '0',
-                  '&:hover': {
-                    background: isLaptop ? '#2474D2' : '#8080803b',
-                    boxShadow: '0'
-                  }
+                  background: isLaptop ? "#2474D2" : "transparent",
+                  borderRadius: "2em",
+                  fontWeight: "600",
+                  boxShadow: "0",
+                  "&:hover": {
+                    background: isLaptop ? "#2474D2" : "#8080803b",
+                    boxShadow: "0",
+                  },
                 }}
                 onClick={
                   !isLaptop
-                    ? () => setNavExpanded(curr =>!curr)
+                    ? () => setNavExpanded((curr) => !curr)
                     : () => openModal()
                 }
               >
                 {/* {!isLaptop ? <DehazeIcon sx={{ color: 'black' }} /> : 'Signup'} */}
-               
 
-
-              {/* change 2-> Adding clear Icon  */}
-                {!isLaptop ? (<>{!navExpanded ? <DehazeIcon sx={{ color: 'black' }} /> 
-                 :<ClearIcon sx={{ color: 'black' }} />}</>) : ( 'Signup')}
+                {/* change 2-> Adding clear Icon  */}
+                {!isLaptop ? (
+                  <>
+                    {!navExpanded ? (
+                      <DehazeIcon sx={{ color: "black" }} />
+                    ) : (
+                      <ClearIcon sx={{ color: "black" }} />
+                    )}
+                  </>
+                ) : (
+                  "Signup / Signin"
+                )}
               </Button>
             )}
-
 
             {isLoggedIn && (
               <Grid
                 sx={{
-                  display: 'flex',
-                  gap: '20px',
-                  alignItems: 'center'
+                  display: "flex",
+                  gap: "20px",
+                  alignItems: "center",
                 }}
               >
                 <Box
                   sx={{
-                    width: '90px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    position: 'relative'
+                    width: "100px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    position: "relative",
                   }}
                 >
                   <Box
-                    component={'img'}
+                    component={"img"}
                     src={MoneyBg}
-                    alt='background'
+                    alt="background"
                     sx={{
-                      width: '90px'
+                      width: "90px",
                     }}
                   />
                   <Typography
                     sx={{
-                      color: 'white',
-                      fontWeight: '600',
-                      fontSize: '14px',
-                      zIndex: '110',
-                      position: 'absolute',
-                      right: '13px',
-                      textAlign: 'center',
-                      width: '40px'
+                      color: "white",
+                      fontWeight: "600",
+                      fontSize: "14px",
+                      zIndex: "110",
+                      position: "absolute",
+                      right: "13px",
+                      textAlign: "center",
+                      width: "40px",
                     }}
                   >
                     {user.funingo_money}
@@ -439,22 +477,22 @@ const Navbar = () => {
                 </Box>
 
                 <Box
-                  component={'img'}
+                  component={"img"}
                   src={getProfile(user.profile_picture)}
                   sx={{
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '50%',
-                    cursor: 'pointer',
-                    border: isPremium ? '2px solid #0580e2' : 'none',
-                    padding: '2px'
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    border: isPremium ? "2px solid #0580e2" : "none",
+                    padding: "2px",
                   }}
                   onClick={
                     !isLaptop
-                      ? () => setNavExpanded(curr => !curr)
-                      : e => {
+                      ? () => setNavExpanded((curr) => !curr)
+                      : (e) => {
                           e.stopPropagation();
-                          setShowProfileDialog(curr => !curr);
+                          setShowProfileDialog((curr) => !curr);
                         }
                   }
                 />
@@ -468,141 +506,127 @@ const Navbar = () => {
             )}
           </Grid>
 
-
-
-
-         
-
-
-
           <Backdrop
             sx={{
-              color: '#fff',
+              color: "#fff",
               zIndex: 10,
-              top: '88px'
+              top: "88px",
             }}
             open={navExpanded}
             onClick={() => setNavExpanded(false)}
           >
-
-    
-
-         
             {/* change 1-> adding slider*/}
             <Grid
-              className={navExpanded ? 'expanded-nav nav-container' : 'collapsed-nav nav-container'}
-            
+              className={
+                navExpanded
+                  ? "expanded-nav nav-container"
+                  : "collapsed-nav nav-container"
+              }
               // height={!navExpanded ? '0' : 'fit-content'}
-              height={navExpanded ? '100vh' : 'fit-content'}
-              // right={!navExpanded ? '-100%': '0'} 
+              height={navExpanded ? "100vh" : "fit-content"}
+              // right={!navExpanded ? '-100%': '0'}
             >
-
-
-              <Grid 
-              className='action-btns'
-              >
-                      <Link to='/'>
-                         <Grid textAlign={'center'}>
-                            <Button
-                              sx={{
-                                fontWeight: '600',
-                                width: '100%',
-                                color: '#2474D2',
-                                padding: '10px',
-                                borderBottom: '1px solid #aac1dc',
-                            
-                              
-                                // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
-                              }}
-                              onClick={() => {
-                                setNavExpanded(false);
-                              }}
-                            >
-                              Home
-                            </Button>
-                         </Grid>
-                      </Link>
-
-
-                        <Grid textAlign={'center'}>
-                         <Button
-                           sx={{
-                                fontWeight: '600',
-                                width: '100%',
-                                padding: '10px',
-                                borderBottom: '1px solid #aac1dc'
-                             // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
-                              }}
-                           onClick={() => {
-                             setNavExpanded(false);
-                            //  dispatch(openPremiumSubscriptionModal());
-                               }}
-                                >
-                                Go Premium
-                                <WorkspacePremiumIcon style={{ color: '#FFD700', fontSize: '1.2rem' }} />
-                             </Button>
-                           </Grid>
-
-                     {isLoggedIn && (
-                       <Link to='/profile'>
-                          <Grid textAlign={'center'}>
-                            <Button
-                              sx={{
-                               fontWeight: '600',
-                               width: '100%',
-                               color: '#2474D2',
-                               padding: '10px',
-                               borderBottom: '1px solid #aac1dc'
-                               // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
-                               }}
-                               onClick={() => {
-                               setNavExpanded(false);
-                               }}
-                           >
-                             Profile
-                            </Button>
-                          </Grid>
-                       </Link>
-                     )}
-
-
-                        <Link to='/zone'>
-                          <Grid textAlign={'center'}>
-                            <Button
-                              sx={{
-                                fontWeight: '600',
-                                width: '100%',
-                                color: '#2474D2',
-                            
-                                padding: '10px',
-                                borderBottom: '1px solid #aac1dc',
-                                textAlign: 'left',
-                                // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
-                              }}
-                              onClick={() => {
-                                setNavExpanded(false);
-                              }}
-                            >
-                              Zones
-                            </Button>
-                          </Grid>
-                        </Link>
-
-
-                <Link to='/events'>
-                  <Grid textAlign={'center'}>
+              <Grid className="action-btns">
+                <Link to="/">
+                  <Grid textAlign={"center"}>
                     <Button
                       sx={{
-                        fontWeight: '600',
-                        width: '100%',
-                        color: '#2474D2',
-                        padding: '10px',
-                        borderBottom: '1px solid #aac1dc'
+                        fontWeight: "600",
+                        width: "100%",
+                        color: "#2474D2",
+                        padding: "10px",
+                        borderBottom: "1px solid #aac1dc",
+
+                        // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
+                      }}
+                      onClick={() => {
+                        setNavExpanded(false);
+                      }}
+                    >
+                      Home
+                    </Button>
+                  </Grid>
+                </Link>
+
+                <Grid textAlign={"center"}>
+                  <Button
+                    sx={{
+                      fontWeight: "600",
+                      width: "100%",
+                      padding: "10px",
+                      borderBottom: "1px solid #aac1dc",
+                      // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
+                    }}
+                    onClick={() => {
+                      setNavExpanded(false);
+                      //  dispatch(openPremiumSubscriptionModal());
+                    }}
+                  >
+                    Go Premium
+                    <WorkspacePremiumIcon
+                      style={{ color: "#FFD700", fontSize: "1.2rem" }}
+                    />
+                  </Button>
+                </Grid>
+
+                {isLoggedIn && (
+                  <Link to="/profile">
+                    <Grid textAlign={"center"}>
+                      <Button
+                        sx={{
+                          fontWeight: "600",
+                          width: "100%",
+                          color: "#2474D2",
+                          padding: "10px",
+                          borderBottom: "1px solid #aac1dc",
+                          // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
+                        }}
+                        onClick={() => {
+                          setNavExpanded(false);
+                        }}
+                      >
+                        Profile
+                      </Button>
+                    </Grid>
+                  </Link>
+                )}
+
+                <Link to="/zone">
+                  <Grid textAlign={"center"}>
+                    <Button
+                      sx={{
+                        fontWeight: "600",
+                        width: "100%",
+                        color: "#2474D2",
+
+                        padding: "10px",
+                        borderBottom: "1px solid #aac1dc",
+                        textAlign: "left",
+                        // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
+                      }}
+                      onClick={() => {
+                        setNavExpanded(false);
+                      }}
+                    >
+                      Zones
+                    </Button>
+                  </Grid>
+                </Link>
+
+                <Link to="/events">
+                  <Grid textAlign={"center"}>
+                    <Button
+                      sx={{
+                        fontWeight: "600",
+                        width: "100%",
+                        color: "#2474D2",
+                        padding: "10px",
+                        borderBottom: "1px solid #aac1dc",
                         // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                       }}
                       onClick={
                         !isLaptop
-                          ? () => setNavExpanded(curr => !curr)
+                          ? () => setNavExpanded((curr) => !curr)
                           : () => closeModal()
                       }
                     >
@@ -611,20 +635,20 @@ const Navbar = () => {
                   </Grid>
                 </Link>
 
-                <Link to='/corporate'>
-                  <Grid textAlign={'center'}>
+                <Link to="/corporate">
+                  <Grid textAlign={"center"}>
                     <Button
                       sx={{
-                        fontWeight: '600',
-                        width: '100%',
-                        color: '#2474D2',
-                        padding: '10px',
-                        borderBottom: '1px solid #aac1dc'
+                        fontWeight: "600",
+                        width: "100%",
+                        color: "#2474D2",
+                        padding: "10px",
+                        borderBottom: "1px solid #aac1dc",
                         // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                       }}
                       onClick={
                         !isLaptop
-                          ? () => setNavExpanded(curr => !curr)
+                          ? () => setNavExpanded((curr) => !curr)
                           : () => closeModal()
                       }
                     >
@@ -633,21 +657,21 @@ const Navbar = () => {
                   </Grid>
                 </Link>
 
-                {!admin? (
-                  <Link to='/packages'>
-                    <Grid textAlign={'center'}>
+                {!admin ? (
+                  <Link to="/packages">
+                    <Grid textAlign={"center"}>
                       <Button
                         sx={{
-                          fontWeight: '600',
-                          width: '100%',
-                          color: '#2474D2',
-                          padding: '10px',
-                          borderBottom: '1px solid #aac1dc'
+                          fontWeight: "600",
+                          width: "100%",
+                          color: "#2474D2",
+                          padding: "10px",
+                          borderBottom: "1px solid #aac1dc",
                           // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                         }}
                         onClick={
                           !isLaptop
-                            ? () => setNavExpanded(curr => !curr)
+                            ? () => setNavExpanded((curr) => !curr)
                             : () => closeModal()
                         }
                       >
@@ -656,20 +680,20 @@ const Navbar = () => {
                     </Grid>
                   </Link>
                 ) : (
-                  <Link to='/admin/stats'>
-                    <Grid textAlign={'center'}>
+                  <Link to="/admin/stats">
+                    <Grid textAlign={"center"}>
                       <Button
                         sx={{
-                          fontWeight: '600',
-                          width: '100%',
-                          color: '#2474D2',
-                          padding: '10px',
-                          borderBottom: '1px solid #aac1dc'
+                          fontWeight: "600",
+                          width: "100%",
+                          color: "#2474D2",
+                          padding: "10px",
+                          borderBottom: "1px solid #aac1dc",
                           // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                         }}
                         onClick={
                           !isLaptop
-                            ? () => setNavExpanded(curr => !curr)
+                            ? () => setNavExpanded((curr) => !curr)
                             : () => closeModal()
                         }
                       >
@@ -678,22 +702,22 @@ const Navbar = () => {
                     </Grid>
                   </Link>
                 )}
-                
+
                 {employee ? (
-                  <Link to='/e/redeem'>
-                    <Grid textAlign={'center'}>
+                  <Link to="/e/redeem">
+                    <Grid textAlign={"center"}>
                       <Button
                         sx={{
-                          fontWeight: '600',
-                          width: '100%',
-                          color: '#2474D2',
-                          padding: '10px',
-                          borderBottom: '1px solid #aac1dc'
+                          fontWeight: "600",
+                          width: "100%",
+                          color: "#2474D2",
+                          padding: "10px",
+                          borderBottom: "1px solid #aac1dc",
                           // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                         }}
                         onClick={
                           !isLaptop
-                            ? () => setNavExpanded(curr => !curr)
+                            ? () => setNavExpanded((curr) => !curr)
                             : () => closeModal()
                         }
                       >
@@ -702,20 +726,20 @@ const Navbar = () => {
                     </Grid>
                   </Link>
                 ) : (
-                  <Link to='/franchise'>
-                    <Grid textAlign={'center'}>
+                  <Link to="/franchise">
+                    <Grid textAlign={"center"}>
                       <Button
                         sx={{
-                          fontWeight: '600',
-                          width: '100%',
-                          color: '#2474D2',
-                          padding: '10px',
-                          borderBottom: '1px solid #aac1dc'
+                          fontWeight: "600",
+                          width: "100%",
+                          color: "#2474D2",
+                          padding: "10px",
+                          borderBottom: "1px solid #aac1dc",
                           // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                         }}
                         onClick={
                           !isLaptop
-                            ? () => setNavExpanded(curr => !curr)
+                            ? () => setNavExpanded((curr) => !curr)
                             : () => closeModal()
                         }
                       >
@@ -724,21 +748,21 @@ const Navbar = () => {
                     </Grid>
                   </Link>
                 )}
-                 {windowEmployee ? (
-                  <Link to='/we/get-qr-tickets'>
-                    <Grid textAlign={'center'}>
+                {windowEmployee ? (
+                  <Link to="/we/get-qr-tickets">
+                    <Grid textAlign={"center"}>
                       <Button
                         sx={{
-                          fontWeight: '600',
-                          width: '100%',
-                          color: '#2474D2',
-                          padding: '10px',
-                          borderBottom: '1px solid #aac1dc'
+                          fontWeight: "600",
+                          width: "100%",
+                          color: "#2474D2",
+                          padding: "10px",
+                          borderBottom: "1px solid #aac1dc",
                           // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                         }}
                         onClick={
                           !isLaptop
-                            ? () => setNavExpanded(curr => !curr)
+                            ? () => setNavExpanded((curr) => !curr)
                             : () => closeModal()
                         }
                       >
@@ -747,20 +771,20 @@ const Navbar = () => {
                     </Grid>
                   </Link>
                 ) : (
-                  <Link to='/gallery'>
-                    <Grid textAlign={'center'}>
+                  <Link to="/gallery">
+                    <Grid textAlign={"center"}>
                       <Button
                         sx={{
-                          fontWeight: '600',
-                          width: '100%',
-                          color: '#2474D2',
-                          padding: '10px',
-                          borderBottom: '1px solid #aac1dc'
+                          fontWeight: "600",
+                          width: "100%",
+                          color: "#2474D2",
+                          padding: "10px",
+                          borderBottom: "1px solid #aac1dc",
                           // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                         }}
                         onClick={
                           !isLaptop
-                            ? () => setNavExpanded(curr => !curr)
+                            ? () => setNavExpanded((curr) => !curr)
                             : () => closeModal()
                         }
                       >
@@ -770,77 +794,79 @@ const Navbar = () => {
                   </Link>
                 )}
 
-                <Grid textAlign={'center'}>
+                <Grid textAlign={"center"}>
                   {windowEmployee ? (
                     <Button
                       sx={{
-                        fontWeight: '600',
-                        width: '100%',
-                        color: '#2474D2',
-                        padding: '10px',
-                        borderBottom: '1px solid #aac1dc'
+                        fontWeight: "600",
+                        width: "100%",
+                        color: "#2474D2",
+                        padding: "10px",
+                        borderBottom: "1px solid #aac1dc",
                         // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                       }}
-                      onClick={() => {navigate('/we/window-purchase');scrollToTop()}}
+                      onClick={() => {
+                        navigate("/we/window-purchase");
+                        scrollToTop();
+                      }}
                     >
                       Book tickets
                     </Button>
                   ) : (
                     <Button
                       sx={{
-                        fontWeight: '600',
-                        width: '100%',
-                        color: '#2474D2',
-                        padding: '10px',
-                        borderBottom: '1px solid #aac1dc'
+                        fontWeight: "600",
+                        width: "100%",
+                        color: "#2474D2",
+                        padding: "10px",
+                        borderBottom: "1px solid #aac1dc",
                         // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
                       }}
                       onClick={() => {
                         scrollToBottom();
-                        setNavExpanded(curr => !curr);
+                        setNavExpanded((curr) => !curr);
                       }}
                     >
                       Contact
                     </Button>
                   )}
-                 </Grid>
+                </Grid>
 
-                   
-                      {isLoggedIn ? (
-                        <Button
-                          sx={{
-                            fontWeight: '600',
-                            color: '#2474D2',
-                            width: '100%',
-                            padding: '10px'
-                            // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
-                          }}
-                          onClick={() => {
-                            handleLogout();
-                            setNavExpanded(false);
-                          }}
-                        >
-                          Logout
-                        </Button>
-                      ) : (
-                        <Button
-                          sx={{
-                            fontWeight: '600',
-                            color: '#2474D2',
-                            width: '100%',
-                            padding: '10px',
-                            
-                            // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
-                          }}
-                          onClick={() => {
-                            openModal();
-                            setNavExpanded(false);
-                          }}
-                        >
-                          Signup / Login
-                        </Button>
-                      )}
-                 </Grid>
+                {isLoggedIn ? (
+                  <Button
+                    sx={{
+                      fontWeight: "600",
+                      color: "#2474D2",
+                      width: "100%",
+                      padding: "10px",
+                      // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
+                    }}
+                    onClick={() => {
+                      handleLogout();
+                      setNavExpanded(false);
+                    }}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    sx={{
+                      fontWeight: "600",
+                      color: "#2474D2",
+                      width: "100%",
+                      padding: "10px",
+
+                      // boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)'
+                    }}
+                    onClick={() => {
+                      openModal();
+                      setNavExpanded(false);
+                    }}
+                  >
+                    Signup / Login
+                  </Button>
+                )}
+              </Grid>
             </Grid>
           </Backdrop>
         </Grid>

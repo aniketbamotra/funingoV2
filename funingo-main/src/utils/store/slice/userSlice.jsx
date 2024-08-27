@@ -1,13 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { getAllTickets, getFreebies } from '../../../actions/ticket';
+import { createSlice } from "@reduxjs/toolkit";
+import { getAllTickets, getFreebies } from "../../../actions/ticket";
+import { fetchSelf } from "../../../actions/user";
 
-const capitalizeFirstLetter = inputString => {
+const capitalizeFirstLetter = (inputString) => {
   return (
     inputString.charAt(0).toUpperCase() + inputString.slice(1).toLowerCase()
   );
 };
 const userSlice = createSlice({
-  name: 'userSlice',
+  name: "userSlice",
   initialState: {
     userData: null,
     isLoggedIn: false,
@@ -15,8 +16,8 @@ const userSlice = createSlice({
     packageMap: null,
     freebiesArray: [],
     personsList: [],
-    token: '',
-    isPremium: false
+    token: "",
+    isPremium: false,
   },
   reducers: {
     addUser: (state, action) => {
@@ -34,12 +35,12 @@ const userSlice = createSlice({
     addToken: (state, action) => {
       state.token = action.payload;
     },
-    removeUser: state => {
+    removeUser: (state) => {
       state.userData = null;
       state.isLoggedIn = false;
       state.packageMap = null;
       state.personsList = [];
-      state.token = '';
+      state.token = "";
     },
     setLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload;
@@ -54,10 +55,10 @@ const userSlice = createSlice({
       const obj = {};
       action.payload.map((item, ind) => {
         obj[item?._id] = {
-          price: item?.price ? item.price : '0',
+          price: item?.price ? item.price : "0",
           package_name: capitalizeFirstLetter(
-            item?.name ? item.name : 'Not Available'
-          )
+            item?.name ? item.name : "Not Available"
+          ),
         };
         return {};
       });
@@ -77,13 +78,25 @@ const userSlice = createSlice({
 
     removePersons: (state, action) => {
       state.personsList = action.payload;
-    }
+    },
   },
-  extraReducers: builder => {
-    builder.addCase(getFreebies.fulfilled, (state, action) => {
-      state.freebiesArray = action.payload.freebies;
-    });
-  }
+  extraReducers: (builder) => {
+    builder
+      .addCase(getFreebies.fulfilled, (state, action) => {
+        state.freebiesArray = action.payload.freebies;
+      })
+      .addCase(fetchSelf.fulfilled, (state, action) => {
+        state.userData = action.payload.user;
+        if (action.payload.user.premium?.length > 0) {
+          for (let data of action.payload.user.premium) {
+            if (new Date(data.expires_on) > Date.now()) {
+              state.isPremium = true;
+              return;
+            }
+          }
+        }
+      });
+  },
 });
 
 export const {
@@ -96,6 +109,6 @@ export const {
   addPersons,
   removePersons,
   removeFreebies,
-  setVerified
+  setVerified,
 } = userSlice.actions;
 export default userSlice.reducer;
