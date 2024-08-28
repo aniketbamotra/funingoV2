@@ -339,17 +339,21 @@ const RedeemTicket = () => {
 
   const [inputValue, setInputValue] = useState(0);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (price) => {
     setInputValue(price);
     setIsDropdownVisible(false);
   };
   const [activityname, setactivityname] = useState("");
-  const handleSelection = (price, name) => {
+  const handleSelection = async (price, name) => {
+    setLoading(true);
     setInputValue(price);
     setSelectedColor(price);
     setactivityname(name);
     setIsDropdownVisible(false); // Hide the dropdown options
+    await fetchActivityBookings(name);
+    setLoading(false);
   };
 
   const toggleDropdown = () => {
@@ -370,6 +374,7 @@ const RedeemTicket = () => {
   const [error1, setError1] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [activityBookings, setActivityBookings] = useState(0);
 
   // const handleFind = async (phoneNo) => {
   //   try {
@@ -395,10 +400,30 @@ const RedeemTicket = () => {
       });
 
       if (!response.data.success) {
-        throw new Error("Couldn't Fetch Freebies");
+        throw new Error("Couldn't Fetch funingo money");
       }
       setExistingFuningoMoney(response.data.funingo_money);
       setDialogOpen(true);
+    } catch (error) {
+      console.log(error.message, error);
+    } finally {
+    }
+  }
+
+  async function fetchActivityBookings(activityName) {
+    try {
+      const headers = {
+        token: token,
+        "Content-Type": "application/json",
+      };
+      const response = await axios.get(`${apiUrl}/activity/${activityName}`, {
+        headers: headers,
+      });
+
+      if (!response.data.success) {
+        throw new Error("Couldn't Fetch activity bookings");
+      }
+      setActivityBookings(response.data.bookings);
     } catch (error) {
       console.log(error.message, error);
     } finally {
@@ -418,6 +443,7 @@ const RedeemTicket = () => {
           {
             phone_no: "+91-" + phoneNo,
             coins: inputValue,
+            activity_name: activityname,
           },
           {
             headers: {
@@ -428,6 +454,7 @@ const RedeemTicket = () => {
 
         setSuccess(res.data?.success);
         fetchFuningoMoney(phoneNo);
+        setActivityBookings(res.data?.bookings)
       } else {
         alert("Insufficient Funingo Coins");
         return;
@@ -931,6 +958,7 @@ const RedeemTicket = () => {
                 You have successfully redeemed coins
               </Typography>
             )}
+            <Typography>Current booking count: {activityBookings}</Typography>
             <Button variant="contained" onClick={redeemTicket} fullWidth>
               Redeem
             </Button>

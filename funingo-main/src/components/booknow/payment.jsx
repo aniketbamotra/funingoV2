@@ -275,7 +275,7 @@ import {
   keysToGenerateUnqiueString,
   razorpayKey,
 } from "../../constants";
-import { Typography } from "@mui/material";
+import { FormHelperText, Grid, Typography } from "@mui/material";
 import { openAuthModal } from "../../utils/store/slice/appSlice";
 import ConfirmationModal from "../windowPurchase/modal";
 import AddMoreModal from "./addMore";
@@ -311,6 +311,7 @@ const PaymentButton = ({
   const [addMoreModalOpen, setAddMoreModalOpen] = useState(false);
   const [payment, setpayment] = useState(false);
   const [total, setTotal] = useState(0);
+  const [error, setError] = useState("");
 
   const openModalAuth = () => {
     dispatch(openAuthModal());
@@ -475,24 +476,19 @@ const PaymentButton = ({
           amount={1000 - total}
         />
       )}
-
-      <Button
-        endIcon={<SendIcon />}
-        variant="contained"
+      <Grid
         sx={{
-          background: "#2CC248",
-          boxShadow: "0px 2.5 9 0px rgba(0, 0, 0, 0.25)",
-          borderRadius: "50px",
-          padding: "10px 30px",
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
           alignItems: "center",
-
-          "&:hover": {
-            background: "#1e8e33",
-          },
-
-          "&.Mui-disabled": {
+          gap: "4px",
+        }}
+      >
+        <FormHelperText error>{error}</FormHelperText>
+        <Button
+          endIcon={<SendIcon />}
+          variant="contained"
+          sx={{
             background: "#2CC248",
             boxShadow: "0px 2.5 9 0px rgba(0, 0, 0, 0.25)",
             borderRadius: "50px",
@@ -500,35 +496,53 @@ const PaymentButton = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-          },
-        }}
-        onClick={() => {
-          if (!isLoggedIn) {
-            dispatch(openAuthModal());
-            return;
-          }
-          // console.log("discount"+discount?.discount+"total"+total);
-          if (isLoggedIn) {
-            // handlePayment();
-            setConsentFormOpen(true);
-          } else {
-            dispatch(openModalAuth());
-          }
-        }}
-        disabled={persons?.length === 0}
-      >
-        <Typography
-          sx={{
-            fontFamily: "Luckiest Guy",
-            fontSize: "24px",
-            position: "relative",
-            textAlign: "center",
-            color: "white",
+
+            "&:hover": {
+              background: "#1e8e33",
+            },
+
+            "&.Mui-disabled": {
+              background: "#2CC248",
+              boxShadow: "0px 2.5 9 0px rgba(0, 0, 0, 0.25)",
+              borderRadius: "50px",
+              padding: "10px 30px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            },
           }}
+          onClick={() => {
+            if (!isLoggedIn) {
+              dispatch(openAuthModal());
+              return;
+            }
+            if (persons?.length === 0) {
+              setError("Save atleast one person before continuing");
+              return;
+            }
+            // console.log("discount"+discount?.discount+"total"+total);
+            if (isLoggedIn) {
+              // handlePayment();
+              setConsentFormOpen(true);
+            } else {
+              dispatch(openModalAuth());
+            }
+          }}
+          // disabled={persons?.length === 0}
         >
-          Buy Now
-        </Typography>
-      </Button>
+          <Typography
+            sx={{
+              fontFamily: "Luckiest Guy",
+              fontSize: "24px",
+              position: "relative",
+              textAlign: "center",
+              color: "white",
+            }}
+          >
+            Buy Now
+          </Typography>
+        </Button>
+      </Grid>
     </>
   );
 };
