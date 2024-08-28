@@ -38,34 +38,7 @@ const Packagecard = ({ data, boolFlag }) => {
         </Grid>
       )}
       <Grid display={"flex"} gap="10px" paddingX={"4px"} alignItems={"center"}>
-        <Typography>{boolFlag ? "Flags :- " : "Freebies :- "}</Typography>
-        {/* <Typography
-          fontWeight={"600"}
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          {data?.red}&nbsp;
-          <Tour
-            sx={{
-              color: "#fa1942",
-            }}
-          />
-        </Typography>
-
-        <Typography
-          fontWeight={"600"}
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          {data?.green}&nbsp;{" "}
-          <Tour
-            sx={{
-              color: "#76de9a",
-            }}
-          />
-        </Typography> */}
+        <Typography>Coins :-</Typography>
         <Typography
           fontWeight={"600"}
           display={"flex"}

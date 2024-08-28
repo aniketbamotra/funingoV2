@@ -6,6 +6,7 @@ import Ticket from "../../models/ticket.js";
 import Coupon from "../../models/coupon.js";
 import constants from "../../constants.js";
 import { calculateDiscountPrice } from "../../utilities/utils.js";
+import Activity from "../../models/activity.js";
 
 export const bookTicket = async (req, res) => {
   let {
@@ -95,4 +96,16 @@ export const bookTicket = async (req, res) => {
     short_id: newTicket.short_id,
     success: true,
   });
+};
+
+export const checkActivityBooking = async (req, res) => {
+  const { activity_name } = req.params;
+  const activity = await Activity.findOne({ name: activity_name });
+
+  if (!activity) {
+    const activity = new Activity({ name: activity_name, bookings: 0 });
+    await activity.save();
+  }
+
+  res.status(200).send({ success: true, bookings: activity?.bookings || 0 });
 };

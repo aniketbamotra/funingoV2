@@ -379,6 +379,7 @@ import {
   validateWebhookSignature,
 } from "razorpay/dist/utils/razorpay-utils.js";
 import User from "../models/user.js";
+import Activity from "../models/activity.js";
 
 export const getAllTickets = async (req, res) => {
   const { phone_no } = req.query;
@@ -624,14 +625,22 @@ export const deleteTicket = async (req, res) => {
 };
 
 export const redeemFuningoCoins = async (req, res) => {
-  const { phone_no, coins } = req.body;
+  const { phone_no, coins, activity_name } = req.body;
 
   const user = await User.findOne({ phone_no });
   user.funingo_money -= coins;
   await user.save();
 
+  let activity = await Activity.findOne({ name: activity_name });
+  if (!activity) {
+    activity = new Activity({ name: activity_name, bookings: 0 });
+  }
+  activity.bookings += 1;
+  await activity.save();
+
   res.status(200).json({
     success: true,
     funingo_money: user.funingo_money,
+    bookings: activity.bookings,
   });
 };
