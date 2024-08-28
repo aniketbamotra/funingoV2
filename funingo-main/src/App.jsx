@@ -1,53 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { ThemeProvider } from '@mui/material';
-import './index.css';
-import theme from './theme';
+import React, { useState, useEffect } from "react";
+import { ThemeProvider } from "@mui/material";
+import "./index.css";
+import theme from "./theme";
 import {
   createBrowserRouter,
   Outlet,
   useNavigate,
   Navigate,
-  useLocation
-} from 'react-router-dom';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import store from './utils/store/store';
-import { Grid } from '@mui/material';
-import Home from './components/home';
-import Navbar from './components/navbar';
-import Footer from './components/footer';
-import Zone from './components/zone/zone';
-import Events from './components/Events/Events';
-import Franchise from './components/franchise/franchise';
-import Corporate from './components/corporate/corporate';
-import Gallery from './components/gallery';
-import Packages from './components/package/package';
-import Booknow from './components/booknow/booknow';
-import Showdetails from './actions/showdetails';
-import Icon from './components/icon/icon';
-import RedeemTicket from './components/employee/redeem-tickets';
+  useLocation,
+} from "react-router-dom";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import store from "./utils/store/store";
+import { Grid } from "@mui/material";
+import Home from "./components/home";
+import Navbar from "./components/navbar";
+import Footer from "./components/footer";
+import Zone from "./components/zone/zone";
+import Events from "./components/Events/Events";
+import Franchise from "./components/franchise/franchise";
+import Corporate from "./components/corporate/corporate";
+import Gallery from "./components/gallery";
+import Packages from "./components/package/package";
+import Booknow from "./components/booknow/booknow";
+import Showdetails from "./actions/showdetails";
+import Icon from "./components/icon/icon";
+import RedeemTicket from "./components/employee/redeem-tickets";
 import {
   autoLogin,
   isAdmin,
   isEmployee,
   isWindowEmployee,
-  scrollToTop
-} from './utils';
-import GetQRTickets from './components/employee/get-qr-tickets';
-import Loader from './components/Mainloader/loader';
-import AddMore from './components/add-more-packages/AddMore';
-import WindowPurchase from './components/windowPurchase';
-import Rating from './components/Rate/rate';
-import Stats from './components/admin/stats';
-import Profile from './components/profile';
-import AdminPortal from './components/admin';
-import { getAllImages, getPhoneNumbers } from './actions/admin';
-import Careers from './components/careers';
-import FreebiesModal from './components/freebies-modal';
-import PremiumSubscriptionModal from './components/premium-subscription';
-import Register from './components/auth/signup';
-import { getFreebies } from './actions/ticket';
-import { openPremiumSubscriptionModal } from './utils/store/slice/appSlice';
-import Policy from './components/policies';
+  scrollToTop,
+} from "./utils";
+import GetQRTickets from "./components/employee/get-qr-tickets";
+import Loader from "./components/Mainloader/loader";
+import AddMore from "./components/add-more-packages/AddMore";
+import WindowPurchase from "./components/windowPurchase";
+import Rating from "./components/Rate/rate";
+import Stats from "./components/admin/stats";
+import Profile from "./components/profile";
+import AdminPortal from "./components/admin";
+import { getAllImages, getPhoneNumbers } from "./actions/admin";
+import Careers from "./components/careers";
+import FreebiesModal from "./components/freebies-modal";
+import PremiumSubscriptionModal from "./components/premium-subscription";
+import Register from "./components/auth/signup";
+import { getFreebies } from "./actions/ticket";
+import { openPremiumSubscriptionModal } from "./utils/store/slice/appSlice";
+import Policy from "./components/policies";
 
 const App = () => {
   return (
@@ -62,7 +62,7 @@ const App = () => {
 const AppLayout = ({
   employee = false,
   admin = false,
-  windowEmployee = false
+  windowEmployee = false,
 }) => {
   const [loading, setloading] = useState(false);
   const [showFreebies, setShowFreebies] = useState(false);
@@ -70,21 +70,21 @@ const AppLayout = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname, search } = useLocation();
-  const { isLoggedIn } = useSelector(state => state.userSlice);
+  const { isLoggedIn } = useSelector((state) => state.userSlice);
 
   useEffect(() => {
     const location = pathname + search;
-    if (employee || admin || windowEmployee || pathname === '/profile') {
-      if (pathname === '/e/redeem') {
+    if (employee || admin || windowEmployee || pathname === "/profile") {
+      if (pathname === "/e/redeem") {
         const params = new URLSearchParams(search);
-        navigate(`/qr/${params.get('tid') || ''}`);
+        navigate(`/qr/${params.get("tid") || ""}`);
       } else {
-        navigate('/');
+        navigate("/");
       }
     }
 
     dispatch(
-      autoLogin(user => {
+      autoLogin((user) => {
         dispatch(getFreebies());
         if (
           (employee === true && isEmployee(user?.user_type)) ||
@@ -93,12 +93,12 @@ const AppLayout = ({
         ) {
           navigate(location);
         } else {
-          if (!user && pathname === '/profile') {
-            navigate('/');
-          } else if (user && pathname === '/profile') {
-            navigate('/profile');
-          } else if (isAdmin(user?.user_type)&&pathname==='/') {
-            navigate('/admin');
+          if (!user && pathname === "/profile") {
+            navigate("/");
+          } else if (user && pathname === "/profile") {
+            navigate("/profile");
+          } else if (isAdmin(user?.user_type) && pathname === "/") {
+            navigate("/admin");
           }
         }
 
@@ -106,12 +106,6 @@ const AppLayout = ({
           setTimeout(() => {
             dispatch(openPremiumSubscriptionModal());
           }, 8500);
-        } else {
-          if (!admin && !employee && !windowEmployee) {
-            setTimeout(() => {
-              setShowFreebies(true);
-            }, 6000);
-          }
         }
       })
     );
@@ -133,11 +127,11 @@ const AppLayout = ({
 
   return (
     <Grid
-      sx={{ position: 'relative', overflow: loading ? 'hidden' : 'auto' }}
-      height={loading ? '100vh' : '100%'}
+      sx={{ position: "relative", overflow: loading ? "hidden" : "auto" }}
+      height={loading ? "100vh" : "100%"}
     >
       {loading && (
-        <div className='loader'>
+        <div className="loader">
           <Loader />
         </div>
       )}
@@ -160,11 +154,11 @@ const AppLayout = ({
         <Navbar />
         <Icon />
 
-        <Grid mt='90px'>
+        <Grid mt="90px">
           <Outlet />
         </Grid>
 
-        <Grid display={'flex'} justifyContent={'center'}>
+        <Grid display={"flex"} justifyContent={"center"}>
           <Footer />
         </Grid>
       </div>
@@ -174,119 +168,119 @@ const AppLayout = ({
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <App />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <AppLayout />,
         children: [
           {
-            path: '/',
-            element: <Home />
+            path: "/",
+            element: <Home />,
           },
           {
-            path: '/zone',
-            element: <Zone />
+            path: "/zone",
+            element: <Zone />,
           },
           {
-            path: '/events',
-            element: <Events />
+            path: "/events",
+            element: <Events />,
           },
           {
-            path: '/corporate',
-            element: <Corporate />
+            path: "/corporate",
+            element: <Corporate />,
           },
           {
-            path: '/franchise',
-            element: <Franchise />
+            path: "/franchise",
+            element: <Franchise />,
           },
           {
-            path: '/packages',
-            element: <Packages />
+            path: "/packages",
+            element: <Packages />,
           },
           {
-            path: '/rating',
-            element: <Rating />
+            path: "/rating",
+            element: <Rating />,
           },
           {
-            path: '/gallery',
-            element: <Gallery />
+            path: "/gallery",
+            element: <Gallery />,
           },
           {
-            path: '/book',
-            element: <Booknow />
+            path: "/book",
+            element: <Booknow />,
           },
           {
-            path: '/profile',
-            element: <Profile />
+            path: "/profile",
+            element: <Profile />,
           },
           {
-            path: '/careers',
-            element: <Careers />
-          },
-	{
-            path: '/policies',
-            element: <Policy />
+            path: "/careers",
+            element: <Careers />,
           },
           {
-            path: '/qr/:id',
-            element: <AddMore />
+            path: "/policies",
+            element: <Policy />,
           },
           {
-            path: '*',
-            element: <Navigate to='/' />
-          }
-        ]
+            path: "/qr/:id",
+            element: <AddMore />,
+          },
+          {
+            path: "*",
+            element: <Navigate to="/" />,
+          },
+        ],
       },
       {
-        path: 'e',
+        path: "e",
         element: <AppLayout employee={true} />,
         children: [
           {
-            path: 'redeem',
+            path: "redeem",
             element: <RedeemTicket />,
-            index: true
-          }
-        ]
+            index: true,
+          },
+        ],
       },
       {
-        path: 'we',
+        path: "we",
         element: <AppLayout windowEmployee={true} />,
         children: [
           {
-            path: 'get-qr-tickets',
-            element: <GetQRTickets />
+            path: "get-qr-tickets",
+            element: <GetQRTickets />,
           },
           {
-            path: 'window-purchase',
-            element: <WindowPurchase />
-          }
-        ]
+            path: "window-purchase",
+            element: <WindowPurchase />,
+          },
+        ],
       },
       {
-        path: 'admin',
+        path: "admin",
         element: <AppLayout admin={true} />,
         children: [
           {
-            path: '',
+            path: "",
             element: <AdminPortal />,
-            index: true
+            index: true,
           },
           {
-            path: 'stats',
-            element: <Stats />
+            path: "stats",
+            element: <Stats />,
           },
           {
-            path: 'getDetails',
-            element: <Showdetails/>
+            path: "getDetails",
+            element: <Showdetails />,
           },
           {
-            path:'showdetails',
-            element: <Showdetails/>
+            path: "showdetails",
+            element: <Showdetails />,
           },
-        ]
-      }
-    ]
-  }
+        ],
+      },
+    ],
+  },
 ]);

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { validatePhoneNumber } from '../../utils/validators/validate';
-import shortid from 'shortid';
-import axios from 'axios';
-import { apiUrl, flag_prices, payment_modes } from '../../constants';
-import Coin from "../admin/Coin"
+import React, { useEffect, useState } from "react";
+import { validatePhoneNumber } from "../../utils/validators/validate";
+import shortid from "shortid";
+import axios from "axios";
+import { apiUrl, flag_prices, payment_modes } from "../../constants";
+import Coin from "../admin/Coin";
 import { getDiscount } from "../../actions/ticket";
 import {
   TextField,
@@ -16,22 +16,21 @@ import {
   Typography,
   FormHelperText,
   CircularProgress,
-  Box
-} from '@mui/material';
-import { Tour } from '@mui/icons-material';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import ListedOptionLayout from './ListedOptionLayout';
-import { windowPurchase } from '../../actions/exployee';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import ReactSelect from 'react-select';
-import ConfirmationModal from './modal';
-import IndividualFlag from '../booknow/individualFlags';
-import { set, useForm } from 'react-hook-form';
-import {
-  InputAdornment,
+  Box,
 } from "@mui/material";
-import { scrollToTop } from '../../utils';
+import { Tour } from "@mui/icons-material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ListedOptionLayout from "./ListedOptionLayout";
+import { windowPurchase } from "../../actions/exployee";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import ReactSelect from "react-select";
+import ConfirmationModal from "./modal";
+import IndividualFlag from "../booknow/individualFlags";
+import { set, useForm } from "react-hook-form";
+import { InputAdornment } from "@mui/material";
+import { scrollToTop } from "../../utils";
+import statesData, { localityData } from "../auth/states";
 
 const WindowPurchase = () => {
   const navigate = useNavigate();
@@ -41,72 +40,109 @@ const WindowPurchase = () => {
   const [code, setCode] = useState("");
   const [count, setCount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [discount, setDiscount] = useState(0);
   const [gstPrice, setGstPrice] = useState(0);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [isValid, setIsValid] = useState(true);
-  const [helperText, setHelperText] = useState('');
+  const [helperText, setHelperText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [packageData, setPackageData] = useState([]);
-  const { token } = useSelector(state => state.userSlice);
+  const { token } = useSelector((state) => state.userSlice);
   const [shortId, setShortId] = useState(null);
   const [paymentMode, setPaymentMode] = useState(null);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [namefilled,setnamefilled]=useState('');
-  const [promocode,setpromocode]=useState('');
-  const [agefilled,setagefilled]=useState('');
-  const [genderfilled,setgenderfilled]=useState('');
   const [dummyFreebiesData, setDummyFreebiesData] = useState([]);
+  const [existingFuningoMoney, setExistingFuningoMoney] = useState(0);
+  const [dob, setDob] = useState("");
+  const [error, setError] = useState("");
+  const [isPremium, setIsPremium] = useState(false);
+  const [premiumDiscount, setPremiumDiscount] = useState(0);
 
-  const paymentModes = payment_modes.map(paymentMode => ({
+  const [address, setAddress] = useState({
+    state: "Madhya Pradesh",
+    city: "Jabalpur",
+    locality: "",
+  });
+
+  const states = Object.keys(statesData).map((state) => ({
+    label: state,
+    value: state,
+  }));
+  const localities = localityData.map((locality) => ({
+    label: locality,
+    value: locality,
+  }));
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    if (address.state)
+      setCities(
+        statesData[address.state].map((city) => ({
+          label: city,
+          value: city,
+        }))
+      );
+  }, [address.city, address.state]);
+
+  const paymentModes = payment_modes.map((paymentMode) => ({
     label: paymentMode[0].toUpperCase() + paymentMode.slice(1),
-    value: paymentMode
+    value: paymentMode,
   }));
 
   const genderOptions = [
-    { value: 'male', label: 'Male' },
-    { value: 'female', label: 'Female' },
-    { value: 'others', label: 'Others' }
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+    { value: "others", label: "Others" },
   ];
 
-  const handlePhoneNumberChange = e => {
+  const handlePhoneNumberChange = (e) => {
     setPhoneNumber(e.target.value);
     setIsValid(true);
   };
 
+  const handleDobChange = (e) => {
+    setDob(e.target.value);
+  };
+
   const handleCheckClick = () => {
     if (!validatePhoneNumber(phoneNumber)) {
-      setHelperText('Invalid phone number');
+      setHelperText("Invalid phone number");
       setIsValid(false);
     } else {
-      setHelperText('');
+      setHelperText("");
       setIsValid(true);
     }
 
     async function fetchData() {
       try {
         setIsLoading(true);
-        const token = localStorage.getItem('token');
+        setExistingFuningoMoney(0);
+        const token = localStorage.getItem("token");
         if (!token) {
-          throw new Error('Login or SignUp First');
+          throw new Error("Login or SignUp First");
         }
 
         const headers = {
           token: token,
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         };
         const response = await axios.get(
-          `${apiUrl}/user/freebies/+91-${phoneNumber}`,
+          `${apiUrl}/user/coins/+91-${phoneNumber}`,
           {
-            headers: headers
+            headers: headers,
           }
         );
-
-        if (!response.data.success) {
-          throw new Error("Couldn't Fetch Freebies");
+        setExistingFuningoMoney(response.data.funingo_money);
+        if (response.data.address) {
+          setAddress(response.data.address);
         }
-        console.log('fetched freebies', response.data);
-        setDummyFreebiesData(response.data.freebies);
+        if (response.data.premium) {
+          for (let data of response.data.premium) {
+            if (new Date(data.expires_on) > Date.now()) {
+              setIsPremium(true);
+              break;
+            }
+          }
+        }
       } catch (error) {
         console.log(error.message, error);
       } finally {
@@ -115,34 +151,24 @@ const WindowPurchase = () => {
     }
     fetchData();
   };
-  
-  const handlediscountChange=event=>{
-    setDiscount(Math.max((event.target.value),0));
-  }
-  const handleCountChange = event => {
+
+  const handleCountChange = (event) => {
     const newCount = parseInt(event.target.value, 10);
     if (newCount < 0 || newCount > 10) {
       return;
     }
     setCount(newCount);
-    setSelectedSlots(prevSelectedSlots => {
+    setSelectedSlots((prevSelectedSlots) => {
       const updatedSelectedSlots = [...prevSelectedSlots];
       if (newCount < updatedSelectedSlots.length) {
         return updatedSelectedSlots.slice(0, newCount);
       } else {
         for (let i = updatedSelectedSlots.length; i < newCount; i++) {
           updatedSelectedSlots.push({
-            package: '',
-            freebies: '',
-            extra_red: 0,
-            extra_green: 0,
-            extra_yellow: 0,
-            golden_flag: 0,
-            person_name: '',
-            age: '',
-            gender: '',
-            discount:discount,
-            promo_code:''
+            package: "",
+            person_name: "",
+            age: "",
+            gender: "",
           });
         }
         return updatedSelectedSlots;
@@ -153,15 +179,14 @@ const WindowPurchase = () => {
     const resp = await getDiscount({
       token,
       code,
-      total_amount: totalPrice,
-    })
-    setDiscount(resp.discount);
-    console.log("resp.discount",resp.discount);
+      total_amount: totalPrice - premiumDiscount,
+    });
+    console.log("resp.discount", resp.discount);
     setCouponDiscount({ discount: resp.discount, message: resp.msg, code });
-};
+  };
 
   const handleChange = (index, newSelectedSlot) => {
-    setSelectedSlots(prev =>
+    setSelectedSlots((prev) =>
       prev.map((selectedSlot, ind) => {
         if (ind === index) return newSelectedSlot;
         return selectedSlot;
@@ -171,7 +196,7 @@ const WindowPurchase = () => {
 
   const handlePackageSelectChange = (event, index) => {
     const selectedValue = event.target.value;
-    setSelectedSlots(prevSelectedSlots => {
+    setSelectedSlots((prevSelectedSlots) => {
       const updatedSelectedSlots = [...prevSelectedSlots];
       updatedSelectedSlots[index].package = selectedValue;
       return updatedSelectedSlots;
@@ -180,28 +205,29 @@ const WindowPurchase = () => {
 
   const handleFreebiesSelectChange = (event, index) => {
     const selectedValue = event.target.value;
-    setSelectedSlots(prevSelectedSlots => {
+    setSelectedSlots((prevSelectedSlots) => {
       const updatedSelectedSlots = [...prevSelectedSlots];
       updatedSelectedSlots[index].freebies = selectedValue;
       return updatedSelectedSlots;
     });
   };
 
-  const handleDeleteSelect = index => {
-    setSelectedSlots(prevSelectedSlots => {
+  const handleDeleteSelect = (index) => {
+    setSelectedSlots((prevSelectedSlots) => {
       const updatedSelectedSlots = [...prevSelectedSlots];
       updatedSelectedSlots.splice(index, 1);
       setCount(count - 1);
       return updatedSelectedSlots;
     });
     let totalPrice = 0;
-    selectedSlots.forEach(selectedSlot => {
+    selectedSlots.forEach((selectedSlot) => {
       const packagePrice = selectedSlot.package?.price || 0;
       totalPrice += packagePrice;
     });
-    setGstPrice(Math.round((0.18 * totalPrice + Number.EPSILON) * 100) / 100);
-    totalPrice += 0.18 * totalPrice;
-    totalPrice = Math.round((totalPrice + Number.EPSILON) * 100) / 100;
+    // setGstPrice(Math.round((0.18 * totalPrice + Number.EPSILON) * 100) / 100);
+    // totalPrice += 0.18 * totalPrice;
+    // totalPrice = Math.round((totalPrice + Number.EPSILON) * 100) / 100;
+    if (premiumDiscount) setPremiumDiscount(totalPrice / 2);
     setTotalPrice(totalPrice);
   };
 
@@ -210,60 +236,61 @@ const WindowPurchase = () => {
     return availableOptions;
   };
 
-  const getAvailableFreebiesOptions = index => {
+  const getAvailableFreebiesOptions = (index) => {
     const selectedValues = selectedSlots.slice();
     const availableOptions = dummyFreebiesData.filter(
-      option =>
+      (option) =>
         !selectedValues.some(
-          selected =>
+          (selected) =>
             selected.freebies === option.id &&
-            selected.freebies !== '' &&
+            selected.freebies !== "" &&
             selected.freebies !== selectedValues[index].freebies
         ) ||
         option.id === selectedValues[index].freebies ||
-        option.id === ''
+        option.id === ""
     );
     return availableOptions;
   };
 
-  const handlePackageDataResponse = data => {
+  const handlePackageDataResponse = (data) => {
     setPackageData(
       data.map((item, index) => {
         const obj = {
           ...item,
-          id: item?._id
+          id: item?._id,
         };
         return obj;
       })
     );
   };
-  const handlePurchase = async callback => {
-    const details = selectedSlots.map(data => ({
+  const handlePurchase = async (callback) => {
+    const details = selectedSlots.map((data) => ({
       ...data,
-      package: data.package._id
+      package: data.package._id,
     }));
-    details[0].discount=discount;
-    details[0].promo_code=code;
-    console.log("details",details);
+
     try {
       const response = await windowPurchase({
-        total_amount: totalPrice,
+        total_amount: totalPrice - premiumDiscount - couponDiscount.discount,
         details,
         token,
-        phone_no: phoneNumber ? '+91-' + phoneNumber : undefined,
-        payment_mode: paymentMode.value
+        phone_no: phoneNumber ? "+91-" + phoneNumber : undefined,
+        payment_mode: paymentMode.value,
+        coupon: code,
+        dob,
       });
-     
+
       if (response.success) {
         setShortId(response.short_id);
         callback?.(response.short_id);
         setConfirmationModalOpen(false);
       }
-     } catch (error) {
+    } catch (error) {
       // Handle the error here, e.g., display an error message to the user or log the error for troubleshooting
-      console.error("Please fill all the fields");
+      console.error("Please fill all the fields", error);
+      setError(error?.response?.data?.error);
       // Add your error handling logic here
-     }
+    }
   };
 
   useEffect(() => {
@@ -287,29 +314,27 @@ const WindowPurchase = () => {
   }, []);
 
   useEffect(() => {
-    let totalPrice = 0;
-    selectedSlots.forEach(selectedSlot => {
+    let totalPrice = 0,
+      premiumDiscount = 0;
+    selectedSlots.forEach((selectedSlot) => {
       const packagePrice = selectedSlot.package?.price || 0;
       totalPrice += packagePrice;
-      totalPrice += selectedSlot.extra_green * flag_prices.green_flag_price;
-      totalPrice += selectedSlot.extra_red * flag_prices.red_flag_price;
-      totalPrice += selectedSlot.extra_yellow * flag_prices.yellow_flag_price;
-      totalPrice += selectedSlot.golden_flag * flag_prices.golden_flag_price;
     });
-    const gst = Math.round((0.18 * totalPrice + Number.EPSILON) * 100) / 100;
-    setGstPrice(gst);
-    console.log("totalPrice + gst-discount",totalPrice + gst-discount);
-    setTotalPrice(totalPrice + gst-discount);
-  }, [selectedSlots,discount]);
+    if (isPremium) {
+      premiumDiscount = totalPrice / 2;
+      setPremiumDiscount(premiumDiscount);
+    }
+    setTotalPrice(totalPrice);
+  }, [selectedSlots]);
 
   return (
     <Grid
       sx={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '20px'
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "20px",
       }}
     >
       <ConfirmationModal
@@ -320,43 +345,43 @@ const WindowPurchase = () => {
       {isLoading && (
         <Grid
           sx={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 9999
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
           }}
         >
-          <CircularProgress sx={{ color: 'white' }} />
+          <CircularProgress sx={{ color: "white" }} />
         </Grid>
       )}
       <Grid
         sx={{
-          width: { xs: '100%', lg: '60%' },
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '15px'
+          width: { xs: "100%", lg: "60%" },
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
         }}
       >
         <Grid
-          display={'flex'}
-          width={'100%'}
-          justifyContent={'space-between'}
+          display={"flex"}
+          width={"100%"}
+          justifyContent={"space-between"}
           sx={{
-            gap: '15px',
-            marginBottom: '25px',
-            flexDirection: { xs: 'column', md: 'row' }
+            gap: "15px",
+            marginBottom: "25px",
+            flexDirection: { xs: "column", md: "row" },
           }}
         >
-          <FormControl sx={{ width: { xs: '100%', lg: '50%' } }}>
+          <FormControl sx={{ width: { xs: "100%", lg: "50%" } }}>
             <TextField
-              label='Select the number of options'
-              type='number'
+              label="Select the number of options"
+              type="number"
               value={count}
               onChange={handleCountChange}
             />
@@ -369,76 +394,221 @@ const WindowPurchase = () => {
               onChange={handlediscountChange}
             />
           </FormControl> */}
-          <FormControl sx={{ width: { xs: '100%', lg: '50%' } }}>
+          <FormControl sx={{ width: { xs: "100%", lg: "50%" } }}>
             <TextField
-              label='Enter valid Phone Number'
-              type='number'
+              label="Enter valid Phone Number"
+              type="number"
               value={phoneNumber}
               onChange={handlePhoneNumberChange}
               InputProps={{
                 sx: {
-                  height: '100%',
-                  '& input': {
-                    border: '0px !important',
-                    '&::-webkit-inner-spin-button, &::-webkit-outer-spin-button':
+                  height: "100%",
+                  "& input": {
+                    border: "0px !important",
+                    "&::-webkit-inner-spin-button, &::-webkit-outer-spin-button":
                       {
-                        WebkitAppearance: 'none',
-                        margin: 0
-                      }
-                  }
+                        WebkitAppearance: "none",
+                        margin: 0,
+                      },
+                  },
                 },
 
                 endAdornment: (
                   <Button
                     sx={{
-                      background: '#257ac4',
-                      color: 'white',
-                      '&:hover': {
-                        backgroundColor: '#257ac4',
-                        color: 'white'
+                      background: "#257ac4",
+                      color: "white",
+                      height: "28px",
+                      fontSize: "12px",
+                      "&:hover": {
+                        backgroundColor: "#257ac4",
+                        color: "white",
                       },
-                      border: 'none',
-                      outline: 'none'
+                      border: "none",
+                      outline: "none",
                     }}
                     onClick={handleCheckClick}
                   >
                     Check
                   </Button>
-                )
+                ),
               }}
             />
+            <Typography>Available: {existingFuningoMoney}</Typography>
             <FormHelperText error={!isValid}>
               {!isValid && helperText}
             </FormHelperText>
           </FormControl>
+
+          <FormControl sx={{ width: { xs: "100%", lg: "50%" } }}>
+            <TextField
+              type="date"
+              value={dob}
+              onChange={handleDobChange}
+              InputProps={{
+                sx: {
+                  height: "40px",
+                  "& input": {
+                    border: "0px !important",
+                    "&::-webkit-inner-spin-button, &::-webkit-outer-spin-button":
+                      {
+                        WebkitAppearance: "none",
+                        margin: 0,
+                      },
+                  },
+                },
+              }}
+            />
+          </FormControl>
+        </Grid>
+        <Grid
+          sx={{
+            display: "flex",
+            gap: "15px",
+          }}
+        >
+          <ReactSelect
+            value={
+              states.find((state) => state.value === address.state) ?? null
+            }
+            onChange={(e) => setAddress((add) => ({ ...add, state: e?.value }))}
+            placeholder="Select your state"
+            styles={{
+              control: (provided) => ({
+                ...provided,
+                background: "white",
+                minWidth: "250px",
+              }),
+              input: (provided) => ({
+                ...provided,
+                color: "black",
+
+                "& input": {
+                  height: "30px",
+                },
+              }),
+              option: (provided, state) => ({
+                ...provided,
+                color: state.isSelected ? "white" : "black",
+              }),
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: "200px",
+              }),
+            }}
+            getOptionLabel={(opt) => opt.label}
+            getOptionValue={(opt) => opt.value}
+            required={true}
+            isSearchable={true}
+            isClearable
+            options={states}
+          />
+
+          <ReactSelect
+            value={
+              cities.find((option) => option?.value === address.city) ?? null
+            }
+            onChange={(e) => setAddress((add) => ({ ...add, city: e?.value }))}
+            placeholder="Select your city"
+            styles={{
+              control: (provided) => ({
+                ...provided,
+                background: "white",
+                minWidth: "250px",
+              }),
+              input: (provided) => ({
+                ...provided,
+                color: "black",
+
+                "& input": {
+                  height: "30px",
+                },
+              }),
+              option: (provided, state) => ({
+                ...provided,
+                color: state.isSelected ? "white" : "black",
+              }),
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: "200px",
+              }),
+            }}
+            required={true}
+            isSearchable={true}
+            options={cities}
+            isClearable
+            noOptionsMessage={() => "Please select your state first"}
+          />
+
+          {address.state === "Madhya Pradesh" &&
+            address.city === "Jabalpur" && (
+              <ReactSelect
+                value={
+                  localities.find(
+                    (option) => option?.value === address.locality
+                  ) ?? null
+                }
+                onChange={(e) =>
+                  setAddress((add) => ({ ...add, locality: e?.value }))
+                }
+                placeholder="Select your locality"
+                styles={{
+                  control: (provided) => ({
+                    ...provided,
+                    background: "white",
+                    minWidth: "250px",
+                  }),
+                  input: (provided) => ({
+                    ...provided,
+                    color: "black",
+
+                    "& input": {
+                      height: "30px",
+                    },
+                  }),
+                  option: (provided, state) => ({
+                    ...provided,
+                    color: state.isSelected ? "white" : "black",
+                  }),
+                  menuList: (provided) => ({
+                    ...provided,
+                    maxHeight: "150px",
+                  }),
+                }}
+                required={true}
+                isSearchable={true}
+                isClearable
+                options={localities}
+              />
+            )}
         </Grid>
         {count > 0 &&
           selectedSlots.map((selectedSlot, index) => (
             <Grid
               key={index}
               sx={{
-                display: 'flex',
-                gap: '20px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'column',
-                marginBottom: '15px'
+                display: "flex",
+                gap: "20px",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                marginBottom: "15px",
               }}
             >
-              <hr width={'100%'} />
+              <hr width={"100%"} />
               <Grid
                 sx={{
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
                 <Typography
                   sx={{
-                    fontFamily: 'Roboto Mono, monospace',
-                    fontSize: { xs: '15px', lg: '20px' },
-                    letterSpacing: '2px'
+                    fontFamily: "Roboto Mono, monospace",
+                    fontSize: { xs: "15px", lg: "20px" },
+                    letterSpacing: "2px",
                   }}
                 >
                   {`TICKET NUMBER : ${index + 1}  Price -> Rs ${
@@ -448,62 +618,62 @@ const WindowPurchase = () => {
                   }`}
                 </Typography>
                 <Button
-                  variant='outlined'
+                  variant="outlined"
                   onClick={() => handleDeleteSelect(index)}
                   sx={{
-                    height: '40px',
-                    width: '20px',
-                    '&:hover': {
+                    height: "40px",
+                    width: "20px",
+                    "&:hover": {
                       //   backgroundColor: "#f52047",
-                      color: '#f52047',
-                      outline: 'none',
-                      border: 'none'
+                      color: "#f52047",
+                      outline: "none",
+                      border: "none",
                     },
-                    outline: 'none',
-                    border: 'none',
-                    borderRadius: '50%'
+                    outline: "none",
+                    border: "none",
+                    borderRadius: "50%",
                   }}
                 >
-                  <DeleteForeverIcon sx={{ borderRadius: '50%' }} />
+                  <DeleteForeverIcon sx={{ borderRadius: "50%" }} />
                 </Button>
               </Grid>
 
               <Grid
                 sx={{
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: { xs: 'column', md: 'row' },
-                  gap: { xs: '15px', md: '10px' }
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
+                  gap: { xs: "15px", md: "10px" },
                 }}
               >
                 <Grid
                   sx={{
-                    width: { xs: '100%', lg: '50%' },
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px'
+                    width: { xs: "100%", lg: "50%" },
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
                   }}
                 >
                   <FormControl fullWidth>
                     <InputLabel>Select Package</InputLabel>
                     <Select
-                      label='Select Package'
+                      label="Select Package"
                       value={
-                        selectedSlot?.package === '' ? '' : selectedSlot.package
+                        selectedSlot?.package === "" ? "" : selectedSlot.package
                       }
-                      onChange={e => handlePackageSelectChange(e, index)}
+                      onChange={(e) => handlePackageSelectChange(e, index)}
                     >
-                      <MenuItem value=''>
+                      <MenuItem value="">
                         <em>
                           {getAvailablePackageOptions &&
                           getAvailablePackageOptions.length === 0
-                            ? 'Deselect packages'
-                            : 'None'}
+                            ? "Deselect packages"
+                            : "None"}
                         </em>
                       </MenuItem>
                       {getAvailablePackageOptions(index).map((option, i) => (
                         <MenuItem key={i} value={option}>
-                          <ListedOptionLayout data={option} boolFlag={true} />
+                          <ListedOptionLayout data={option} />
                         </MenuItem>
                       ))}
                     </Select>
@@ -511,10 +681,10 @@ const WindowPurchase = () => {
                 </Grid>
                 <Grid
                   sx={{
-                    width: { xs: '100%', lg: '50%' },
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px'
+                    width: { xs: "100%", lg: "50%" },
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
                   }}
                 >
                   {/* <FormControl fullWidth>
@@ -542,11 +712,11 @@ const WindowPurchase = () => {
                 </Grid>
               </Grid>
               <Grid
-                display={'flex'}
-                justifyContent={'space-between'}
-                width={'100%'}
+                display={"flex"}
+                justifyContent={"space-between"}
+                width={"100%"}
               >
-                <Grid className='input-freebies' width={'100%'}>
+                <Grid className="input-freebies" width={"100%"}>
                   {/* <Typography mb='5px'>Add More Coins</Typography>
                   <Grid
                     sx={{
@@ -557,7 +727,7 @@ const WindowPurchase = () => {
                       gap: '10px'
                     }}
                   > */}
-                    {/* <IndividualFlag
+                  {/* <IndividualFlag
                       label={
                         <Tour
                           sx={{
@@ -574,7 +744,7 @@ const WindowPurchase = () => {
                         })
                       }
                     /> */}
-                    {/* <IndividualFlag
+                  {/* <IndividualFlag
                       label={
                         <Coin/>
                       }
@@ -587,7 +757,7 @@ const WindowPurchase = () => {
                         })
                       }
                     /> */}
-                    {/* <IndividualFlag
+                  {/* <IndividualFlag
                       label={
                         <Tour
                           sx={{
@@ -632,44 +802,44 @@ const WindowPurchase = () => {
                   </Grid> */}
                 </Grid>
               </Grid>
-              <Grid width={'100%'}>
-                <Typography mb='5px'>Required Fields</Typography>
+              <Grid width={"100%"}>
+                <Typography mb="5px">Optional Fields</Typography>
                 <Grid
-                  display={'flex'}
-                  justifyContent={'space-between'}
-                  mb={'15px'}
-                  flexDirection={'row'}
-                  width={'100%'}
-                  gap='20px'
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  mb={"15px"}
+                  flexDirection={"row"}
+                  width={"100%"}
+                  gap="20px"
                 >
                   <Grid flexGrow={1}>
                     <TextField
-                      name='person_name'
-                      type='text'
-                      placeholder='Name'
+                      name="person_name"
+                      type="text"
+                      placeholder="Name"
                       value={selectedSlot.person_name}
-                      onChange={e =>
-                        {setnamefilled(e.target.value);handleChange(index, {
+                      onChange={(e) => {
+                        handleChange(index, {
                           ...selectedSlot,
-                          person_name: e.target.value
-                        })}
-                      }
+                          person_name: e.target.value,
+                        });
+                      }}
                       required={true}
                       fullWidth
                     />
                   </Grid>
                   <Grid>
                     <TextField
-                      name='age'
-                      type='text'
-                      placeholder='Age'
+                      name="age"
+                      type="text"
+                      placeholder="Age"
                       value={selectedSlot.age}
-                      onChange={e =>
-                        {setagefilled(e.target.value);handleChange(index, {
+                      onChange={(e) => {
+                        handleChange(index, {
                           ...selectedSlot,
-                          age: e.target.value
-                        })}
-                      }
+                          age: e.target.value,
+                        });
+                      }}
                       required={true}
                       fullWidth
                     />
@@ -677,39 +847,38 @@ const WindowPurchase = () => {
 
                   <Grid>
                     <ReactSelect
-                      id='gender'
-                      name='gender'
+                      id="gender"
+                      name="gender"
                       value={genderOptions.find(
-                        option => option?.value === selectedSlot.gender
+                        (option) => option?.value === selectedSlot.gender
                       )}
-                      onChange={e => {
-                        setgenderfilled(e?.value);
+                      onChange={(e) => {
                         handleChange(index, {
                           ...selectedSlot,
-                          gender: e?.value
+                          gender: e?.value,
                         });
                       }}
-                      placeholder='Gender'
+                      placeholder="Gender"
                       styles={{
-                        control: provided => ({
+                        control: (provided) => ({
                           ...provided,
-                          background: 'white',
-                          height: '40px'
+                          background: "white",
+                          height: "40px",
                         }),
-                        input: provided => ({
+                        input: (provided) => ({
                           ...provided,
-                          color: 'black',
-                          '& input': {
-                            height: '30px'
-                          }
+                          color: "black",
+                          "& input": {
+                            height: "30px",
+                          },
                         }),
-                        ValueContainer: provided => ({
-                          ...provided
+                        ValueContainer: (provided) => ({
+                          ...provided,
                         }),
                         option: (provided, state) => ({
                           ...provided,
-                          color: state.isSelected ? 'white' : 'black'
-                        })
+                          color: state.isSelected ? "white" : "black",
+                        }),
                       }}
                       required={true}
                       isSearchable={false}
@@ -723,32 +892,32 @@ const WindowPurchase = () => {
 
         <Grid
           sx={{
-            width: '100%',
-            height: '150px',
-            backgroundColor: 'beige',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            color: 'black',
-            padding: '15px 30px',
-            marginBottom: '25px',
-            borderRadius: '5px'
+            width: "100%",
+            height: "150px",
+            backgroundColor: "beige",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+            alignItems: "center",
+            color: "black",
+            padding: "15px 30px",
+            marginBottom: "25px",
+            borderRadius: "5px",
           }}
         >
           <Typography
             sx={{
-              fontSize: { xs: '22px', lg: '15px' },
-              fontWeight: '600',
-              letterSpacing: '3px'
+              fontSize: { xs: "22px", lg: "15px" },
+              fontWeight: "600",
+              letterSpacing: "3px",
             }}
           >
             PAYMENT SUMMARY
           </Typography>
           <Grid
-            width={'100%'}
-            display={'flex'}
-            justifyContent={'space-between'}
+            width={"100%"}
+            display={"flex"}
+            justifyContent={"space-between"}
           >
             <Typography>Subtotal </Typography>
             <Typography>Rs {totalPrice - gstPrice} </Typography>
@@ -811,104 +980,115 @@ const WindowPurchase = () => {
                   </Typography>
                 )}
               </Grid> */}
-               <Grid
-            width={'100%'}
-            display={'flex'}
-            justifyContent={'space-between'}
+          <Grid
+            width={"100%"}
+            display={"flex"}
+            justifyContent={"space-between"}
           >
             <Typography>Discount </Typography>
-            <Typography>Rs {discount} </Typography>
+            <Typography>
+              Rs {(couponDiscount.discount || 0) + (premiumDiscount || 0)}
+            </Typography>
           </Grid>
-          <Grid
-            width={'100%'}
-            display={'flex'}
-            justifyContent={'space-between'}
-            paddingBottom={'3px'}
+          {/* <Grid
+            width={"100%"}
+            display={"flex"}
+            justifyContent={"space-between"}
+            paddingBottom={"3px"}
           >
             <Typography>Gst@18% </Typography>
             <Typography>Rs {gstPrice} </Typography>
-          </Grid>
+          </Grid> */}
 
-          <hr width={'100%'} />
+          <hr width={"100%"} />
 
           <Grid
-            width={'100%'}
-            display={'flex'}
-            justifyContent={'space-between'}
-            paddingTop={'5px'}
+            width={"100%"}
+            display={"flex"}
+            justifyContent={"space-between"}
+            paddingTop={"5px"}
           >
             <Typography>Total </Typography>
-            <Typography>Rs {Math.max((totalPrice),0)}</Typography>
+            <Typography>
+              Rs{" "}
+              {Math.max(
+                totalPrice -
+                  ((couponDiscount.discount || 0) + (premiumDiscount || 0)),
+                0
+              )}
+            </Typography>
           </Grid>
         </Grid>
         <Grid width={"100%"}>
-                <TextField
-                  fullWidth
-                  sx={{
-                    background: "white",
-                    borderRadius: "5px",
-                    mt: "0px",
-                    zIndex: 0,
-                    "&:hover": {
-                      "& fieldset": {
-                        borderColor: "rgba(0, 0, 0, 0.23)",
-                      },
-                    },
-                  }}
-                  placeholder="Have a promo code?"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <Button onClick={() => getDiscountUsingCoupon()}>
-                          Apply
-                        </Button>
-                      </InputAdornment>
-                    ),
-                  }}
-                  inputProps={{
-                    sx: {
-                      border: "none !important",
-                      zIndex: "0 !important",
-                    },
-                  }}
-                />
-                {!!couponDiscount.message && (
-                  <Typography
-                    sx={{
-                      color: "red",
-                      fontSize: "12px",
-                      mt: "5px",
-                    }}
-                  >
-                    {couponDiscount.message}
-                  </Typography>
-                )}
-                {!!couponDiscount.discount && (
-                  <Typography
-                    sx={{
-                      color: "green",
-                      fontSize: "12px",
-                      mt: "5px",
-                    }}
-                  >
-                    Promo code applied!!
-                  </Typography>
-                )}
-              </Grid>
+          <TextField
+            fullWidth
+            sx={{
+              background: "white",
+              borderRadius: "5px",
+              mt: "0px",
+              zIndex: 0,
+              "&:hover": {
+                "& fieldset": {
+                  borderColor: "rgba(0, 0, 0, 0.23)",
+                },
+              },
+            }}
+            placeholder="Have a promo code?"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Button onClick={() => getDiscountUsingCoupon()}>
+                    Apply
+                  </Button>
+                </InputAdornment>
+              ),
+            }}
+            inputProps={{
+              sx: {
+                border: "none !important",
+                zIndex: "0 !important",
+              },
+            }}
+          />
+          {!!couponDiscount.message && (
+            <Typography
+              sx={{
+                color: "red",
+                fontSize: "12px",
+                mt: "5px",
+              }}
+            >
+              {couponDiscount.message}
+            </Typography>
+          )}
+          {!!couponDiscount.discount && (
+            <Typography
+              sx={{
+                color: "green",
+                fontSize: "12px",
+                mt: "5px",
+              }}
+            >
+              Promo code applied!!
+            </Typography>
+          )}
+        </Grid>
         <Grid>
-          <Grid mb='20px'>
+          <Grid mb="20px">
             <ReactSelect
               options={paymentModes}
-              onChange={e => {setPaymentMode(e)}}
-              placeholder='Payment mode'
+              onChange={(e) => {
+                setPaymentMode(e);
+              }}
+              placeholder="Payment mode"
               value={paymentMode}
               styles={{
-                container: styles => ({
+                container: (styles) => ({
                   ...styles,
-                  flexBasis: '300px'
-                })
+                  flexBasis: "300px",
+                }),
               }}
               isClearable={false}
             />
@@ -916,30 +1096,36 @@ const WindowPurchase = () => {
           {shortId ? (
             <Box
               sx={{
-                display: 'flex',
-                gap: '10px',
-                alignItems: 'center',
-                mb: '10px'
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+                mb: "10px",
               }}
             >
               <Typography>
                 Your ticket is booked. <b>TicketId: {shortId}</b>
               </Typography>
               <Button
-                onClick={() => {navigate(`/we/get-qr-tickets?tid=${shortId}`);scrollToTop();}}
+                onClick={() => {
+                  navigate(`/we/get-qr-tickets?tid=${shortId}`);
+                  scrollToTop();
+                }}
               >
                 Generate QR Tickets
               </Button>
             </Box>
           ) : (
-            <Button
-              onClick={() => setConfirmationModalOpen(true)}
-              variant='contained'
-              fullWidth
-              disabled={!paymentMode||count===0||phoneNumber===''||namefilled===''||agefilled===''||genderfilled===''}
-            >
-              Buy Now
-            </Button>
+            <>
+              <Button
+                onClick={() => setConfirmationModalOpen(true)}
+                variant="contained"
+                fullWidth
+                disabled={!paymentMode || count === 0 || phoneNumber === ""}
+              >
+                Buy Now
+              </Button>
+              <FormHelperText error>{error}</FormHelperText>
+            </>
           )}
         </Grid>
       </Grid>

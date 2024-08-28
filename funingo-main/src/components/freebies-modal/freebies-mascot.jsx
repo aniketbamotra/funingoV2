@@ -5,15 +5,8 @@ import FreebiesGif from '../../assets/freebies-mascot.png';
 import staticMascot from '../../assets/freebies-mascot.png';
 import { useSelector } from 'react-redux';
 
-let userfunmoneyfromnavbar=0;
-
-export const getuser_funingomoney = (userfuningomoney) => {
-  userfunmoneyfromnavbar=userfuningomoney;
-  // userfunmoneyfromnavbar=0;
-};
-
 const FreebiesMascot = ({ small = false, backgroundFilter = true }) => {
-  const { freebiesArray: freebies = [] } = useSelector(
+  const { freebiesArray: freebies = [], userData: {funingo_money: userfunmoneyfromnavbar} } = useSelector(
     state => state.userSlice
   );
   const [gif, setGif] = useState(FreebiesGif);

@@ -1,17 +1,17 @@
-import express from 'express';
-import catchAsync from '../utilities/catch-async.js';
+import express from "express";
+import catchAsync from "../utilities/catch-async.js";
 import {
   addPackage,
   deletePackage,
-  getAllPackages
-} from '../controllers/package.js';
-import { authenticateAdmin } from '../middleware.js';
+  getAllPackages,
+} from "../controllers/package.js";
+import { authenticateAdmin } from "../middleware.js";
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   .get(catchAsync(getAllPackages))
   .post(authenticateAdmin, catchAsync(addPackage));
-router.route('/:id').delete(authenticateAdmin, catchAsync(deletePackage));
+router.route("/:id").delete(authenticateAdmin, catchAsync(deletePackage));
 
 export default router;

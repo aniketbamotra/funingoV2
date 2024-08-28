@@ -1,63 +1,78 @@
-import ShortUniqueId from 'short-unique-id';
-import User from '../../models/user.js';
-import Package from '../../models/package.js';
-import ExpressError from '../../utilities/express-error.js';
-import Ticket from '../../models/ticket.js';
-import Coupon from '../../models/coupon.js';
-import constants from '../../constants.js';
+import ShortUniqueId from "short-unique-id";
+import User from "../../models/user.js";
+import Package from "../../models/package.js";
+import ExpressError from "../../utilities/express-error.js";
+import Ticket from "../../models/ticket.js";
+import Coupon from "../../models/coupon.js";
+import constants from "../../constants.js";
+import { calculateDiscountPrice } from "../../utilities/utils.js";
 
 export const bookTicket = async (req, res) => {
-  let { details, total_amount, phone_no, payment_mode } = req.body;
+  let {
+    details,
+    total_amount,
+    phone_no,
+    payment_mode,
+    coupon,
+    dob,
+    state,
+    city,
+    locality,
+  } = req.body;
   let totalAmount = 0;
-  const user = await User.findOne({ phone_no });
-  console.log("user",user);
-  console.log("details",details);
+  let user = await User.findOne({ phone_no, dob: new Date(dob) });
+
+  if (!user) {
+    user = new User({ phone_no, dob: new Date(dob), state, city, locality });
+  }
+
+  let total_coins = 0;
+
   const newDetails = await Promise.all(
-    details.map(async person => {
-      const existing = person?.freebie;
-      const freebies = user?.existing_flags?.find(
-        exist => exist.id === existing
-      );
+    details.map(async (person) => {
       if (person.package) {
         const pack = await Package.findById(person.package);
         totalAmount += pack.price;
-        totalAmount +=
-          constants.red_flag_price *
-          Math.max(person.extra_red - (freebies?.red ?? 0), 0);
-        totalAmount +=
-          constants.yellow_flag_price *
-          Math.max(person.extra_yellow - (freebies?.yellow ?? 0), 0);
-        totalAmount +=
-          constants.green_flag_price *
-          Math.max(person.extra_green - (freebies?.green ?? 0), 0);
+        total_coins += pack.coins;
       }
-      totalAmount += constants.golden_flag_price * person.golden_flag;
-
-      person.extra_red += freebies?.red ?? 0;
-      person.extra_green += freebies?.green ?? 0;
-      person.extra_yellow += freebies?.yellow ?? 0;
+      if (!person.age) delete person.age;
+      if (!person.name) delete person.name;
+      if (!person.gender) delete person.gender;
       return person;
     })
   );
 
-  totalAmount += 0.18 * totalAmount;
-  totalAmount-=details[0].discount;
-  totalAmount = Math.round((totalAmount + Number.EPSILON) * 100) / 100;
+  user.funingo_money += total_coins;
 
+  let isPremium = false;
+  for (let data of user.premium || []) {
+    if (new Date(data.expires_on) > Date.now()) {
+      isPremium = true;
+      break;
+    }
+  }
+  if (isPremium) {
+    totalAmount /= 2;
+  }
 
-  // totalAmount=total_amount;
-  console.log("totalAmount",totalAmount);
-  console.log("total_amount",total_amount);
+  if (coupon) {
+    const discount = await calculateDiscountPrice({
+      code: coupon,
+      total_amount: totalAmount,
+      updateCouponCount: true,
+    });
+    totalAmount -= discount.discount;
+  }
+  console.log("discount", { totalAmount });
 
   if (totalAmount !== total_amount) {
-    throw new ExpressError("Total amount doesn't match index.js", 400);
+    throw new ExpressError("Total amount doesn't match", 400);
   }
- 
+
   const new_short_id = new ShortUniqueId({
-    dictionary: 'number',
+    dictionary: "number",
     // length: 3
   });
-
 
   const newTicket = new Ticket({
     fun_date: new Date(),
@@ -68,34 +83,16 @@ export const bookTicket = async (req, res) => {
     short_id: new_short_id(),
     user,
     payment_mode,
-    phone_no: phone_no ?? ''
+    phone_no: phone_no ?? "",
   });
 
-  console.log("newTicket",newTicket);
+  user.booked_tickets.push(newTicket);
 
   await newTicket.save();
-
-  if(details[0].discount>0)
-    {
-      const coupon2 = await Coupon.findOne({code:details[0].promo_code});
-
-  if (!coupon2) {
-    return res.status(404).json({ success: false, error: 'Coupon not found ticket.js' });
-  }
-  if (coupon2.count > 0) {
-    coupon2.count -= 1;
-    if(coupon2.count==0)
-    await Coupon.findOneAndDelete({ code:text });
-  } 
-
-  // Save the changes to the database
-
-  if(coupon2.count>0)
-  await coupon2.save();
-    }
+  await user.save();
 
   res.status(200).send({
     short_id: newTicket.short_id,
-    success: true
+    success: true,
   });
 };

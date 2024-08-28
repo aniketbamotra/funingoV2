@@ -43,7 +43,16 @@ import { Tour } from "@mui/icons-material";
 import InfoIcon from "@mui/icons-material/Info";
 import Ticket from "./ticket";
 import ConfirmationModal from "../windowPurchase/modal";
-import { P1000, P1500, P2000, P2500, P3000, P500, P5000, arrow } from "../../assets";
+import {
+  P1000,
+  P1500,
+  P2000,
+  P2500,
+  P3000,
+  P500,
+  P5000,
+  arrow,
+} from "../../assets";
 import { red } from "@mui/material/colors";
 
 export const genderOptions = [
@@ -169,7 +178,6 @@ const initialErrorMsg = {
   error: false,
 };
 const Booknow = () => {
-  
   const dispatch = useDispatch();
 
   const {
@@ -189,7 +197,6 @@ const Booknow = () => {
   const [errorMsg, setErrorMsg] = useState(initialErrorMsg);
   const [totalPrice, setTotalPrice] = useState(0);
   const [couponDiscount, setCouponDiscount] = useState({});
-  const [gstPrice, setGstPrice] = useState(0);
   const [code, setCode] = useState("");
   const [showTrampolinePopup, setShowTrampolinePopup] = useState(false);
   const [premium50Live, setPremium50Live] = useState(0);
@@ -205,13 +212,12 @@ const Booknow = () => {
   const today = new Date().getDay(); // Get the current day of the week (0 for Sunday, 1 for Monday, and so on)
   const isWeekend = today === 0 || today === 6;
 
-
   useEffect(() => {
     // Set usedFuningoMoney to Number(values.totalfuningocoinsassigned) initially
     setUseFuningoMoney(Number(values.totalfuningocoinsassigned));
   });
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -219,9 +225,7 @@ const Booknow = () => {
 
   const disablevariable = () => {
     setdisablevar(true);
-  }
-
-
+  };
 
   let weekdaypackageprice = 0;
   const {
@@ -278,9 +282,19 @@ const Booknow = () => {
           errmessage += "Invalid Funingo Coins";
         }
 
-        if ((Number(values.totalfuningocoinsassigned)) + Number((values.funingocoins)) > userData?.funingo_money) {
-          console.log("Number(values.totalfuningocoinsassigned)", (Number(values.totalfuningocoinsassigned)));
-          console.log("Number(values.funingocoins)", Number(values.funingocoins));
+        if (
+          Number(values.totalfuningocoinsassigned) +
+            Number(values.funingocoins) >
+          userData?.funingo_money
+        ) {
+          console.log(
+            "Number(values.totalfuningocoinsassigned)",
+            Number(values.totalfuningocoinsassigned)
+          );
+          console.log(
+            "Number(values.funingocoins)",
+            Number(values.funingocoins)
+          );
           console.log("userData?.funingo_money", userData?.funingo_money);
           setErrorMsg({
             ...setErrorMsg,
@@ -297,21 +311,13 @@ const Booknow = () => {
           let weekdayprice = values.isChecked == true ? weekdaypackageprice : 0;
           values.extra_yellow =
             values.extra_yellow + Number(values.funingocoins);
-          (values.totalfuningocoinsassigned) =
-            Number(values.totalfuningocoinsassigned) + Number(values.funingocoins);
+          values.totalfuningocoinsassigned =
+            Number(values.totalfuningocoinsassigned) +
+            Number(values.funingocoins);
           console.log("values.extra_yellow" + values.extra_yellow);
           console.log(
-            "totalfuningocoins assigned" + Number(values.totalfuningocoinsassigned)
-          );
-        }
-
-        if (selectedPremium?.premium_type === "50%") {
-          setPremium50Live((curr) =>
-            curr.filter((pre) => pre._id !== selectedPremium._id)
-          );
-        } else if (selectedPremium?.premium_type === "100%") {
-          setPremium100Live((curr) =>
-            curr.filter((pre) => pre._id !== selectedPremium._id)
+            "totalfuningocoins assigned" +
+              Number(values.totalfuningocoinsassigned)
           );
         }
 
@@ -319,18 +325,10 @@ const Booknow = () => {
         const pkgObj = packageMap?.[pID];
         values = {
           ...values,
-          price:
-            (pkgObj?.price ?? 0) +
-            (values.extra_red * flag_prices.red_flag_price +
-              // values.extra_yellow * flag_prices.yellow_flag_price +      //since funingo coins are of user only hence no need to add that amount
-              values.extra_green * flag_prices.green_flag_price +
-              values.golden_flag * flag_prices.golden_flag_price),
+          price: pkgObj?.price ?? 0,
           selectedPremium,
         };
-        // if (selectedPremium === '50%') {
-        //   setTotalPremiumDiscount(curr => curr + Math.floor(values.price / 2));
-        // }
-        // setTotalPrice(curr => curr + values.price);
+
         setPersons([...persons, values]);
 
         resetForm({
@@ -358,7 +356,7 @@ const Booknow = () => {
       token,
       code,
       total_amount: totalPrice - totalPremiumDiscount,
-    })
+    });
     setCouponDiscount({ discount: resp.discount, message: resp.msg, code });
   };
 
@@ -388,16 +386,6 @@ const Booknow = () => {
       };
     })
     .filter((option) => option !== null);
-
-  const freebiesOption = freebiesArray
-    .filter(
-      (freebiesObj) =>
-        !persons.some((person) => person?.freebies === freebiesObj?.id)
-    )
-    .map((freebiesObj) => ({
-      value: freebiesObj?.id,
-      label: <Packagecard data={freebiesObj} boolFlag={false} />,
-    }));
 
   const timeOptions = [
     { value: "11-12", label: "11 AM - 12 PM" },
@@ -442,35 +430,17 @@ const Booknow = () => {
   // };
 
   useEffect(() => {
-    setGstPrice(
-      Math.max(
-        Math.round(
-          (0.18 *
-            (totalPrice -
-              totalPremiumDiscount -
-              // usedFuningoMoney -
-              (couponDiscount?.discount || 0)) +
-            Number.EPSILON) *
-          100
-        ) / 100,
-        0
-      )
-    );
-  }, [totalPrice, totalPremiumDiscount, usedFuningoMoney, couponDiscount]);
-
-  useEffect(() => {
-    let total = 0,
-      premiumDiscount = 0;
+    let total = 0;
 
     persons.forEach((person) => {
-      console.log("person here", person);
+      console.log("person here", person, isPremium);
       total += person.price;
-      if (person.selectedPremium?.premium_type === "50%")
-        premiumDiscount += Math.floor(person.price / 2);
     });
 
-
-    setTotalPremiumDiscount(premiumDiscount);
+    if (isPremium) {
+      console.log("premium", Math.floor(total / 2));
+      setTotalPremiumDiscount(total / 2);
+    }
     setTotalPrice(total);
   }, [persons]);
 
@@ -501,38 +471,6 @@ const Booknow = () => {
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        setIsLoading(true);
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Login or SignUp First");
-        }
-
-        const headers = {
-          token: token,
-          "Content-Type": "application/json",
-        };
-        const response = await axios.get(`${apiUrl}/user/freebies`, {
-          headers: headers,
-        });
-
-        if (!response.data.success) {
-          throw new Error("Couldn't Fetch Freebies");
-        }
-        dispatch(addFreebies(response.data?.freebies));
-        console.log("fetched freebies", response.data);
-      } catch (error) {
-        dispatch(removeFreebies());
-        console.log(error.message, error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchData();
-  }, [isLoggedIn]);
-
-  useEffect(() => {
     if (showTrampolinePopup) {
       const timeoutId = setTimeout(() => {
         setShowTrampolinePopup(false);
@@ -552,26 +490,19 @@ const Booknow = () => {
             data?.premium_type === "50%"
         )
       );
-      setPremium100Live(
-        userData?.premium?.filter(
-          (data) =>
-            new Date(data.expires_on) > Date.now() &&
-            data?.premium_type === "100%"
-        )
-      );
       resetForm({
         values: {
           ...values,
           email: values.email
             ? values.email
             : userData?.email
-              ? userData.email
-              : "",
+            ? userData.email
+            : "",
           phone: values.phone
             ? values.phone
             : userData?.phone_no
-              ? userData.phone_no.split("-")?.[1]
-              : "",
+            ? userData.phone_no.split("-")?.[1]
+            : "",
         },
       });
     }
@@ -593,17 +524,14 @@ const Booknow = () => {
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-
-
   return (
     <Grid className="booknow">
-
       {isLoading && (
         <Grid className="loading-overlay">
           <CircularProgress />
@@ -625,9 +553,12 @@ const Booknow = () => {
         />
       )}
 
-      <Grid className="top2 flex lg:justify-evenly lg:flex-row max-md:flex-col max-md:flex-wrap max-md:justify-center max-md:p-5" mb={"2%"}>
+      <Grid
+        className="top2 flex lg:justify-evenly lg:flex-row max-md:flex-col max-md:flex-wrap max-md:justify-center max-md:p-5"
+        mb={"2%"}
+      >
         {/* Mobile button  */}
-        <button 
+        <button
           onClick={toggleVisibility}
           className="
             z-50 h-10 text-[15px] lg:hidden max-sm:flex
@@ -635,14 +566,24 @@ const Booknow = () => {
             w-44 p-3 rounded-3xl
             bg-[#03ea2e] buttonText
             cursor-pointer absolute left-8
-          ">
+          "
+        >
           VIEW ACTIVITY COSTS
         </button>
         {/* Left Information Grid Mobile Version  */}
         {isVisible && (
-          <Grid className={`bukFormMobile z-[500] absolute w-[100%] lg:hidden ${isVisible ? 'slide-in' : 'slide-out'}`}>
+          <Grid
+            className={`bukFormMobile z-[500] absolute w-[100%] lg:hidden ${
+              isVisible ? "slide-in" : "slide-out"
+            }`}
+          >
             {packageInfo.map((info, index) => (
-              <div key={index} className={`flex w-full h-16 ${index % 2 === 0 ? 'bg-yellow-200' : 'bg-red-200'}`}>
+              <div
+                key={index}
+                className={`flex w-full h-16 ${
+                  index % 2 === 0 ? "bg-yellow-200" : "bg-red-200"
+                }`}
+              >
                 <div className="text-left justify-center items-center w-1/2 p-4">
                   <h2>{info.text}</h2>
                 </div>
@@ -657,7 +598,12 @@ const Booknow = () => {
         {/* Left Informative Grid Desktop Version  */}
         <Grid className="bukForm max-md:hidden">
           {packageInfo.map((info, index) => (
-            <div key={index} className={`flex w-full h-16 ${index % 2 === 0 ? 'bg-yellow-200' : 'bg-red-200'}`}>
+            <div
+              key={index}
+              className={`flex w-full h-16 ${
+                index % 2 === 0 ? "bg-yellow-200" : "bg-red-200"
+              }`}
+            >
               <div className="text-left justify-center items-center w-1/2 p-4">
                 <h2>{info.text}</h2>
               </div>
@@ -685,7 +631,6 @@ const Booknow = () => {
                 setPersons={setPersons}
                 packagesData={packagesData}
                 setTotalPrice={setTotalPrice}
-                freebiesOption={freebiesOption}
                 setPremium100Live={setPremium100Live}
                 setPremium50Live={setPremium50Live}
               />
@@ -708,7 +653,7 @@ const Booknow = () => {
                     width={"100%"}
                     placeholder="Email ID"
                     value={values.email}
-                    // onChange={handleInputChange} 
+                    // onChange={handleInputChange}
                     disabled={disablevar}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -831,81 +776,12 @@ const Booknow = () => {
               </Grid>
 
               <Grid
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  mb: "10px",
-                }}
-              >
-                {premium50Live.length > 0 && (
-                  <Grid display={"flex"}>
-                    <Radio
-                      id="50%"
-                      name="premium"
-                      onClick={handleSelectedPremiumChange}
-                      checked={selectedPremium?.premium_type === "50%"}
-                      sx={{
-                        color: "white",
-                        padding: "0px",
-                        "&.Mui-checked": {
-                          color: "white",
-                        },
-                        paddingRight: "5px",
-                      }}
-                    />
-                    <Typography
-                      component={"label"}
-                      htmlFor="50%"
-                      display={"block"}
-                    >
-                      Apply 50% Premium for this person
-                    </Typography>
-                  </Grid>
-                )}
-                {premium100Live.length > 0 && (
-                  <Grid display="flex">
-                    <Radio
-                      id="100%"
-                      name="premium"
-                      onClick={handleSelectedPremiumChange}
-                      checked={selectedPremium?.premium_type === "100%"}
-                      sx={{
-                        color: "white",
-                        padding: "0px",
-                        "&.Mui-checked": {
-                          color: "white",
-                        },
-                        paddingRight: "5px",
-                      }}
-                    />
-                    <Typography
-                      component={"label"}
-                      htmlFor="100%"
-                      display={"block"}
-                    >
-                      Apply 100% Premium for this person&nbsp;
-                      <Typography
-                        component={"span"}
-                        sx={{
-                          fontSize: "12px",
-                        }}
-                      >
-                        {"(Selecting packages won't be required)"}
-                      </Typography>
-                    </Typography>
-                  </Grid>
-                )}
-              </Grid>
-
-              <Grid
                 display={"flex"}
                 justifyContent={"space-between"}
                 mb={"15px"}
                 width={"100%"}
-              // border={"2px solid red"}
+                // border={"2px solid red"}
               >
-
                 {/* start */}
                 <Grid className="input-package">
                   <label className="book-now-label">Select Packages</label>
@@ -925,7 +801,6 @@ const Booknow = () => {
                     onBlur={handleBlur}
                     placeholder="Select a package..."
                     styles={{
-
                       control: (provided) => ({
                         ...provided,
                         background: "white",
@@ -1174,13 +1049,12 @@ const Booknow = () => {
                     </Grid>
                   )} */}
 
-
               {/* </Grid> */}
               {/* </Grid> */}
 
               {/* testing start */}
 
-              {userData?.funingo_money != 0 && (
+              {/* {userData?.funingo_money !== 0 && (
                 <Grid
                   display={"flex"}
                   justifyContent={"space-between"}
@@ -1220,7 +1094,7 @@ const Booknow = () => {
                         ))}
                   </Grid>
                 </Grid>
-              )}
+              )} */}
 
               {/* weekend start */}
 
@@ -1358,17 +1232,12 @@ const Booknow = () => {
                 </Grid>
               </Grid> */}
 
-
-
-
-
-
               <Grid
                 display={"flex"}
                 flexDirection={"row-reverse"}
                 width={"100%"}
                 height={"50px"}
-                mt={isMobile ? "60px" : "18px"}
+                mt={"18px"}
                 mb={"15px"}
               >
                 <Button
@@ -1392,8 +1261,6 @@ const Booknow = () => {
                   Save Details/Add Person
                 </Button>
               </Grid>
-
-
 
               <Grid
                 display={"flex"}
@@ -1453,21 +1320,22 @@ const Booknow = () => {
                         ...provided,
                         color: state.isSelected ? "white" : "black",
                       }),
-
                     }}
                     required={true}
                     isSearchable={false}
                     isClearable
                     options={timeOptions}
-                  // isDisabled={disablevar}
+                    // isDisabled={disablevar}
                   />
                 </Grid>
               </Grid>
 
-
-
-
-              <Grid width={"100%"} mb={"15px"} gap={"0px"} className="max-md:mt-[60px]">
+              <Grid
+                width={"100%"}
+                mb={"15px"}
+                gap={"0px"}
+                className="max-md:mt-[60px]"
+              >
                 <label className="book-now-label">Promo Code</label>
                 <TextField
                   fullWidth
@@ -1543,41 +1411,38 @@ const Booknow = () => {
                 </Typography>
 
                 <Grid
-                  width={'100%'}
-                  display={'flex'}
-                  gap='5px'
-                  alignItems={'center'}
-                  mb='10px'
+                  width={"100%"}
+                  display={"flex"}
+                  gap="5px"
+                  alignItems={"center"}
+                  mb="10px"
                 >
                   <Checkbox
                     sx={{
-                      p: '0px',
-                      '&.Mui-checked': {
-                        color: 'black'
+                      p: "0px",
+                      "&.Mui-checked": {
+                        color: "black",
                       },
-                      position: 'absolute',
-                      overflow: 'hidden',
-                      clip: 'rect(0 0 0 0)',
-                      height: '1px',
-                      width: '1px',
-                      margin: '-1px',
-                      padding: '0',
-                      border: '0',
-                      whiteSpace: 'nowrap'
-
+                      position: "absolute",
+                      overflow: "hidden",
+                      clip: "rect(0 0 0 0)",
+                      height: "1px",
+                      width: "1px",
+                      margin: "-1px",
+                      padding: "0",
+                      border: "0",
+                      whiteSpace: "nowrap",
                     }}
-                    onChange={e => {
+                    onChange={(e) => {
                       setUseFuningoMoney(
                         e.target.checked
                           ? Number(values.totalfuningocoinsassigned)
                           : Number(values.totalfuningocoinsassigned)
-                      )
+                      );
                       console.log("usedFuningoMoney", usedFuningoMoney);
-                    }
-                    }
+                    }}
                     checked={usedFuningoMoney !== 0}
-                    id='funingo-money'
-
+                    id="funingo-money"
                   />
                   {/* <Typography component={'label'} htmlFor='funingo-money'>
                     Use {percent_of_fm_to_use}% of your funingo money.
@@ -1595,8 +1460,6 @@ const Booknow = () => {
                 >
                   <Typography>Subtotal </Typography>
                   <Typography>Rs {totalPrice} </Typography>
-
-
                 </Grid>
 
                 <Grid
@@ -1623,7 +1486,7 @@ const Booknow = () => {
                   </Grid>
                 )} */}
 
-                <Grid
+                {/* <Grid
                   width={"100%"}
                   display={"flex"}
                   justifyContent={"space-between"}
@@ -1631,7 +1494,7 @@ const Booknow = () => {
                 >
                   <Typography>Gst@18% </Typography>
                   <Typography>Rs {Math.ceil(gstPrice)}</Typography>
-                </Grid>
+                </Grid> */}
 
                 <hr width={"100%"} />
 
@@ -1646,14 +1509,10 @@ const Booknow = () => {
                     Rs{" "}
                     {Math.max(
                       Math.round(
-                        (Math.ceil(gstPrice) +
-                          totalPrice -
+                        totalPrice -
                           (couponDiscount?.discount || 0) -
-                          (totalPremiumDiscount || 0) -
-                          // (usedFuningoMoney || 0) +
-                          Number.EPSILON) *
-                        1
-                      ) / 1,
+                          (totalPremiumDiscount || 0)
+                      ),
                       0
                     )}
                   </Typography>
@@ -1668,15 +1527,14 @@ const Booknow = () => {
                 mb="30px"
                 className="paymentButton"
               >
-                <div
-
-                >
+                <div>
                   <PaymentButton
                     values={values}
                     persons={persons}
                     setPersons={setPersons}
                     handleResetBookForm={handleResetBookForm}
-                    discount={couponDiscount}
+                    discount={couponDiscount?.discount || 0}
+                    premiumDiscount={totalPremiumDiscount}
                     usedFuningoMoney={usedFuningoMoney}
                     setShowTicket={setShowTicket}
                   />

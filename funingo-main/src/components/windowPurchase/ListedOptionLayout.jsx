@@ -1,14 +1,14 @@
 import React from "react";
 import { Grid, Typography } from "@mui/material";
 import { Tour } from "@mui/icons-material";
-import Coin from "../admin/Coin"
+import Coin from "../admin/Coin";
 
 const capitalizeFirstLetter = (inputString) => {
   return (
     inputString.charAt(0).toUpperCase() + inputString.slice(1).toLowerCase()
   );
 };
-const ListedOptionLayout = ({ data, boolFlag }) => {
+const ListedOptionLayout = ({ data }) => {
   return (
     <Grid
       display={"flex"}
@@ -31,12 +31,15 @@ const ListedOptionLayout = ({ data, boolFlag }) => {
       >
         <Grid>
           <Typography fontWeight={"600"}>
-            {boolFlag
-              ? `${capitalizeFirstLetter(data?.name)} Rs ${data?.price}`
-              : "Freebies :- "}
+            {`${capitalizeFirstLetter(data?.name)} Rs ${data?.price}`}
           </Typography>
         </Grid>
-        <Grid display={"flex"} justifyContent={"center"} alignItems={"center"} gap={'5px'}>
+        <Grid
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          gap={"5px"}
+        >
           {/* <Typography
             fontWeight={"600"}
             display={"flex"}
@@ -70,8 +73,7 @@ const ListedOptionLayout = ({ data, boolFlag }) => {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            {data?.yellow}&nbsp;{" "}
-            <Coin/>
+            {data?.coins}&nbsp; <Coin />
           </Typography>
         </Grid>
       </Grid>

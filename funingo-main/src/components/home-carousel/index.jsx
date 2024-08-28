@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Carousel } from 'react-responsive-carousel';
-import './styles.scss';
-import { Cursor } from 'react-simple-typewriter';
-import Slide0 from './images/slide-0.png';
-import Slide1 from './images/slide-1.png';
-import Slide2 from './images/slide-2.jpg';
+import React, { useState, useEffect } from "react";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
+import "./styles.scss";
+import { Cursor } from "react-simple-typewriter";
+import Slide0 from "./images/slide-0.png";
+import Slide1 from "./images/slide-1.png";
+import Slide2 from "./images/slide-2.jpg";
 import Slide3 from "./images/slide-3.jpg";
-import { Box, Grid, Button } from '@mui/material';
+import { Box, Grid, Button } from "@mui/material";
 
-import { useNavigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { openPremiumSubscriptionModal } from '../../utils/store/slice/appSlice';
-import { homeBookNow, mainBackground3 } from '../../assets';
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { openPremiumSubscriptionModal } from "../../utils/store/slice/appSlice";
+import { homeBookNow, mainBackground3 } from "../../assets";
 
 const HomeCarousel = () => {
   const navigate = useNavigate();
@@ -21,17 +21,17 @@ const HomeCarousel = () => {
   const dispatch = useDispatch();
   const [currentSlide, setCurrentSlide] = useState(0);
   const {
-    images: { banner }
-  } = useSelector(state => state.appSlice);
+    images: { banner },
+  } = useSelector((state) => state.appSlice);
 
   function useTypewriter({ words, loop, autoPlay }) {
     const [textIndex, setTextIndex] = useState(0);
-    const [text, setText] = useState('');
+    const [text, setText] = useState("");
 
     useEffect(() => {
       const interval = setInterval(() => {
         setText(words[textIndex]);
-        setTextIndex(prevIndex => (prevIndex + 1) % words.length);
+        setTextIndex((prevIndex) => (prevIndex + 1) % words.length);
       }, 1000);
 
       return () => {
@@ -43,8 +43,8 @@ const HomeCarousel = () => {
   }
 
   const { text } = useTypewriter({
-    words: ['EXCITEMENT', 'THRILL', 'ENJOYMENT'],
-    loop: {}
+    words: ["EXCITEMENT", "THRILL", "ENJOYMENT"],
+    loop: {},
   });
 
   useEffect(() => {
@@ -54,31 +54,31 @@ const HomeCarousel = () => {
   }, []);
 
   return (
-    <Grid position={'relative'}>
+    <Grid position={"relative"}>
       {showText && currentSlide === 0 && (
         <Grid
           sx={{
-            position: 'absolute',
-            top: '50%',
-            transform: 'translateY(-70%)',
-            zIndex: '10',
-            left: '50px',
-            width: 'fit-content',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px'
+            position: "absolute",
+            top: "50%",
+            transform: "translateY(-70%)",
+            zIndex: "10",
+            left: "50px",
+            width: "fit-content",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
           }}
         >
-          <Grid className='car-top-heading'>Get Ready For</Grid>
-          <span className='car-bottom-heading '>
+          <Grid className="car-top-heading">Get Ready For</Grid>
+          <span className="car-bottom-heading ">
             {text} <Cursor />
           </span>
         </Grid>
       )}
       <Grid
-        onClick={() =>
-          currentSlide === 1 && dispatch(openPremiumSubscriptionModal())
-        }
+      // onClick={() =>
+      //   currentSlide === 1 &&
+      // }
       >
         <Carousel
           autoPlay={autoPlay}
@@ -92,7 +92,7 @@ const HomeCarousel = () => {
           showIndicators={true}
           showThumbs={false}
           stopOnHover={false}
-          onChange={curr => {
+          onChange={(curr) => {
             setCurrentSlide(curr);
             if (curr === 1) {
               setShowText(false);
@@ -106,38 +106,72 @@ const HomeCarousel = () => {
             }
           }}
         >
-          <Box maxHeight={'calc(100vh - 84px)'}>
-            <img src={Slide0} alt={'slide 0'} />
+          <Box
+            maxHeight={"calc(100vh - 84px)"}
+            sx={{
+              "-webkit-user-select": "none" /* Safari */,
+              "-ms-user-select": "none" /* IE 10 and IE 11 */,
+              "user-select": "none" /* Standard syntax */,
+            }}
+          >
+            <img src={Slide0} alt={"slide 0"} />
           </Box>
-          <Box maxHeight={'calc(100vh - 84px)'}>
-            <img src={Slide1} alt={'slide 1'} />
+          <Box
+            maxHeight={"calc(100vh - 84px)"}
+            sx={{
+              "-webkit-user-select": "none" /* Safari */,
+              "-ms-user-select": "none" /* IE 10 and IE 11 */,
+              "user-select": "none" /* Standard syntax */,
+            }}
+            onClick={() => dispatch(openPremiumSubscriptionModal())}
+          >
+            <img src={Slide1} alt={"slide 1"} />
           </Box>
-          <Box maxHeight={'calc(100vh - 84px)'}>
-            <img src={Slide2} alt={'slide 2'} />
+          <Box
+            maxHeight={"calc(100vh - 84px)"}
+            sx={{
+              "-webkit-user-select": "none" /* Safari */,
+              "-ms-user-select": "none" /* IE 10 and IE 11 */,
+              "user-select": "none" /* Standard syntax */,
+            }}
+          >
+            <img src={Slide2} alt={"slide 2"} />
           </Box>
-          <Box maxHeight={'calc(100vh - 84px)'}>
-            <img src={Slide3} alt={'slide 3'} />
+          <Box
+            maxHeight={"calc(100vh - 84px)"}
+            sx={{
+              "-webkit-user-select": "none" /* Safari */,
+              "-ms-user-select": "none" /* IE 10 and IE 11 */,
+              "user-select": "none" /* Standard syntax */,
+            }}
+          >
+            <img src={Slide3} alt={"slide 3"} />
           </Box>
-          {banner?.map(img => (
-            <Box maxHeight={'calc(100vh - 84px)'} key={img._id}>
-              <img src={img.url} alt={'banner image'} />
+          {banner?.map((img) => (
+            <Box
+              maxHeight={"calc(100vh - 84px)"}
+              key={img._id}
+              sx={{
+                "-webkit-user-select": "none" /* Safari */,
+                "-ms-user-select": "none" /* IE 10 and IE 11 */,
+                "user-select": "none" /* Standard syntax */,
+              }}
+            >
+              <img src={img.url} alt={"banner image"} />
             </Box>
           ))}
         </Carousel>
       </Grid>
 
       {showText && currentSlide === 0 && (
-        <Grid className='car-bottom-wrapper'>
-          <Grid className='car-bottom-btn'>
+        <Grid className="car-bottom-wrapper">
+          <Grid className="car-bottom-btn">
             <Button
-              className='car-bottom-button'
-              onClick={() => navigate('/book')}
+              className="car-bottom-button"
+              onClick={() => navigate("/book")}
             >
               <img src={homeBookNow} alt="" />
             </Button>
-          </Grid>
-          <Grid className='car-bottom-refer'>
-            Refer&nbsp;a&nbsp;friend&nbsp;to&nbsp;get <br /> <u>50%&nbsp;OFF</u>
           </Grid>
         </Grid>
       )}

@@ -767,11 +767,8 @@ const Packages = () => {
   } = useForm({
     defaultValues: {
       name: '',
-      red: 0,
-      green: 0,
-      yellow: 0,
+      coins: 0,
       price: '',
-      is_premium: false
     }
   });
 
@@ -794,12 +791,9 @@ const Packages = () => {
     await addPackage({ token, data });
     await fetchPackages();
     reset({
-      is_premium: false,
       name: '',
-      red: 0,
-      green: 0,
-      yellow: 0,
-      price: ''
+      price: '',
+      coins: 0,
     });
     setLoading(false);
   };
@@ -870,9 +864,6 @@ const Packages = () => {
                 }}
               >
                 {pack.name}&nbsp;
-                <Typography component={'span'}>
-                  {pack.is_premium ? '(Premium)' : ''}
-                </Typography>
               </Typography>
               <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Grid display={'flex'} gap='10px' alignItems={'center'}>
@@ -910,7 +901,7 @@ const Packages = () => {
                     justifyContent={'center'}
                     alignItems={'center'}
                   >
-                    {pack?.yellow}&nbsp;{' '}
+                    {pack?.coins}&nbsp;{' '}
                     {/* <Copyright
                       sx={{
                         color: '#fac219'
@@ -1047,7 +1038,7 @@ const Packages = () => {
                     width: '100px'
                   }}
                   defaultValue={0}
-                  {...register('yellow', { required: true })}
+                  {...register('coins', { required: true })}
                 />
               </Box>
             </Grid>

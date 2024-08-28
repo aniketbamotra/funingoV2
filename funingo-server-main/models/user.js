@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -7,104 +7,83 @@ const userSchema = new mongoose.Schema(
     phone_no: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
     email: {
       type: String,
       unique: true,
-      required: false
+      required: false,
     },
     gender: {
       type: String,
       required: false,
-      enum: ['male', 'female', 'others']
+      enum: ["male", "female", "others"],
     },
     dob: {
       type: Date,
-      required: false
+      required: true,
     },
     reg_date: {
       type: Date,
-      required: false
+      required: false,
     },
     hash_password: String,
     city: String,
     state: String,
     locality: String, // If city === 'jabalpur'
-    dob: Date,
     verified: Boolean,
     profile_picture: {
       type: String,
-      enum: ['m1', 'm2', 'm3', 'm4', 'f1', 'f2', 'f3', 'f4'],
+      enum: ["m1", "m2", "m3", "m4", "f1", "f2", "f3", "f4"],
       required: false,
-      default: 'm1'
+      default: "m1",
     },
+    // funingo_coins
     funingo_money: {
       type: Number,
-      default: 0
+      default: 0,
     },
     booked_tickets: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Ticket'
-      }
+        ref: "Ticket",
+      },
     ],
     user_type: {
       type: String,
-      enum: ['customer', 'employee', 'admin', 'window_employee'],
-      default: 'customer'
+      enum: ["customer", "employee", "admin", "window_employee"],
+      default: "customer",
     },
-    existing_flags: [
-      {
-        red: {
-          type: Number,
-          default: 0
-        },
-        green: {
-          type: Number,
-          default: 0
-        },
-        yellow: {
-          type: Number,
-          default: 0
-        },
-        golden: {
-          type: Number,
-          default: 0
-        },
-        expires_on: Date,
-        id: String
-      }
-    ],
+
     premium: [
       {
         expires_on: {
           type: Date,
-          required: true
+          required: true,
         },
         premium_type: {
           type: String,
-          enum: ['50%', '100%'],
-          required: true
+          enum: ["50%", "100%"],
+          required: true,
         },
         premium_duration: {
           type: String,
           required: true,
-          enum: ['6_months', '1_year', '100_years']
+          enum: ["6_months", "1_year", "100_years"],
         },
         buy_date: {
           type: Date,
           required: true,
-          default: new Date()
-        }
-      }
-    ]
+          default: new Date(),
+        },
+      },
+    ],
   },
   {
-    versionKey: false
+    versionKey: false,
   }
 );
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;
