@@ -271,7 +271,8 @@ const WindowPurchase = () => {
 
     try {
       const response = await windowPurchase({
-        total_amount: totalPrice - premiumDiscount - couponDiscount.discount,
+        total_amount:
+          totalPrice - premiumDiscount - (couponDiscount.discount || 0),
         details,
         token,
         phone_no: phoneNumber ? "+91-" + phoneNumber : undefined,
@@ -325,7 +326,7 @@ const WindowPurchase = () => {
       setPremiumDiscount(premiumDiscount);
     }
     setTotalPrice(totalPrice);
-  }, [selectedSlots]);
+  }, [selectedSlots, isPremium]);
 
   return (
     <Grid
