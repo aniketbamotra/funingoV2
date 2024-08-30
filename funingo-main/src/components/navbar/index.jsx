@@ -93,6 +93,7 @@ const Navbar = () => {
     dispatch(removeUser());
     localStorage.removeItem("token");
     dispatch(setLoggedIn(false));
+    navigate("/");
   };
 
   return (

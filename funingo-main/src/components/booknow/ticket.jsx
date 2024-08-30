@@ -80,7 +80,8 @@ export const Ticket = ({
 
   const totalFuningoCoins = useMemo(() => {
     return (
-      ticket?.packages?.reduce((total, curr) => total + curr.coins, 0) || 0
+      ticket?.details?.reduce((total, curr) => total + curr.package.coins, 0) ||
+      0
     );
   }, [ticket, ticket?._id]);
 
