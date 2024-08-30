@@ -11,8 +11,15 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      unique: true,
       required: false,
+      validate: {
+        validator: async function(email) {
+          if (!email) return true; // Allow null/undefined emails
+          const user = await this.constructor.findOne({ email });
+          return !user; // Return false if a user with this email already exists
+        },
+        message: 'Email already exists'
+      }
     },
     gender: {
       type: String,
