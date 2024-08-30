@@ -136,6 +136,7 @@ const Register = () => {
     dispatch(removeUser());
     localStorage.removeItem("token");
     dispatch(setLoggedIn(false));
+    navigate("/");
   };
 
   const { values, resetForm, handleBlur, handleChange, handleSubmit } =
