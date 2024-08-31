@@ -334,11 +334,11 @@ const Register = () => {
             setIsAddressState(true);
           } catch (error) {
             setIsSnack(true);
+
             setSnackDetails({
-              msg:
-                error.message === "Request failed with status code 500"
-                  ? "Server Busy 🙇"
-                  : error.message,
+              msg: !!error?.response?.data?.error
+                ? error?.response?.data?.error
+                : "Server Busy 🙇",
               severity: "warning",
             });
             console.error("Registration failed:", error);
@@ -369,10 +369,9 @@ const Register = () => {
           } catch (error) {
             setIsSnack(true);
             setSnackDetails({
-              msg:
-                error.message === "Request failed with status code 500"
-                  ? "Server Busy 🙇"
-                  : error.message,
+              msg: !!error?.response?.data?.error
+                ? error?.response?.data?.error
+                : "Server Busy 🙇",
               severity: "warning",
             });
             console.error("Registration failed:", error);
@@ -404,10 +403,9 @@ const Register = () => {
           } catch (error) {
             setIsSnack(true);
             setSnackDetails({
-              msg:
-                error.message === "Request failed with status code 500"
-                  ? "Server Busy 🙇"
-                  : error.message,
+              msg: !!error?.response?.data?.error
+                ? error?.response?.data?.error
+                : "Server Busy 🙇",
               severity: "warning",
             });
             console.error("Registration failed:", error);
@@ -467,10 +465,9 @@ const Register = () => {
           } catch (error) {
             setIsSnack(true);
             setSnackDetails({
-              msg:
-                error.message === "Request failed with status code 400"
-                  ? "Invalid Request"
-                  : error.message,
+              msg: !!error?.response?.data?.error
+                ? error?.response?.data?.error
+                : "Server Busy 🙇",
               severity: "error",
             });
             setValidationsError({
