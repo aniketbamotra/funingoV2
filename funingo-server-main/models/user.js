@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
         validator: async function (email) {
           if (!email) return true; // Allow null/undefined emails
           const user = await this.constructor.findOne({ email });
-          if (user._id.toString() === this._id.toString()) return true; // same user
+          if (user?._id?.toString() === this?._id?.toString()) return true; // same user
           return !user; // Return false if a user with this email already exists
         },
         message: "Email already exists",
