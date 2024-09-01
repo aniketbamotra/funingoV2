@@ -525,19 +525,24 @@ const GetQRTickets = () => {
               gap: "30px",
             }}
           >
-            <Grid display={"flex"} gap="20px" alignItems={"center"}>
-              <div>
-                <Typography sx={{ textAlign: "center" }}>
-                  User Id: {qrTicketsData.tickets?.[current]?.short_id}
-                </Typography>
-                <img
+            <Grid
+              display={"flex"}
+              gap="20px"
+              alignItems={"center"}
+              justifyContent={"center"}
+            >
+              {/* <div> */}
+              <Typography sx={{ textAlign: "center", fontWeight: "600" }}>
+                {qrTicketsData.tickets?.[current]?.short_id}
+              </Typography>
+              {/* <img
                   src={qrTicketsData.tickets?.[current]?.qr}
                   alt="qr-code"
                   width="150px"
                   height="150px"
-                />
-              </div>
-              <Typography>Total Coins: {qrTicketsData.total_coins}</Typography>
+                /> */}
+              {/* </div> */}
+              {/* <Typography>Total Coins: {qrTicketsData.total_coins}</Typography> */}
             </Grid>
             <Grid
               sx={{
