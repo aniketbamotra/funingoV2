@@ -420,6 +420,15 @@ export const getQRTickets = async (req, res) => {
     );
   }
 
+  if (!user.short_id) {
+    const new_short_id = new ShortUniqueId({
+      dictionary: "alphanum_upper",
+      length: 4,
+    });
+    user.short_id = new_short_id();
+    await user.save();
+  }
+
   const qr = `http://api.qrserver.com/v1/create-qr-code/?data=${
     constants.website_url
   }/e/redeem?tid=${user.phone_no.split("-")[1]}`;
@@ -427,6 +436,7 @@ export const getQRTickets = async (req, res) => {
   const finalData = [...Array(ticket_count)].map(() => ({
     qr,
     phone_no,
+    short_id: user.short_id,
   }));
 
   res.status(200).send({
@@ -625,9 +635,11 @@ export const deleteTicket = async (req, res) => {
 };
 
 export const redeemFuningoCoins = async (req, res) => {
-  const { phone_no, coins, activity_name } = req.body;
+  const { phone_no, coins, activity_name, short_id } = req.body;
 
-  const user = await User.findOne({ phone_no });
+  const user = await User.findOne({
+    $or: [{ phone_no }, { short_id }],
+  });
   user.funingo_money -= coins;
   await user.save();
 

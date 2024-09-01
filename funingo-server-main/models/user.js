@@ -86,6 +86,10 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    short_id: {
+      type: String,
+      unique: true,
+    },
   },
   {
     versionKey: false,

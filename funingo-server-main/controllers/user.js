@@ -191,7 +191,9 @@ export const getFreebies = async (req, res) => {
 
 export const getFuningoCoinsFromPhnNo = async (req, res) => {
   const { phone_no } = req.params;
-  const user = await User.findOne({ phone_no });
+  const user = await User.findOne({
+    $or: [{ phone_no }, { short_id: phone_no }],
+  });
 
   if (!user) {
     throw new ExpressError("User not found", 401);

@@ -395,9 +395,12 @@ const RedeemTicket = () => {
         token: token,
         "Content-Type": "application/json",
       };
-      const response = await axios.get(`${apiUrl}/user/coins/+91-${phoneNo}`, {
-        headers: headers,
-      });
+      const response = await axios.get(
+        `${apiUrl}/user/coins/${phoneNo.length === 10 ? "+91-" : ""}${phoneNo}`,
+        {
+          headers: headers,
+        }
+      );
 
       if (!response.data.success) {
         throw new Error("Couldn't Fetch funingo money");
@@ -441,7 +444,8 @@ const RedeemTicket = () => {
         const res = await axios.post(
           `${apiUrl}/ticket/redeem`,
           {
-            phone_no: "+91-" + phoneNo,
+            phone_no: phoneNo.length !== 4 && "+91-" + phoneNo,
+            short_id: phoneNo.length === 4 && phoneNo,
             coins: inputValue,
             activity_name: activityname,
           },
@@ -454,7 +458,7 @@ const RedeemTicket = () => {
 
         setSuccess(res.data?.success);
         fetchFuningoMoney(phoneNo);
-        setActivityBookings(res.data?.bookings)
+        setActivityBookings(res.data?.bookings);
       } else {
         alert("Insufficient Funingo Coins");
         return;
