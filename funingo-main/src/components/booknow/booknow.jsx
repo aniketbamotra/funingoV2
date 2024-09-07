@@ -54,6 +54,7 @@ import {
   arrow,
 } from "../../assets";
 import { red } from "@mui/material/colors";
+import MoneyBg from "../../assets/money-logo-bg.svg";
 
 export const genderOptions = [
   { value: "male", label: "Male" },
@@ -65,82 +66,102 @@ const packageInfo = [
   {
     text: "Tampoline Island",
     image: P2500,
+    coins: 2500,
   },
   {
     text: "Paintball",
     image: P2500,
+    coins: 2500,
   },
   {
     text: "Get Blaster Arena",
     image: P1500,
+    coins: 1500,
   },
   {
     text: "Low Ropes",
     image: P1500,
+    coins: 1500,
   },
   {
     text: "High Ropes",
     image: P1500,
+    coins: 1500,
   },
   {
     text: "Giant Swing",
     image: P3000,
+    coins: 3000,
   },
   {
     text: "Sky Cycle",
     image: P2500,
+    coins: 2500,
   },
   {
     text: "Zipline",
     image: P2500,
+    coins: 2500,
   },
   {
     text: "Burma Bridge",
     image: P1500,
+    coins: 1500,
   },
   {
     text: "Peak Rock Climb",
     image: P2000,
+    coins: 2000,
   },
   {
     text: "Commando Climb",
     image: P500,
+    coins: 500,
   },
   {
     text: "Peak Rock Climb",
     image: P2000,
+    coins: 2000,
   },
   {
     text: "Meltdown",
     image: P1000,
+    coins: 1000,
   },
   {
     text: "Bucking Bull Arena",
     image: P1000,
+    coins: 1000,
   },
   {
     text: "Kids Obstacle",
     image: P500,
+    coins: 500,
   },
   {
     text: "Sumo Showdown",
     image: P500,
+    coins: 500,
   },
   {
     text: "Archery Alley",
     image: P500,
+    coins: 500,
   },
   {
     text: "Shooter's Range",
     image: P1000,
+    coins: 1000,
   },
   {
     text: "Pedal Go Kart",
     image: P1000,
+    coins: 1000,
   },
   {
     text: "Rocket Ejector",
     image: P2500,
+    coins: 2500,
   },
 ];
 
@@ -588,7 +609,8 @@ const Booknow = () => {
                   <h2>{info.text}</h2>
                 </div>
                 <div className="w-1/2 p-4 flex justify-end items-center">
-                  <img className="w-32" src={info.image} alt={info.text} />
+                  {/* <img className="w-32" src={info.image} alt={info.text} /> */}
+                  <CoinsBox text={`${info.coins} Coins`} />
                 </div>
               </div>
             ))}
@@ -608,7 +630,8 @@ const Booknow = () => {
                 <h2>{info.text}</h2>
               </div>
               <div className="w-1/2 p-4 flex justify-end items-center">
-                <img className="w-32" src={info.image} alt={info.text} />
+                {/* <img className="w-32" src={info.image} alt={info.text} /> */}
+                <CoinsBox text={`${info.coins} Coins`} />
               </div>
             </div>
           ))}
@@ -1549,3 +1572,56 @@ const Booknow = () => {
 };
 
 export default Booknow;
+
+const CoinsBox = ({ text, subText }) => (
+  <Box
+    sx={{
+      width: "140px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "relative",
+    }}
+  >
+    <Box
+      component={"img"}
+      src={MoneyBg}
+      alt="background"
+      sx={{
+        width: "130px",
+      }}
+    />
+    <Box
+      sx={{
+        position: "absolute",
+        right: "0px",
+        width: { xs: "80px", md: "90px" },
+      }}
+    >
+      <Typography
+        sx={{
+          color: "white",
+          fontWeight: "600",
+          fontSize: "12px",
+          zIndex: "110",
+          textAlign: "center",
+        }}
+      >
+        {text}
+      </Typography>
+      {subText && (
+        <Typography
+          sx={{
+            color: "white",
+            fontWeight: "400",
+            fontSize: "12px",
+            zIndex: "110",
+            textAlign: "center",
+          }}
+        >
+          {subText}
+        </Typography>
+      )}
+    </Box>
+  </Box>
+);

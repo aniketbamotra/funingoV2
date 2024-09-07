@@ -102,11 +102,11 @@ const AppLayout = ({
           }
         }
 
-        if (!user) {
-          setTimeout(() => {
-            dispatch(openPremiumSubscriptionModal());
-          }, 8500);
-        }
+        // if (!user) {
+        //   setTimeout(() => {
+        //     dispatch(openPremiumSubscriptionModal());
+        //   }, 8500);
+        // }
       })
     );
 
@@ -138,7 +138,7 @@ const AppLayout = ({
 
       <div>
         {/* Modals start */}
-        <FreebiesModal
+        {/* <FreebiesModal
           open={showFreebies && !loading}
           onClose={() => {
             setShowFreebies(false);
@@ -146,8 +146,8 @@ const AppLayout = ({
               dispatch(openPremiumSubscriptionModal());
             }, 5000);
           }}
-        />
-        <PremiumSubscriptionModal />
+        /> */}
+        {/* <PremiumSubscriptionModal /> */}
         <Register />
         {/* Modals end */}
 

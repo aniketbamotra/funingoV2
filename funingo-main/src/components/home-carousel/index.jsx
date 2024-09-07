@@ -116,17 +116,19 @@ const HomeCarousel = () => {
           >
             <img src={Slide0} alt={"slide 0"} />
           </Box>
-          <Box
+
+          {/* <Box
             maxHeight={"calc(100vh - 84px)"}
             sx={{
-              "-webkit-user-select": "none" /* Safari */,
-              "-ms-user-select": "none" /* IE 10 and IE 11 */,
-              "user-select": "none" /* Standard syntax */,
+              "-webkit-user-select": "none" ,
+              "-ms-user-select": "none",
+              "user-select": "none" ,
             }}
             onClick={() => dispatch(openPremiumSubscriptionModal())}
           >
             <img src={Slide1} alt={"slide 1"} />
-          </Box>
+          </Box> */}
+
           <Box
             maxHeight={"calc(100vh - 84px)"}
             sx={{
