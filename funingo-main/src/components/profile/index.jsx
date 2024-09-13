@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
   Box,
@@ -12,36 +12,36 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  useMediaQuery
-} from '@mui/material';
-import Select from 'react-select';
+  useMediaQuery,
+} from "@mui/material";
+import Select from "react-select";
 
-import { Heading, Label, Value } from './styles';
-import { getAllTickets } from '../../actions/ticket';
-import { useNavigate } from 'react-router-dom';
-import { getProfile } from '../../utils';
-import TicketModal from '../booknow/ticket';
-import SliderImage from './images/slider.png';
-import { openPremiumSubscriptionModal } from '../../utils/store/slice/appSlice';
+import { Heading, Label, Value } from "./styles";
+import { getAllTickets } from "../../actions/ticket";
+import { useNavigate } from "react-router-dom";
+import { getProfile } from "../../utils";
+import TicketModal from "../booknow/ticket";
+import SliderImage from "./images/slider.png";
+import { openPremiumSubscriptionModal } from "../../utils/store/slice/appSlice";
 
 const Profile = () => {
   const {
     userData: user,
     token,
     isLoggedIn,
-    isPremium
-  } = useSelector(state => state.userSlice);
+    isPremium,
+  } = useSelector((state) => state.userSlice);
   const [tickets, setTickets] = useState([]);
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(1);
   const [expandedTicket, setExpandedTicket] = useState(null);
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const isMobile = useMediaQuery("(max-width:600px)");
   const [sliderValue, setSliderValue] = useState(12);
   const dispatch = useDispatch();
 
   const options = [
-    { label: 'Premium Packages', value: 0 },
-    { label: 'Upcoming Trips', value: 1 },
-    { label: 'Previous Bookings', value: 2 }
+    // { label: 'Premium Packages', value: 0 },
+    { label: "Upcoming Trips", value: 1 },
+    { label: "Previous Bookings", value: 2 },
   ];
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const Profile = () => {
       if (isLoggedIn && token) {
         const resp = await getAllTickets({
           phone_no: user?.phone_no,
-          token: token
+          token: token,
         });
         setTickets(resp?.tickets);
         console.log(tickets);
@@ -67,60 +67,61 @@ const Profile = () => {
   return (
     <Grid
       sx={{
-        display: 'flex',
-        minHeight: '100vh',
+        display: "flex",
+        minHeight: "100vh",
         flexDirection: {
-          xs: 'column',
-          sm: 'row'
-        }
+          xs: "column",
+          sm: "row",
+        },
       }}
     >
       <TicketModal
         open={expandedTicket !== null}
         onClose={() => {
           // console.log("cliclked here beta");
-          setExpandedTicket(null)}}
+          setExpandedTicket(null);
+        }}
         ticket={expandedTicket}
         downloadable={active === 1}
       />
       <Grid
         sx={{
           flexBasis: {
-            xs: '100%',
-            sm: '20%'
+            xs: "100%",
+            sm: "20%",
           },
-          borderRight: '1px solid #7c7c7c2a',
-          padding: '30px 20px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          height: 'fit-content',
-          minHeight: { xs: 'fit-content', sm: '100vh' }
+          borderRight: "1px solid #7c7c7c2a",
+          padding: "30px 20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          height: "fit-content",
+          minHeight: { xs: "fit-content", sm: "100vh" },
         }}
       >
         <Avatar
           src={getProfile(user?.profile_picture)}
           sx={{
-            width: '100px',
-            height: '100px',
-            borderRadius: '50%',
-            border: isPremium ? '2px solid #0580e2' : 'none',
-            padding: '2px'
+            width: "100px",
+            height: "100px",
+            borderRadius: "50%",
+            border: isPremium ? "2px solid #0580e2" : "none",
+            padding: "2px",
           }}
           imgProps={{
             sx: {
-              borderRadius: '50%'
-            }
+              borderRadius: "50%",
+            },
           }}
         />
         <Grid
-          width={'100%'}
-          mt='30px'
+          width={"100%"}
+          mt="30px"
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-            flexShrink: 1
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            flexShrink: 1,
           }}
         >
           <Box>
@@ -133,19 +134,19 @@ const Profile = () => {
           </Box>
           <Typography
             sx={{
-              textDecoration: 'underline',
-              fontWeight: '600',
-              fontSize: '14px',
-              mt: '20px'
+              textDecoration: "underline",
+              fontWeight: "600",
+              fontSize: "14px",
+              mt: "20px",
             }}
           >
             Location Details
           </Typography>
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '5px'
+              display: "flex",
+              flexDirection: "column",
+              gap: "5px",
             }}
           >
             {user?.locality && (
@@ -169,30 +170,30 @@ const Profile = () => {
       <Grid
         sx={{
           flexBasis: {
-            xs: '100%',
-            md: '80%'
+            xs: "100%",
+            md: "80%",
           },
-          padding: '10px 30px'
+          padding: "10px 30px",
         }}
       >
         {isMobile ? (
           <Grid>
             <Select
               options={options}
-              value={options.filter(opt => active === opt.value)}
-              onChange={val => setActive(val.value)}
+              value={options.filter((opt) => active === opt.value)}
+              onChange={(val) => setActive(val.value)}
             />
           </Grid>
         ) : (
           <Grid
             sx={{
-              display: 'flex',
-              gap: '20px'
+              display: "flex",
+              gap: "20px",
             }}
           >
-            <Heading active={active === 0} onClick={() => setActive(0)}>
+            {/* <Heading active={active === 0} onClick={() => setActive(0)}>
               Premium Packages
-            </Heading>
+            </Heading> */}
             <Heading active={active === 1} onClick={() => setActive(1)}>
               Upcoming Trips
             </Heading>
@@ -209,16 +210,16 @@ const Profile = () => {
                   <TableRow>
                     <TableCell>S. No.</TableCell>
                     <TableCell>Ticket Id</TableCell>
-                    <TableCell align='right'>PAX</TableCell>
-                    <TableCell align='right'>Credited Funingo Money</TableCell>
-                    <TableCell align='right'>Date</TableCell>
-                    <TableCell align='right'>Total Amount</TableCell>
-                    <TableCell align='right'>Preferred Slots</TableCell>
+                    <TableCell align="right">PAX</TableCell>
+                    <TableCell align="right">Credited Funingo Money</TableCell>
+                    <TableCell align="right">Date</TableCell>
+                    <TableCell align="right">Total Amount</TableCell>
+                    <TableCell align="right">Preferred Slots</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {tickets
-                    .filter(ticket =>
+                    .filter((ticket) =>
                       active === 1
                         ? new Date(
                             new Date(ticket.fun_date).setHours(23, 59, 59, 0)
@@ -227,34 +228,33 @@ const Profile = () => {
                             new Date(ticket.fun_date).setHours(23, 59, 59, 0)
                           ) < new Date()
                     )
-                    
+
                     .map((ticket, ind) => (
-                      
                       <TableRow
                         key={ticket.short_id}
                         sx={{
-                          '&:last-child td, &:last-child th': { border: 0 },
-                          cursor: 'pointer'
+                          "&:last-child td, &:last-child th": { border: 0 },
+                          cursor: "pointer",
                         }}
                         onClick={() => setExpandedTicket(ticket)}
                       >
-                        <TableCell component='th' scope='row'>
+                        <TableCell component="th" scope="row">
                           {ind + 1}.
                         </TableCell>
                         <TableCell>{ticket.short_id}</TableCell>
-                        <TableCell align='right'>
+                        <TableCell align="right">
                           {ticket.details?.length}
                         </TableCell>
-                        <TableCell align='right'>
+                        <TableCell align="right">
                           {ticket.added_funingo_money}
                         </TableCell>
-                        <TableCell align='right'>
+                        <TableCell align="right">
                           {new Date(ticket.fun_date).toDateString()}
                         </TableCell>
-                        <TableCell align='right'>
+                        <TableCell align="right">
                           Rs. {ticket.total_amount}
                         </TableCell>
-                        <TableCell align='right'>
+                        <TableCell align="right">
                           {ticket.preferred_slot}
                         </TableCell>
                       </TableRow>
@@ -263,7 +263,7 @@ const Profile = () => {
               </Table>
             </TableContainer>
             <Grid>
-              {tickets?.filter(ticket =>
+              {tickets?.filter((ticket) =>
                 active === 1
                   ? new Date(
                       new Date(ticket.fun_date).setHours(23, 59, 59, 0)
@@ -274,19 +274,19 @@ const Profile = () => {
               )?.length === 0 && (
                 <Grid
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    width: '100%',
-                    textAlign: 'center',
-                    height: '400px'
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    width: "100%",
+                    textAlign: "center",
+                    height: "400px",
                   }}
                 >
-                  <Typography fontWeight={'600'} fontSize={'16px'}>
+                  <Typography fontWeight={"600"} fontSize={"16px"}>
                     You don't have a ticket yet.
                   </Typography>
-                  <Typography fontWeight={'600'} fontSize={'16px'}>
+                  <Typography fontWeight={"600"} fontSize={"16px"}>
                     Go get a Funingo ticket and enjoy with your family and
                     friends.
                   </Typography>
@@ -295,37 +295,37 @@ const Profile = () => {
             </Grid>
           </Grid>
         )}
-        {active === 0 && (
+        {/* {active === 0 && (
           <Grid>
-            <Grid my='10px'>
+            <Grid my="10px">
               {user?.premium?.filter(
-                prem => new Date(prem.expires_on) >= new Date()
+                (prem) => new Date(prem.expires_on) >= new Date()
               )?.length > 0 && (
-                <Typography fontSize={'16px'} mb='10px' fontWeight={'600'}>
+                <Typography fontSize={"16px"} mb="10px" fontWeight={"600"}>
                   Active Premium Packages
                 </Typography>
               )}
               {user?.premium
-                ?.filter(prem => new Date(prem.expires_on) >= new Date())
-                ?.map(prem => (
+                ?.filter((prem) => new Date(prem.expires_on) >= new Date())
+                ?.map((prem) => (
                   <Grid
                     key={prem._id}
                     sx={{
-                      border: '1px solid black',
-                      borderRadius: '10px',
-                      padding: '10px',
-                      marginBottom: '10px'
+                      border: "1px solid black",
+                      borderRadius: "10px",
+                      padding: "10px",
+                      marginBottom: "10px",
                     }}
                   >
-                    <Box display={'flex'}>
+                    <Box display={"flex"}>
                       <Typography>Premium type:&nbsp;</Typography>
-                      <Typography fontWeight={'600'}>
+                      <Typography fontWeight={"600"}>
                         {prem.premium_type} off
                       </Typography>
                     </Box>
-                    <Box display={'flex'}>
+                    <Box display={"flex"}>
                       <Typography>Expires on:&nbsp;</Typography>
-                      <Typography fontWeight={'600'}>
+                      <Typography fontWeight={"600"}>
                         {new Date(prem.expires_on).toDateString()}
                       </Typography>
                     </Box>
@@ -334,32 +334,32 @@ const Profile = () => {
             </Grid>
             <Grid>
               {user?.premium?.filter(
-                prem => new Date(prem.expires_on) < new Date()
+                (prem) => new Date(prem.expires_on) < new Date()
               ).length > 0 && (
-                <Typography fontSize={'16px'} mb='10px' fontWeight={'600'}>
+                <Typography fontSize={"16px"} mb="10px" fontWeight={"600"}>
                   Expired Premium Packages
                 </Typography>
               )}
               {user?.premium
-                ?.filter(prem => new Date(prem.expires_on) < new Date())
-                ?.map(prem => (
+                ?.filter((prem) => new Date(prem.expires_on) < new Date())
+                ?.map((prem) => (
                   <Grid
                     key={prem._id}
                     sx={{
-                      border: '1px solid black',
-                      borderRadius: '10px',
-                      padding: '10px'
+                      border: "1px solid black",
+                      borderRadius: "10px",
+                      padding: "10px",
                     }}
                   >
-                    <Box display={'flex'}>
+                    <Box display={"flex"}>
                       <Typography>Premium type:&nbsp;</Typography>
-                      <Typography fontWeight={'600'}>
+                      <Typography fontWeight={"600"}>
                         {prem.premium_type} off
                       </Typography>
                     </Box>
-                    <Box display={'flex'}>
+                    <Box display={"flex"}>
                       <Typography>Expired on:&nbsp;</Typography>
-                      <Typography fontWeight={'600'}>
+                      <Typography fontWeight={"600"}>
                         {new Date(prem.expires_on).toDateString()}
                       </Typography>
                     </Box>
@@ -370,72 +370,72 @@ const Profile = () => {
               {!user?.premium?.length && (
                 <Grid
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    width: '100%',
-                    textAlign: 'center',
-                    height: '500px'
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    width: "100%",
+                    textAlign: "center",
+                    height: "500px",
                   }}
                 >
                   <Grid
                     sx={{
-                      position: 'relative'
+                      position: "relative",
                     }}
                   >
                     <Box
-                      type='range'
-                      component={'input'}
+                      type="range"
+                      component={"input"}
                       min={12}
                       max={85}
-                      onChange={e => setSliderValue(e.target.value)}
+                      onChange={(e) => setSliderValue(e.target.value)}
                       value={sliderValue}
                       sx={{
                         opacity: 0,
-                        zIndex: '10',
-                        position: 'relative',
-                        height: '50px',
-                        width: '250px',
-                        cursor: 'pointer'
+                        zIndex: "10",
+                        position: "relative",
+                        height: "50px",
+                        width: "250px",
+                        cursor: "pointer",
                       }}
                     />
                     <Grid
                       sx={{
-                        height: '50px',
-                        width: '250px'
+                        height: "50px",
+                        width: "250px",
                       }}
                     >
                       <Box
-                        component='img'
+                        component="img"
                         src={SliderImage}
                         sx={{
-                          position: 'absolute',
+                          position: "absolute",
                           left: `calc(${sliderValue}% - 30px)`,
-                          top: '0px',
-                          height: '50px',
-                          zIndex: '5'
+                          top: "0px",
+                          height: "50px",
+                          zIndex: "5",
                         }}
                       />
                       <Box
                         sx={{
-                          height: '50px',
-                          width: '250px',
-                          background: '#03034f',
-                          position: 'absolute',
-                          top: '0px',
-                          borderRadius: '40px'
+                          height: "50px",
+                          width: "250px",
+                          background: "#03034f",
+                          position: "absolute",
+                          top: "0px",
+                          borderRadius: "40px",
                         }}
                       >
                         <Typography
                           sx={{
-                            color: 'white',
-                            fontWeight: '600',
-                            fontSize: '18px',
-                            width: '200px',
-                            float: 'right',
-                            lineHeight: '22px',
-                            padding: '3px 0px'
+                            color: "white",
+                            fontWeight: "600",
+                            fontSize: "18px",
+                            width: "200px",
+                            float: "right",
+                            lineHeight: "22px",
+                            padding: "3px 0px",
                           }}
                         >
                           Swipe Right To Go Platinum
@@ -447,7 +447,7 @@ const Profile = () => {
               )}
             </Grid>
           </Grid>
-        )}
+        )} */}
       </Grid>
     </Grid>
   );

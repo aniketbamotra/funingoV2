@@ -549,7 +549,7 @@ const Navbar = () => {
                   </Grid>
                 </Link>
 
-                <Grid textAlign={"center"}>
+                {/* <Grid textAlign={"center"}>
                   <Button
                     sx={{
                       fontWeight: "600",
@@ -568,7 +568,7 @@ const Navbar = () => {
                       style={{ color: "#FFD700", fontSize: "1.2rem" }}
                     />
                   </Button>
-                </Grid>
+                </Grid> */}
 
                 {isLoggedIn && (
                   <Link to="/profile">
