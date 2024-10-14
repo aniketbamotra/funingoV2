@@ -70,8 +70,8 @@ const packageInfo = [
   },
   {
     text: "Paintball",
-    image: P2500,
-    coins: 2500,
+    image: P3000,
+    coins: 3000,
   },
   {
     text: "Get Blaster Arena",

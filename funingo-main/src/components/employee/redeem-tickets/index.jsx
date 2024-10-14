@@ -683,11 +683,11 @@ const RedeemTicket = () => {
                     </div>
                     <div
                       className="option"
-                      onClick={() => handleSelection(2500, "Paintball Arena")}
+                      onClick={() => handleSelection(3000, "Paintball Arena")}
                     >
                       <span>Paintball Arena</span>
                       <div className="funingo-icon-container">
-                        <span>2500</span>
+                        <span>3000</span>
                         <Coin />
                       </div>
                     </div>
