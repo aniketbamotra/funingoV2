@@ -322,7 +322,9 @@ const Profile = () => {
                     <TableRow key={transaction._id}>
                       <TableCell>{ind + 1}.</TableCell>
                       <TableCell sx={{ textTransform: "capitalize" }}>
-                        {transaction.coins}
+                        {transaction.type === "credit"
+                          ? `+ ${transaction.coins}`
+                          : `- ${transaction.coins}`}
                       </TableCell>
                       <TableCell sx={{ textTransform: "capitalize" }}>
                         {transaction.type}

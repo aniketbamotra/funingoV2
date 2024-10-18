@@ -780,28 +780,12 @@ const WindowPurchase = () => {
                 <Typography mb="5px">Optional Fields</Typography>
                 <Grid
                   display={"flex"}
-                  justifyContent={"space-between"}
+                  justifyContent={"flex-start"}
                   mb={"15px"}
                   flexDirection={"row"}
                   width={"100%"}
                   gap="20px"
                 >
-                  <Grid flexGrow={1}>
-                    <TextField
-                      name="person_name"
-                      type="text"
-                      placeholder="Name"
-                      value={selectedSlot.person_name}
-                      onChange={(e) => {
-                        handleChange(index, {
-                          ...selectedSlot,
-                          person_name: e.target.value,
-                        });
-                      }}
-                      required={true}
-                      fullWidth
-                    />
-                  </Grid>
                   <Grid>
                     <TextField
                       name="age"

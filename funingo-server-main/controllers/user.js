@@ -13,6 +13,16 @@ import Transaction from "../models/transaction.js";
 
 export const registerUser = async (req, res) => {
   const saltRounds = 10;
+
+  const phone_no = req.body.phone_no;
+  const user = await User.findOne({ phone_no });
+  if (user) {
+    if (!user.password) {
+      throw new ExpressError("password_not_set", 400);
+    }
+    throw new ExpressError("User already registered", 400);
+  }
+
   const hash_password = await bcrypt.hash(req.body.password, saltRounds);
   const newUser = new User({
     ...req.body,

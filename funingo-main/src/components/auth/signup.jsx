@@ -335,6 +335,18 @@ const Register = () => {
           } catch (error) {
             setIsSnack(true);
 
+            if (error?.response?.data?.error === "password_not_set") {
+              setIsForgetPass(true);
+              setIsResetPassword(false);
+              setIsSignstate(true);
+
+              setSnackDetails({
+                msg: "Password not set",
+                severity: "warning",
+              });
+              return;
+            }
+
             setSnackDetails({
               msg: !!error?.response?.data?.error
                 ? error?.response?.data?.error
