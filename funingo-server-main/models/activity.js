@@ -7,6 +7,10 @@ const activitySchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    coins_required: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     versionKey: false,

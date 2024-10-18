@@ -33,6 +33,7 @@ import {
 import {
   addPackages,
   addPersons,
+  removePersons,
   addFreebies,
   removeFreebies,
 } from "../../utils/store/slice/userSlice";
@@ -214,6 +215,7 @@ const Booknow = () => {
 
   const isMobile = useMediaQuery("(max-width:900px)");
   const [persons, setPersons] = useState([]);
+  const [personsData, setPersonsData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(initialErrorMsg);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -258,7 +260,7 @@ const Booknow = () => {
     handleSubmit,
   } = useFormik({
     initialValues,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setErrorMsg(initialErrorMsg);
       if (values?.id.length === 0) values.id = shortid.generate();
       let errmessage = "";
@@ -350,23 +352,25 @@ const Booknow = () => {
           selectedPremium,
         };
 
-        setPersons([...persons, values]);
+        setPersons([values]);
+        setPersonsData(values);
 
-        resetForm({
-          values: {
-            ...values,
-            name: "",
-            age: "",
-            gender: "",
-            package: "",
-            id: "",
-            extra_green: 0,
-            extra_red: 0,
-            extra_yellow: 0,
-            golden_flag: 0,
-          },
-        });
+        // resetForm({
+        //   values: {
+        //     ...values,
+        //     name: "",
+        //     age: "",
+        //     gender: "",
+        //     package: "",
+        //     id: "",
+        //     extra_green: 0,
+        //     extra_red: 0,
+        //     extra_yellow: 0,
+        //     golden_flag: 0,
+        //   },
+        // });
         setSelectedPremium(null);
+        return true;
       } catch (error) {
         console.log(error.message, error);
       }
@@ -484,9 +488,11 @@ const Booknow = () => {
     fetchData();
     if (personsList && personsList.length !== 0) {
       setPersons(personsList);
+      setPersonsData(personsList[0]);
     }
 
     return () => {
+      dispatch(removePersons());
       dispatch(addPersons(persons));
     };
   }, []);
@@ -536,6 +542,10 @@ const Booknow = () => {
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
+  };
+
+  const handleSubmitBookNow = () => {
+    handleSubmit();
   };
 
   const handleClickOutside = (event) => {
@@ -639,7 +649,7 @@ const Booknow = () => {
         {/* Form Grid  */}
         <Grid className="book-form">
           <Grid className="form-heading">BOOK NOW!</Grid>
-          {persons && persons.length !== 0 && (
+          {/* {persons && persons.length !== 0 && (
             <Grid
               className="people-card"
               width={isMobile ? "90%" : "75%"}
@@ -658,7 +668,7 @@ const Booknow = () => {
                 setPremium50Live={setPremium50Live}
               />
             </Grid>
-          )}
+          )} */}
 
           <Grid className="details">
             <form onSubmit={handleSubmit}>
@@ -737,12 +747,14 @@ const Booknow = () => {
                     <label className="book-now-label">Age</label>
                     <input
                       name="age"
-                      type="text"
+                      type="number"
                       placeholder="Age"
                       value={values.age}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       required={true}
+                      min={1}
+                      max={100}
                     />
                     {errorMsg && errorMsg?.age && errorMsg.age !== 0 && (
                       <Typography
@@ -819,6 +831,7 @@ const Booknow = () => {
                     }
                     onChange={(e) => {
                       setFieldValue("package", e?.value || null);
+                      handleSubmitBookNow();
                       // handleChange(e?.value || null);
                     }}
                     onBlur={handleBlur}
@@ -1255,7 +1268,7 @@ const Booknow = () => {
                 </Grid>
               </Grid> */}
 
-              <Grid
+              {/* <Grid
                 display={"flex"}
                 flexDirection={"row-reverse"}
                 width={"100%"}
@@ -1283,7 +1296,7 @@ const Booknow = () => {
                 >
                   Save Details/Add Person
                 </Button>
-              </Grid>
+              </Grid> */}
 
               <Grid
                 display={"flex"}
@@ -1553,13 +1566,14 @@ const Booknow = () => {
                 <div>
                   <PaymentButton
                     values={values}
-                    persons={persons}
-                    setPersons={setPersons}
+                    persons={[personsData]}
+                    setPersonsData={setPersonsData}
                     handleResetBookForm={handleResetBookForm}
                     discount={couponDiscount?.discount || 0}
                     premiumDiscount={totalPremiumDiscount}
                     usedFuningoMoney={usedFuningoMoney}
                     setShowTicket={setShowTicket}
+                    onClick={() => {}}
                   />
                 </div>
               </Grid>

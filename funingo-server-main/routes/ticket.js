@@ -12,7 +12,10 @@ import {
   redeemFuningoCoins,
 } from "../controllers/ticket.js";
 import { authenticateEmployee, authenticateUser } from "../middleware.js";
-import { bookTicket } from "../controllers/employee/index.js";
+import {
+  addComplementaryCoins,
+  bookTicket,
+} from "../controllers/employee/index.js";
 import multer from "multer";
 import { storage } from "../cloudinary/index.js";
 const upload = multer({ storage });
@@ -43,5 +46,11 @@ router.delete("/:short_id", authenticateUser, catchAsync(deleteTicket));
 
 router.post("/e/book-ticket", authenticateEmployee, catchAsync(bookTicket));
 router.post("/redeem", authenticateEmployee, catchAsync(redeemFuningoCoins));
+
+router.post(
+  "/e/add-complementary-coins",
+  authenticateEmployee,
+  catchAsync(addComplementaryCoins)
+);
 
 export default router;

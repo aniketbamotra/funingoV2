@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getAllTickets, getFreebies } from "../../../actions/ticket";
-import { fetchSelf } from "../../../actions/user";
+import { fetchSelf, getTransactions } from "../../../actions/user";
 
 const capitalizeFirstLetter = (inputString) => {
   return (
@@ -18,6 +18,7 @@ const userSlice = createSlice({
     personsList: [],
     token: "",
     isPremium: false,
+    transactions: [],
   },
   reducers: {
     addUser: (state, action) => {
@@ -76,8 +77,8 @@ const userSlice = createSlice({
       state.personsList = action.payload;
     },
 
-    removePersons: (state, action) => {
-      state.personsList = action.payload;
+    removePersons: (state) => {
+      state.personsList = [];
     },
   },
   extraReducers: (builder) => {
@@ -95,6 +96,9 @@ const userSlice = createSlice({
             }
           }
         }
+      })
+      .addCase(getTransactions.fulfilled, (state, action) => {
+        state.transactions = action.payload.transactions;
       });
   },
 });

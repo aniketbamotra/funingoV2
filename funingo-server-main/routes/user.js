@@ -13,6 +13,7 @@ import {
   verifyPremiumPayment,
   createAddFuningoMoneyOrder,
   verifyAddFuningoMoneyPayment,
+  getTransactions,
 } from "../controllers/user.js";
 import { authenticateEmployee, authenticateUser } from "../middleware.js";
 const router = express.Router();
@@ -40,11 +41,13 @@ router
 
 router
   .route("/coins/create-order")
-  .post(catchAsync(createAddFuningoMoneyOrder));
+  .post(authenticateUser, catchAsync(createAddFuningoMoneyOrder));
 router
   .route("/coins/verify-payment")
-  .post(catchAsync(verifyAddFuningoMoneyPayment));
+  .post(authenticateUser, catchAsync(verifyAddFuningoMoneyPayment));
 
 router.get("/coins/:phone_no", catchAsync(getFuningoCoinsFromPhnNo));
+
+router.get("/transactions", authenticateUser, catchAsync(getTransactions));
 
 export default router;

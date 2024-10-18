@@ -21,8 +21,8 @@ import {
 import { Tour } from "@mui/icons-material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ListedOptionLayout from "./ListedOptionLayout";
-import { windowPurchase } from "../../actions/exployee";
-import { useSelector } from "react-redux";
+import { addComplementaryCoins, windowPurchase } from "../../actions/exployee";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ReactSelect from "react-select";
 import ConfirmationModal from "./modal";
@@ -31,14 +31,23 @@ import { set, useForm } from "react-hook-form";
 import { InputAdornment } from "@mui/material";
 import { scrollToTop } from "../../utils";
 import statesData, { localityData } from "../auth/states";
+import ComplimentaryDialog from "./ComplimentaryDialog";
 
 const WindowPurchase = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [selectedSlots, setSelectedSlots] = useState([]);
+  const [selectedSlots, setSelectedSlots] = useState([
+    {
+      package: "",
+      person_name: "",
+      age: "",
+      gender: "",
+    },
+  ]);
   const [couponDiscount, setCouponDiscount] = useState({});
   const [code, setCode] = useState("");
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
   const [gstPrice, setGstPrice] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -53,9 +62,14 @@ const WindowPurchase = () => {
   const [dummyFreebiesData, setDummyFreebiesData] = useState([]);
   const [existingFuningoMoney, setExistingFuningoMoney] = useState(0);
   const [dob, setDob] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const [fetchUserError, setFetchUserError] = useState("");
   const [isPremium, setIsPremium] = useState(false);
   const [premiumDiscount, setPremiumDiscount] = useState(0);
+  const [customDiscount, setCustomDiscount] = useState(0);
+  const [complementaryCoinsModalOpen, setComplementaryCoinsModalOpen] =
+    useState(false);
 
   const [address, setAddress] = useState({
     state: "Madhya Pradesh",
@@ -132,6 +146,7 @@ const WindowPurchase = () => {
           }
         );
         setExistingFuningoMoney(response.data.funingo_money);
+        setName(response.data?.name || "");
         if (response.data.address) {
           setAddress(response.data.address);
         }
@@ -145,6 +160,7 @@ const WindowPurchase = () => {
         }
       } catch (error) {
         console.log(error.message, error);
+        setFetchUserError(error?.response?.data?.error);
       } finally {
         setIsLoading(false);
       }
@@ -272,13 +288,18 @@ const WindowPurchase = () => {
     try {
       const response = await windowPurchase({
         total_amount:
-          totalPrice - premiumDiscount - (couponDiscount.discount || 0),
+          totalPrice -
+          premiumDiscount -
+          (couponDiscount.discount || 0) -
+          customDiscount,
         details,
         token,
         phone_no: phoneNumber ? "+91-" + phoneNumber : undefined,
         payment_mode: paymentMode.value,
         coupon: code,
         dob,
+        name,
+        custom_discount: customDiscount,
       });
 
       if (response.success) {
@@ -292,6 +313,16 @@ const WindowPurchase = () => {
       setError(error?.response?.data?.error);
       // Add your error handling logic here
     }
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleCustomDiscountChange = (e) => {
+    const val = parseInt(e.target.value || 0);
+    if (val < 0) return;
+    setCustomDiscount(val);
   };
 
   useEffect(() => {
@@ -338,6 +369,11 @@ const WindowPurchase = () => {
         padding: "20px",
       }}
     >
+      <ComplimentaryDialog
+        phoneNumber={phoneNumber}
+        open={complementaryCoinsModalOpen}
+        onClose={() => setComplementaryCoinsModalOpen(false)}
+      />
       <ConfirmationModal
         open={confirmationModalOpen}
         onClose={() => setConfirmationModalOpen(false)}
@@ -372,21 +408,21 @@ const WindowPurchase = () => {
         <Grid
           display={"flex"}
           width={"100%"}
-          justifyContent={"space-between"}
           sx={{
             gap: "15px",
             marginBottom: "25px",
             flexDirection: { xs: "column", md: "row" },
+            alignItems: "center",
           }}
         >
-          <FormControl sx={{ width: { xs: "100%", lg: "50%" } }}>
+          {/* <FormControl sx={{ width: { xs: "100%", lg: "50%" } }}>
             <TextField
               label="Select the number of options"
               type="number"
               value={count}
               onChange={handleCountChange}
             />
-          </FormControl>
+          </FormControl> */}
           {/* <FormControl sx={{ width: { xs: '100%', lg: '50%' } }}>
             <TextField
               label='Discount'
@@ -396,14 +432,14 @@ const WindowPurchase = () => {
             />
           </FormControl> */}
           <FormControl sx={{ width: { xs: "100%", lg: "50%" } }}>
+            <p style={{ fontSize: "14px", fontWeight: "500" }}>Phone Number</p>
             <TextField
-              label="Enter valid Phone Number"
               type="number"
               value={phoneNumber}
+              placeholder="Enter valid Phone Number"
               onChange={handlePhoneNumberChange}
               InputProps={{
                 sx: {
-                  height: "100%",
                   "& input": {
                     border: "0px !important",
                     "&::-webkit-inner-spin-button, &::-webkit-outer-spin-button":
@@ -413,35 +449,92 @@ const WindowPurchase = () => {
                       },
                   },
                 },
-
-                endAdornment: (
-                  <Button
-                    sx={{
-                      background: "#257ac4",
-                      color: "white",
-                      height: "28px",
-                      fontSize: "12px",
-                      "&:hover": {
-                        backgroundColor: "#257ac4",
-                        color: "white",
-                      },
-                      border: "none",
-                      outline: "none",
-                    }}
-                    onClick={handleCheckClick}
-                  >
-                    Check
-                  </Button>
-                ),
               }}
             />
-            <Typography>Available: {existingFuningoMoney}</Typography>
+            <Box>
+              <Typography>
+                Available funingo money: {existingFuningoMoney}
+              </Typography>
+            </Box>
+            {fetchUserError && (
+              <Typography color={"red"}>{fetchUserError}</Typography>
+            )}
+            {/* <Typography>Available: {existingFuningoMoney}</Typography> */}
             <FormHelperText error={!isValid}>
               {!isValid && helperText}
             </FormHelperText>
           </FormControl>
 
+          <Button
+            sx={{
+              background: "#257ac4",
+              color: "white",
+              maxHeight: "40px",
+              marginBottom: "4px",
+              fontSize: "12px",
+              "&:hover": {
+                backgroundColor: "#257ac4",
+                color: "white",
+              },
+              border: "none",
+              outline: "none",
+            }}
+            onClick={handleCheckClick}
+          >
+            Check
+          </Button>
+          <Button
+            sx={{
+              background: "#257ac4",
+              color: "white",
+              maxHeight: "40px",
+              marginBottom: "4px",
+              fontSize: "12px",
+              "&:hover": {
+                backgroundColor: "#257ac4",
+                color: "white",
+              },
+              border: "none",
+              outline: "none",
+            }}
+            onClick={() => {
+              if (!phoneNumber) {
+                setFetchUserError("Please enter a valid phone number");
+                return;
+              }
+              setComplementaryCoinsModalOpen(true);
+            }}
+          >
+            Add Complementary Coins
+          </Button>
+        </Grid>
+
+        <Grid display={"flex"} gap={"20px"}>
+          <FormControl sx={{ width: { xs: "100%", lg: "45%" } }}>
+            <p style={{ fontSize: "14px", fontWeight: "500" }}>Name</p>
+            <TextField
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              placeholder="Enter customer name"
+              InputProps={{
+                sx: {
+                  height: "40px",
+                  "& input": {
+                    border: "0px !important",
+                    "&::-webkit-inner-spin-button, &::-webkit-outer-spin-button":
+                      {
+                        WebkitAppearance: "none",
+                        margin: 0,
+                      },
+                  },
+                },
+              }}
+            />
+          </FormControl>
+
           <FormControl sx={{ width: { xs: "100%", lg: "50%" } }}>
+            <p style={{ fontSize: "14px", fontWeight: "500" }}>Date of Birth</p>
             <TextField
               type="date"
               value={dob}
@@ -462,127 +555,7 @@ const WindowPurchase = () => {
             />
           </FormControl>
         </Grid>
-        <Grid
-          sx={{
-            display: "flex",
-            gap: "15px",
-          }}
-        >
-          <ReactSelect
-            value={
-              states.find((state) => state.value === address.state) ?? null
-            }
-            onChange={(e) => setAddress((add) => ({ ...add, state: e?.value }))}
-            placeholder="Select your state"
-            styles={{
-              control: (provided) => ({
-                ...provided,
-                background: "white",
-                minWidth: "250px",
-              }),
-              input: (provided) => ({
-                ...provided,
-                color: "black",
 
-                "& input": {
-                  height: "30px",
-                },
-              }),
-              option: (provided, state) => ({
-                ...provided,
-                color: state.isSelected ? "white" : "black",
-              }),
-              menuList: (provided) => ({
-                ...provided,
-                maxHeight: "200px",
-              }),
-            }}
-            getOptionLabel={(opt) => opt.label}
-            getOptionValue={(opt) => opt.value}
-            required={true}
-            isSearchable={true}
-            isClearable
-            options={states}
-          />
-
-          <ReactSelect
-            value={
-              cities.find((option) => option?.value === address.city) ?? null
-            }
-            onChange={(e) => setAddress((add) => ({ ...add, city: e?.value }))}
-            placeholder="Select your city"
-            styles={{
-              control: (provided) => ({
-                ...provided,
-                background: "white",
-                minWidth: "250px",
-              }),
-              input: (provided) => ({
-                ...provided,
-                color: "black",
-
-                "& input": {
-                  height: "30px",
-                },
-              }),
-              option: (provided, state) => ({
-                ...provided,
-                color: state.isSelected ? "white" : "black",
-              }),
-              menuList: (provided) => ({
-                ...provided,
-                maxHeight: "200px",
-              }),
-            }}
-            required={true}
-            isSearchable={true}
-            options={cities}
-            isClearable
-            noOptionsMessage={() => "Please select your state first"}
-          />
-
-          {address.state === "Madhya Pradesh" &&
-            address.city === "Jabalpur" && (
-              <ReactSelect
-                value={
-                  localities.find(
-                    (option) => option?.value === address.locality
-                  ) ?? null
-                }
-                onChange={(e) =>
-                  setAddress((add) => ({ ...add, locality: e?.value }))
-                }
-                placeholder="Select your locality"
-                styles={{
-                  control: (provided) => ({
-                    ...provided,
-                    background: "white",
-                    minWidth: "250px",
-                  }),
-                  input: (provided) => ({
-                    ...provided,
-                    color: "black",
-
-                    "& input": {
-                      height: "30px",
-                    },
-                  }),
-                  option: (provided, state) => ({
-                    ...provided,
-                    color: state.isSelected ? "white" : "black",
-                  }),
-                  menuList: (provided) => ({
-                    ...provided,
-                    maxHeight: "150px",
-                  }),
-                }}
-                required={true}
-                isSearchable={true}
-                isClearable
-                options={localities}
-              />
-            )}
-        </Grid>
         {count > 0 &&
           selectedSlots.map((selectedSlot, index) => (
             <Grid
@@ -612,13 +585,13 @@ const WindowPurchase = () => {
                     letterSpacing: "2px",
                   }}
                 >
-                  {`TICKET NUMBER : ${index + 1}  Price -> Rs ${
+                  {`Price -> Rs ${
                     selectedSlot?.package?.price
                       ? parseInt(selectedSlot.package.price)
                       : 0
                   }`}
                 </Typography>
-                <Button
+                {/* <Button
                   variant="outlined"
                   onClick={() => handleDeleteSelect(index)}
                   sx={{
@@ -636,7 +609,7 @@ const WindowPurchase = () => {
                   }}
                 >
                   <DeleteForeverIcon sx={{ borderRadius: "50%" }} />
-                </Button>
+                </Button> */}
               </Grid>
 
               <Grid
@@ -891,6 +864,16 @@ const WindowPurchase = () => {
             </Grid>
           ))}
 
+        <Grid>
+          <Typography>Add Custom discount</Typography>
+          <TextField
+            type="number"
+            value={customDiscount}
+            onChange={handleCustomDiscountChange}
+            min={0}
+          />
+        </Grid>
+
         <Grid
           sx={{
             width: "100%",
@@ -988,7 +971,10 @@ const WindowPurchase = () => {
           >
             <Typography>Discount </Typography>
             <Typography>
-              Rs {(couponDiscount.discount || 0) + (premiumDiscount || 0)}
+              Rs{" "}
+              {(couponDiscount.discount || 0) +
+                (premiumDiscount || 0) +
+                customDiscount}
             </Typography>
           </Grid>
           {/* <Grid
@@ -1014,7 +1000,9 @@ const WindowPurchase = () => {
               Rs{" "}
               {Math.max(
                 totalPrice -
-                  ((couponDiscount.discount || 0) + (premiumDiscount || 0)),
+                  ((couponDiscount.discount || 0) +
+                    (premiumDiscount || 0) +
+                    customDiscount),
                 0
               )}
             </Typography>

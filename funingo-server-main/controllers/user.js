@@ -9,6 +9,7 @@ import ExpressError from "../utilities/express-error.js";
 import constants from "../constants.js";
 import { razorpay } from "../index.js";
 import { validatePaymentVerification } from "razorpay/dist/utils/razorpay-utils.js";
+import Transaction from "../models/transaction.js";
 
 export const registerUser = async (req, res) => {
   const saltRounds = 10;
@@ -199,8 +200,9 @@ export const getFuningoCoinsFromPhnNo = async (req, res) => {
     throw new ExpressError("User not found", 401);
   }
 
-  res.status(200).send({
+  res.status(200).json({
     success: true,
+    name: (user?.first_name || "") + " " + (user?.last_name || ""),
     funingo_money: user.funingo_money,
     address: {
       state: user.state,
@@ -360,8 +362,6 @@ export const verifyAddFuningoMoneyPayment = async (req, res) => {
     razorpay_signature,
   } = req.body;
 
-  console.log(phone_no);
-
   const user = await User.findOne({ phone_no });
 
   if (!user) throw new ExpressError("User not found", 404);
@@ -397,5 +397,22 @@ export const verifyAddFuningoMoneyPayment = async (req, res) => {
   user.funingo_money += coins;
   await user.save();
 
+  const transaction = new Transaction({
+    user: user._id,
+    coins: coins,
+    type: "credit",
+    description: "Purchased coins",
+  });
+  await transaction.save();
+
   res.status(200).send({ success: true, coins: user.funingo_money });
+};
+
+export const getTransactions = async (req, res) => {
+  const { user } = req;
+  const transactions = await Transaction.find({ user: user._id }).sort({
+    created_at: -1,
+  });
+
+  res.status(200).send({ success: true, transactions });
 };

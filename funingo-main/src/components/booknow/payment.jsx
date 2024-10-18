@@ -297,12 +297,13 @@ const PaymentButton = ({
   code,
   values,
   persons,
-  setPersons,
+  setPersonsData,
   discount,
   usedFuningoMoney,
   setShowTicket,
   handleResetBookForm,
   premiumDiscount,
+  onClick,
 }) => {
   const userData = useSelector((store) => store.userSlice.userData);
   const isLoggedIn = useSelector((store) => store.userSlice.isLoggedIn);
@@ -390,7 +391,7 @@ const PaymentButton = ({
       if (response.success === true && total === 0) {
         handleResetBookForm();
         callback?.(ticket_id);
-        setPersons([]);
+        setPersonsData({});
         setShowTicket({
           show: true,
           data: response.ticket,
@@ -427,7 +428,7 @@ const PaymentButton = ({
             if (resp) {
               handleResetBookForm();
               callback?.(ticket_id);
-              setPersons([]);
+              setPersonsData({});
               setShowTicket({
                 show: true,
                 data: resp.data.ticket,
@@ -511,7 +512,8 @@ const PaymentButton = ({
               alignItems: "center",
             },
           }}
-          onClick={() => {
+          onClick={async () => {
+            await onClick();
             if (!isLoggedIn) {
               dispatch(openAuthModal());
               return;

@@ -69,7 +69,7 @@ import {
 } from "../../assets";
 import MoneyBg from "../../assets/money-logo-bg.svg";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { scrollToTop } from "../../utils/index";
 const Zone = () => {
@@ -80,6 +80,7 @@ const Zone = () => {
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
   const navigate = useNavigate(false);
+  const { state } = useLocation();
 
   const renderButton = () => (
     <button
@@ -137,6 +138,13 @@ const Zone = () => {
     </button>
   );
 
+  useEffect(() => {
+    const zone = document.getElementById(state?.zoneId);
+    if (zone) {
+      zone.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [state?.zoneId]);
+
   return (
     <div className=" overflow-hidden">
       <section className="section0 w-full">
@@ -157,7 +165,7 @@ const Zone = () => {
       </section>
 
       {/* Zone 1  */}
-      <section>
+      <section id="zone1">
         <div className="zone1 flex justify-between lg:p-28 items-center max-sm:flex-col max-sm:p-20 max-sm:space-y-20">
           <div className="block text-left">
             <h3 className="text-primary max-md:text-center">Zone 1</h3>
@@ -200,7 +208,7 @@ const Zone = () => {
       </section>
 
       {/* Zone 2  */}
-      <section>
+      <section id="zone2">
         <div className="zone2 flex flex-col lg:flex-row items-center justify-between lg:p-28 max-sm:p-20 max-sm:space-y-5">
           <div className="block text-center lg:text-left">
             <h3 className="text-primary">Zone 2</h3>
@@ -276,7 +284,7 @@ const Zone = () => {
 
       {/* Zone 3  */}
 
-      <section>
+      <section id="zone3">
         <div className="zone3 flex flex-col lg:flex-row items-center justify-between lg:p-28 max-sm:p-20 max-sm:space-y-5">
           <div className="block text-center lg:text-left">
             <h3 className="text-primary max-sm:text-center">Zone 3</h3>
@@ -381,7 +389,7 @@ const Zone = () => {
 
       {/* Zone 4  */}
 
-      <section className="section4">
+      <section className="section4" id="zone4">
         <div className="zone4 flex flex-col lg:flex-row justify-between p-28 pb-20 items-center">
           <div className="block text-center lg:text-left">
             <h3 className="text-primary">Zone 4</h3>
@@ -644,7 +652,7 @@ const Zone = () => {
 
       {/* Zone 5  */}
 
-      <section className="section5">
+      <section className="section5" id="zone5">
         <div className="zone5 flex flex-col lg:flex-row items-center justify-between lg:p-28 max-sm:p-20 max-sm:space-y-5">
           <div className="block text-center lg:text-left max-sm:mt-10 lg:mt-40">
             <h3 className="text-primary">Zone 5</h3>
@@ -848,7 +856,7 @@ const Zone = () => {
 
       {/* Zone 6  */}
 
-      <section>
+      <section className="section6" id="zone6">
         <div className="zone6 flex flex-col lg:flex-row items-center justify-between lg:p-28 max-sm:p-20 max-sm:space-y-5">
           <div className="block text-center lg:text-left">
             <h3 className="text-primary max-sm:text-center">Zone 6</h3>
@@ -954,7 +962,7 @@ const Zone = () => {
 
       {/* Zone 7  */}
 
-      <section className="section7">
+      <section className="section7" id="zone7">
         <div className="zone7 flex flex-col lg:flex-row justify-between items-center lg:p-28 max-sm:p-20 max-sm:space-y-5">
           <div className="block text-center lg:text-left">
             <h3 className="text-primary">Zone 7</h3>
@@ -1008,7 +1016,7 @@ const Zone = () => {
 
       {/* Zone 8 */}
 
-      <section>
+      <section className="section8" id="zone8">
         <div className="zone8 flex flex-col lg:flex-row items-center justify-between lg:p-28 max-sm:p-20 max-sm:space-y-5">
           <div className="block text-center lg:text-left">
             <h3 className="text-primary max-sm:text-center">Zone 8</h3>

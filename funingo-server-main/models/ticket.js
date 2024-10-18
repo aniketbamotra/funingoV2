@@ -173,6 +173,10 @@ const ticketSchema = new mongoose.Schema(
       url: String,
       filename: String,
     },
+    custom_discount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     versionKey: false,

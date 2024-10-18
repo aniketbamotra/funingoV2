@@ -23,6 +23,7 @@ import { getProfile } from "../../utils";
 import TicketModal from "../booknow/ticket";
 import SliderImage from "./images/slider.png";
 import { openPremiumSubscriptionModal } from "../../utils/store/slice/appSlice";
+import { getTransactions } from "../../actions/user";
 
 const Profile = () => {
   const {
@@ -30,16 +31,17 @@ const Profile = () => {
     token,
     isLoggedIn,
     isPremium,
+    transactions,
   } = useSelector((state) => state.userSlice);
   const [tickets, setTickets] = useState([]);
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
   const [expandedTicket, setExpandedTicket] = useState(null);
   const isMobile = useMediaQuery("(max-width:600px)");
   const [sliderValue, setSliderValue] = useState(12);
   const dispatch = useDispatch();
 
   const options = [
-    // { label: 'Premium Packages', value: 0 },
+    { label: "Transaction History", value: 0 },
     { label: "Upcoming Trips", value: 1 },
     { label: "Previous Bookings", value: 2 },
   ];
@@ -63,6 +65,10 @@ const Profile = () => {
       setSliderValue(12);
     }
   }, [sliderValue]);
+
+  useEffect(() => {
+    dispatch(getTransactions());
+  }, []);
 
   return (
     <Grid
@@ -194,6 +200,9 @@ const Profile = () => {
             {/* <Heading active={active === 0} onClick={() => setActive(0)}>
               Premium Packages
             </Heading> */}
+            <Heading active={active === 0} onClick={() => setActive(0)}>
+              Transaction History
+            </Heading>
             <Heading active={active === 1} onClick={() => setActive(1)}>
               Upcoming Trips
             </Heading>
@@ -293,6 +302,42 @@ const Profile = () => {
                 </Grid>
               )}
             </Grid>
+          </Grid>
+        )}
+        {active === 0 && (
+          <Grid>
+            <TableContainer>
+              <Table sx={{ minWidth: 650 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>S. No.</TableCell>
+                    <TableCell>Coins</TableCell>
+                    <TableCell>Type</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Date</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {transactions?.map((transaction, ind) => (
+                    <TableRow key={transaction._id}>
+                      <TableCell>{ind + 1}.</TableCell>
+                      <TableCell sx={{ textTransform: "capitalize" }}>
+                        {transaction.coins}
+                      </TableCell>
+                      <TableCell sx={{ textTransform: "capitalize" }}>
+                        {transaction.type}
+                      </TableCell>
+                      <TableCell sx={{ textTransform: "capitalize" }}>
+                        {transaction.description}
+                      </TableCell>
+                      <TableCell sx={{ textTransform: "capitalize" }}>
+                        {new Date(transaction.createdAt).toDateString()}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
         )}
         {/* {active === 0 && (

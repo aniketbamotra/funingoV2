@@ -11,3 +11,16 @@ export const fetchSelf = createAsyncThunk("fetch/self", async () => {
   });
   return resp.data;
 });
+
+export const getTransactions = createAsyncThunk(
+  "get/transactions",
+  async () => {
+    const token = localStorage.getItem("token");
+    const resp = await axios.get(`${apiUrl}/user/transactions`, {
+      headers: {
+        token,
+      },
+    });
+    return resp.data;
+  }
+);
