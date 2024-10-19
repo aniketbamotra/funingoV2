@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import { SNSClient } from "@aws-sdk/client-sns";
+import { S3Client } from "@aws-sdk/client-s3";
+
 import Razorpay from "razorpay";
 import cron from "node-cron";
 
@@ -12,6 +14,7 @@ import ticketRouter from "./routes/ticket.js";
 import packageRouter from "./routes/package.js";
 import qrRouter from "./routes/qr-ticket.js";
 import adminRouter from "./routes/admin/index.js";
+import adminStatsRouter from "./routes/admin/stats.js";
 import imageRouter from "./routes/images.js";
 import couponRouter from "./routes/coupon.js";
 import phoneNoRouter from "./routes/phone-no.js";
@@ -34,6 +37,15 @@ mongoose.connect(process.env.DB_URI).then(
 export const sns_client = new SNSClient({
   region: "ap-south-1",
 });
+
+export const s3_client = new S3Client({
+  region: "ap-south-1",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
 export const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY_ID,
   key_secret: process.env.RAZORPAY_API_KEY_SECRET,
@@ -57,6 +69,7 @@ app.use("/ticket", ticketRouter);
 app.use("/package", packageRouter);
 app.use("/qr", qrRouter);
 app.use("/admin", adminRouter);
+app.use("/admin/stats", adminStatsRouter);
 app.use("/image", imageRouter);
 app.use("/coupon", couponRouter);
 app.use("/phone", phoneNoRouter);

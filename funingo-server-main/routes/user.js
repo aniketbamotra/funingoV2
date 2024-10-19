@@ -41,10 +41,10 @@ router
 
 router
   .route("/coins/create-order")
-  .post(authenticateUser, catchAsync(createAddFuningoMoneyOrder));
+  .post(catchAsync(createAddFuningoMoneyOrder));
 router
   .route("/coins/verify-payment")
-  .post(authenticateUser, catchAsync(verifyAddFuningoMoneyPayment));
+  .post(catchAsync(verifyAddFuningoMoneyPayment));
 
 router.get("/coins/:phone_no", catchAsync(getFuningoCoinsFromPhnNo));
 
