@@ -105,6 +105,7 @@ export const createTicketOrder = async (req, res) => {
     phone_no,
     email,
     coupon,
+    count,
   } = req.body;
 
   const { user } = req;
@@ -156,6 +157,7 @@ export const createTicketOrder = async (req, res) => {
     phone_no,
     email,
     coupon_used: coupon,
+    count,
   });
 
   user.booked_tickets.push(newTicket);

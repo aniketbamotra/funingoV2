@@ -204,10 +204,18 @@ export const getFuningoCoinsFromPhnNo = async (req, res) => {
   const { phone_no } = req.params;
   const user = await User.findOne({
     $or: [{ phone_no }, { short_id: phone_no }],
-  });
+  }).populate("booked_tickets");
 
   if (!user) {
     throw new ExpressError("User not found", 401);
+  }
+  let dob;
+
+  if (
+    new Date(user.booked_tickets.slice(-1)[0]?.fun_date).toDateString() ===
+    new Date().toDateString()
+  ) {
+    dob = user.dob;
   }
 
   res.status(200).json({
@@ -220,6 +228,7 @@ export const getFuningoCoinsFromPhnNo = async (req, res) => {
       locality: user.locality,
     },
     premium: user.premium,
+    dob,
   });
 };
 

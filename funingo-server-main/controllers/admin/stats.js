@@ -135,7 +135,15 @@ export const userFrequency = async (req, res) => {
         foreignField: "_id",
         as: "user",
         pipeline: [
-          { $project: { first_name: 1, last_name: 1, phone_no: 1, dob: 1 } },
+          {
+            $project: {
+              first_name: 1,
+              last_name: 1,
+              phone_no: 1,
+              dob: 1,
+              funingo_money: 1,
+            },
+          },
         ],
       },
     },
@@ -166,6 +174,7 @@ export const userFrequency = async (req, res) => {
         last_name: { $arrayElemAt: ["$user.last_name", 0] },
         phone_no: { $arrayElemAt: ["$user.phone_no", 0] },
         dob: { $arrayElemAt: ["$user.dob", 0] },
+        funingo_money: { $arrayElemAt: ["$user.funingo_money", 0] },
       },
     },
   ];
@@ -259,6 +268,7 @@ export const downloadUserData = async (req, res) => {
               state: 1,
               locality: 1,
               email: 1,
+              funingo_money: 1,
             },
           },
         ],
@@ -277,6 +287,7 @@ export const downloadUserData = async (req, res) => {
         city: { $arrayElemAt: ["$user.city", 0] },
         state: { $arrayElemAt: ["$user.state", 0] },
         locality: { $arrayElemAt: ["$user.locality", 0] },
+        funingo_money: { $arrayElemAt: ["$user.funingo_money", 0] },
       },
     },
   ];
@@ -338,5 +349,80 @@ export const getCoinsPerPerson = async (req, res) => {
     total_coins,
     total_users,
     coins_per_user: Math.round(total_coins / total_users),
+  });
+};
+
+export const downlaodDailySales = async (req, res) => {
+  const { start_date, end_date } = req.query;
+
+  const all_filter = {
+    fun_date: {
+      $gte: new Date(start_date) ?? new Date(0),
+      $lte: new Date(end_date) ?? new Date(),
+    },
+    user: { $ne: null },
+  };
+
+  const pipeline = [
+    {
+      $match: all_filter,
+    },
+    {
+      $group: {
+        _id: {
+          date: { $dateToString: { format: "%Y-%m-%d", date: "$fun_date" } },
+          payment_mode: "$payment_mode",
+        },
+        total_amount: { $sum: "$total_amount" },
+      },
+    },
+    {
+      $sort: {
+        "_id.date": 1,
+        "_id.payment_mode": 1,
+      },
+    },
+  ];
+
+  const result = await Ticket.aggregate(pipeline);
+
+  // Transform the result into a 2D array
+  const dates = [...new Set(result.map((item) => item._id.date))];
+  const paymentModes = [
+    ...new Set(result.map((item) => item._id.payment_mode)),
+  ];
+
+  const dataMatrix = dates.map((date) => {
+    const row = { date };
+    paymentModes.forEach((mode) => {
+      const entry = result.find(
+        (item) => item._id.date === date && item._id.payment_mode === mode
+      );
+      row[mode] = entry ? entry.total_amount : 0;
+    });
+    return row;
+  });
+
+  const csv = json2csv(dataMatrix, {
+    emptyFieldValue: "-",
+  });
+
+  const file_name = `sales/sales-data-${Date.now()}.csv`;
+  const bucket_name = "funingo-user-data-csv-1";
+
+  const command = new PutObjectCommand({
+    Bucket: bucket_name,
+    Key: file_name,
+    Body: csv,
+    ContentType: "text/csv",
+  });
+
+  await s3_client.send(command);
+
+  const url = await generatePresignedUrl(bucket_name, file_name);
+
+  res.status(200).send({
+    success: true,
+    url,
   });
 };

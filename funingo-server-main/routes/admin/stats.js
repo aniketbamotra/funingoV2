@@ -7,6 +7,7 @@ import {
   getCoinsPerPerson,
   revenueTransactionSplit,
   userFrequency,
+  downlaodDailySales,
 } from "../../controllers/admin/stats.js";
 
 const router = express.Router();
@@ -25,6 +26,12 @@ router.get(
   "/download-user-data",
   authenticateAdmin,
   catchAsync(downloadUserData)
+);
+
+router.get(
+  "/download-sales-data",
+  authenticateAdmin,
+  catchAsync(downlaodDailySales)
 );
 
 router.get(

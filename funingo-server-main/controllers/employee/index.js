@@ -22,6 +22,7 @@ export const bookTicket = async (req, res) => {
     locality,
     name,
     custom_discount,
+    count,
   } = req.body;
   let totalAmount = 0;
   let user = await User.findOne({ phone_no });
@@ -108,6 +109,7 @@ export const bookTicket = async (req, res) => {
     payment_mode,
     phone_no: phone_no ?? "",
     custom_discount,
+    count,
   });
 
   user.booked_tickets.push(newTicket);
