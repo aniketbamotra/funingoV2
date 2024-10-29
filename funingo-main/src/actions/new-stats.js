@@ -84,3 +84,17 @@ export const getCoinsPerPerson = createAsyncThunk(
     return response.data;
   }
 );
+
+export const downloadSalesData = createAsyncThunk(
+  "admin/downloadSalesData",
+  async ({ startDate, endDate }, { getState }) => {
+    const {
+      userSlice: { token },
+    } = getState();
+    const response = await axios.get(
+      `${apiUrl}/admin/stats/download-sales-data?start_date=${startDate}&end_date=${endDate}`,
+      { headers: { token } }
+    );
+    return response.data;
+  }
+);

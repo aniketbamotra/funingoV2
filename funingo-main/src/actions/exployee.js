@@ -12,6 +12,7 @@ export const windowPurchase = async ({
   dob,
   name,
   custom_discount,
+  count,
 }) => {
   console.log("details from exployee.js", details);
   const response = await axios.post(
@@ -25,6 +26,7 @@ export const windowPurchase = async ({
       dob,
       name,
       custom_discount,
+      count,
     },
     {
       headers: {

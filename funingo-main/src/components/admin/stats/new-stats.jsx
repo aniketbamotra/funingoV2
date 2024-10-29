@@ -13,12 +13,9 @@ import moment from "moment";
 
 const NewStats = () => {
   const dispatch = useDispatch();
-  const {
-    activityUsage = [],
-    coinsPerPerson = [],
-    userFrequency = [],
-    revenueTransactionSplit = [],
-  } = useSelector((state) => state.statsSlice);
+  const { activityUsage = [], revenueTransactionSplit = [] } = useSelector(
+    (state) => state.statsSlice
+  );
 
   const [startDate, setStartDate] = useState(() =>
     moment().startOf("month").format("YYYY-MM-DD")

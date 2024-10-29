@@ -446,7 +446,7 @@ const Navbar = () => {
               >
                 <Box
                   sx={{
-                    width: "100px",
+                    width: "120px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -458,7 +458,7 @@ const Navbar = () => {
                     src={MoneyBg}
                     alt="background"
                     sx={{
-                      width: "90px",
+                      width: "120px",
                     }}
                   />
                   <Typography
@@ -468,7 +468,7 @@ const Navbar = () => {
                       fontSize: "14px",
                       zIndex: "110",
                       position: "absolute",
-                      right: "13px",
+                      right: "22px",
                       textAlign: "center",
                       width: "40px",
                     }}

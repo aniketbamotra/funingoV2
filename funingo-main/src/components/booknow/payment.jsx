@@ -372,6 +372,7 @@ const PaymentButton = ({
         phone_no: "+91-" + values.phone,
         used_funingo_money: usedFuningoMoney,
         coupon: discount?.code,
+        count: values.count,
       };
       const token = localStorage.getItem("token");
       addScript("https://checkout.razorpay.com/v1/checkout.js");

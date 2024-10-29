@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  downloadSalesData,
   downloadUserData,
   getActivityUsage,
   getCoinsPerPerson,
@@ -63,22 +64,40 @@ const UserFrequency = () => {
     );
   };
 
-  const handleDownloadUserData = () => {
-    if (downloadUrl) {
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = "user_data.csv";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      console.error("Download URL is not available");
+  const handleDownloadUserData = async () => {
+    const data = await dispatch(downloadUserData({ startDate, endDate }));
+    if (data.type.endsWith("/fulfilled")) {
+      if (data.payload.url) {
+        const link = document.createElement("a");
+        link.href = data.payload.url;
+        link.download = "user_data.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        console.error("Download URL is not available");
+      }
+    }
+  };
+
+  const handleDownloadSalesData = async () => {
+    const data = await dispatch(downloadSalesData({ startDate, endDate }));
+    if (data.type.endsWith("/fulfilled")) {
+      if (data.payload.url) {
+        const link = document.createElement("a");
+        link.href = data.payload.url;
+        link.download = "user_data.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        console.error("Download URL is not available");
+      }
     }
   };
 
   useEffect(() => {
     dispatch(getCoinsPerPerson({ startDate, endDate }));
-    dispatch(downloadUserData({ startDate, endDate }));
   }, [dispatch, startDate, endDate]);
 
   useEffect(() => {
@@ -116,21 +135,49 @@ const UserFrequency = () => {
         sx={{
           display: "flex",
           gap: 2,
-          justifyContent: "center",
+          justifyContent: "space-around",
           alignItems: "center",
           width: "100%",
-          my: 3,
           border: "1px solid #000",
           p: 2,
           borderRadius: "10px",
         }}
       >
-        <Typography sx={{ fontSize: "18px", fontWeight: "600", lineHeight: 1 }}>
-          Download User Data:
-        </Typography>
-        <Button variant="contained" onClick={handleDownloadUserData}>
-          Download
-        </Button>
+        <Grid
+          sx={{
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <Typography
+            sx={{ fontSize: "18px", fontWeight: "600", lineHeight: 1 }}
+          >
+            Download User Data:
+          </Typography>
+          <Button variant="contained" onClick={handleDownloadUserData}>
+            Download
+          </Button>
+        </Grid>
+
+        <Grid
+          sx={{
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <Typography
+            sx={{ fontSize: "18px", fontWeight: "600", lineHeight: 1 }}
+          >
+            Download Sales Data:
+          </Typography>
+          <Button variant="contained" onClick={handleDownloadSalesData}>
+            Download
+          </Button>
+        </Grid>
       </Box>
       <Box
         sx={{
@@ -145,7 +192,7 @@ const UserFrequency = () => {
         }}
       >
         <Typography sx={{ fontSize: "18px", fontWeight: "600" }}>
-          Coins Per Person:
+          Coins Per Purchase:
         </Typography>
         <Typography sx={{ fontSize: "18px", fontWeight: "600" }}>
           {coinsPerPerson?.coins_per_user || 0}
@@ -217,6 +264,7 @@ const UserFrequency = () => {
                   Frequency{" "}
                   {sort === "asc" ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
                 </TableCell>
+                <TableCell>Coins</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -227,6 +275,7 @@ const UserFrequency = () => {
                   <TableCell>{data.phone_no}</TableCell>
                   <TableCell>{moment(data.dob).format("DD-MM-YYYY")}</TableCell>
                   <TableCell>{data.count}</TableCell>
+                  <TableCell>{data.funingo_money}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

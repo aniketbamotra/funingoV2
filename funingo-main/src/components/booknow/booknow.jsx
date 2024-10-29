@@ -184,6 +184,7 @@ const initialValues = {
   golden_flag: 0,
   funingocoins: 0,
   totalfuningocoinsassigned: 0,
+  count: 1,
   isChecked: false,
 };
 const initialErrorMsg = {
@@ -1304,6 +1305,7 @@ const Booknow = () => {
                 mb={"15px"}
                 flexDirection={isMobile ? "column" : "row"}
                 height={isMobile ? "100px" : "70px"}
+                gap={"20px"}
               >
                 <Grid className="input-date">
                   <label className="book-now-label">Date </label>
@@ -1319,49 +1321,19 @@ const Booknow = () => {
                     min={new Date().toISOString().split("T")[0]}
                   />
                 </Grid>
-                <Grid className="input-time">
-                  <label className="book-now-label">Time</label>
-                  <Select
-                    id="time"
-                    name="time"
-                    value={
-                      timeOptions.find(
-                        (option) => option?.value === values?.time
-                      ) ?? null
-                    }
-                    onChange={(e) => {
-                      setIsTimeSelected(!!e);
-                      setFieldValue("time", e?.value || "");
 
-                      // handleChange(e?.value || '');
-                    }}
+                <Grid className="input-date">
+                  <label className="book-now-label">Person Count</label>
+                  <input
+                    name="count"
+                    className="date-inp"
+                    type="number"
+                    placeholder="Count"
+                    value={values.count}
+                    onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder="Slots"
-                    styles={{
-                      control: (provided) => ({
-                        ...provided,
-                        background: "white",
-                      }),
-                      input: (provided) => ({
-                        ...provided,
-                        color: "black",
-                        "& input": {
-                          height: "30px",
-                        },
-                      }),
-                      ValueContainer: (provided) => ({
-                        ...provided,
-                      }),
-                      option: (provided, state) => ({
-                        ...provided,
-                        color: state.isSelected ? "white" : "black",
-                      }),
-                    }}
                     required={true}
-                    isSearchable={false}
-                    isClearable
-                    options={timeOptions}
-                    // isDisabled={disablevar}
+                    min={1}
                   />
                 </Grid>
               </Grid>

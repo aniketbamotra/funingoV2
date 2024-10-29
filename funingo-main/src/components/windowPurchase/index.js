@@ -32,6 +32,7 @@ import { InputAdornment } from "@mui/material";
 import { scrollToTop } from "../../utils";
 import statesData, { localityData } from "../auth/states";
 import ComplimentaryDialog from "./ComplimentaryDialog";
+import moment from "moment";
 
 const WindowPurchase = () => {
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ const WindowPurchase = () => {
   const [couponDiscount, setCouponDiscount] = useState({});
   const [code, setCode] = useState("");
   const [count, setCount] = useState(1);
+  const [personCount, setPersonCount] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
   const [gstPrice, setGstPrice] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -157,6 +159,9 @@ const WindowPurchase = () => {
               break;
             }
           }
+        }
+        if (response.data.dob) {
+          setDob(moment(response.data.dob).format("YYYY-MM-DD"));
         }
       } catch (error) {
         console.log(error.message, error);
@@ -287,6 +292,7 @@ const WindowPurchase = () => {
 
     try {
       const response = await windowPurchase({
+        count: personCount,
         total_amount:
           totalPrice -
           premiumDiscount -
@@ -591,25 +597,6 @@ const WindowPurchase = () => {
                       : 0
                   }`}
                 </Typography>
-                {/* <Button
-                  variant="outlined"
-                  onClick={() => handleDeleteSelect(index)}
-                  sx={{
-                    height: "40px",
-                    width: "20px",
-                    "&:hover": {
-                      //   backgroundColor: "#f52047",
-                      color: "#f52047",
-                      outline: "none",
-                      border: "none",
-                    },
-                    outline: "none",
-                    border: "none",
-                    borderRadius: "50%",
-                  }}
-                >
-                  <DeleteForeverIcon sx={{ borderRadius: "50%" }} />
-                </Button> */}
               </Grid>
 
               <Grid
@@ -685,97 +672,7 @@ const WindowPurchase = () => {
                   </FormControl> */}
                 </Grid>
               </Grid>
-              <Grid
-                display={"flex"}
-                justifyContent={"space-between"}
-                width={"100%"}
-              >
-                <Grid className="input-freebies" width={"100%"}>
-                  {/* <Typography mb='5px'>Add More Coins</Typography>
-                  <Grid
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      flexWrap: 'wrap',
-                      alignItems: 'center',
-                      gap: '10px'
-                    }}
-                  > */}
-                  {/* <IndividualFlag
-                      label={
-                        <Tour
-                          sx={{
-                            color: '#fa1942'
-                          }}
-                        />
-                      }
-                      mode='dark'
-                      value={selectedSlot.extra_red}
-                      onChange={val =>
-                        handleChange(index, {
-                          ...selectedSlot,
-                          extra_red: val
-                        })
-                      }
-                    /> */}
-                  {/* <IndividualFlag
-                      label={
-                        <Coin/>
-                      }
-                      mode='dark'
-                      value={selectedSlot.extra_yellow}
-                      onChange={val =>
-                        handleChange(index, {
-                          ...selectedSlot,
-                          extra_yellow: val
-                        })
-                      }
-                    /> */}
-                  {/* <IndividualFlag
-                      label={
-                        <Tour
-                          sx={{
-                            color: '#76de9a'
-                          }}
-                        />
-                      }
-                      mode='dark'
-                      value={selectedSlot.extra_green}
-                      onChange={val =>
-                        handleChange(index, {
-                          ...selectedSlot,
-                          extra_green: val
-                        })
-                      }
-                    /> */}
-                  {/* </Grid> */}
-                  {/* <Grid mt='15px'>
-                    <Typography className='book-now-label' fontSize={'16px'}>
-                      For Trampoline Park{' '}
-                      <Typography component={'span'} fontSize={'12px'}>
-                        (Can be selected without other packages)
-                      </Typography>
-                    </Typography>
-                    <IndividualFlag
-                      label={
-                        <Tour
-                          sx={{
-                            color: '#FFD700'
-                          }}
-                        />
-                      }
-                      mode='dark'
-                      value={selectedSlot.golden_flag}
-                      onChange={val =>
-                        handleChange(index, {
-                          ...selectedSlot,
-                          golden_flag: val
-                        })
-                      }
-                    />
-                  </Grid> */}
-                </Grid>
-              </Grid>
+
               <Grid width={"100%"}>
                 <Typography mb="5px">Optional Fields</Typography>
                 <Grid
@@ -847,15 +744,30 @@ const WindowPurchase = () => {
               </Grid>
             </Grid>
           ))}
-
-        <Grid>
-          <Typography>Add Custom discount</Typography>
-          <TextField
-            type="number"
-            value={customDiscount}
-            onChange={handleCustomDiscountChange}
-            min={0}
-          />
+        <Grid
+          sx={{
+            display: "flex",
+            gap: "20px",
+          }}
+        >
+          <Grid>
+            <Typography>Add Custom discount</Typography>
+            <TextField
+              type="number"
+              value={customDiscount}
+              onChange={handleCustomDiscountChange}
+              min={0}
+            />
+          </Grid>
+          <Grid>
+            <Typography>Add Person count</Typography>
+            <TextField
+              type="number"
+              value={personCount}
+              onChange={(e) => setPersonCount(parseInt(e.target.value))}
+              min={0}
+            />
+          </Grid>
         </Grid>
 
         <Grid
