@@ -11,7 +11,11 @@ import {
   webhookPaymentVerification,
   redeemFuningoCoins,
 } from "../controllers/ticket.js";
-import { authenticateEmployee, authenticateUser } from "../middleware.js";
+import {
+  authenticateEmployee,
+  authenticateUser,
+  authenticateWindowEmployee,
+} from "../middleware.js";
 import {
   addComplementaryCoins,
   bookTicket,
@@ -32,7 +36,11 @@ router
   .route("/verify-payment-webhook")
   .post(catchAsync(webhookPaymentVerification));
 
-router.get("/get-qr-tickets", authenticateEmployee, catchAsync(getQRTickets));
+router.get(
+  "/get-qr-tickets",
+  authenticateWindowEmployee,
+  catchAsync(getQRTickets)
+);
 router.get("/get-all-tickets", authenticateUser, catchAsync(getAllTickets));
 router.post("/get-discount", authenticateUser, catchAsync(getDiscount));
 router.post(
@@ -44,7 +52,11 @@ router.post(
 
 router.delete("/:short_id", authenticateUser, catchAsync(deleteTicket));
 
-router.post("/e/book-ticket", authenticateEmployee, catchAsync(bookTicket));
+router.post(
+  "/e/book-ticket",
+  authenticateWindowEmployee,
+  catchAsync(bookTicket)
+);
 router.post("/redeem", authenticateEmployee, catchAsync(redeemFuningoCoins));
 
 router.post(

@@ -468,7 +468,7 @@ const RedeemTicket = () => {
         alert("Insufficient Funingo Coins");
         return;
       }
-      alert("Please Enter coins in the field again!!");
+      alert("Couldn't redeem coins, please try again!!");
       console.log("phoneNo", phoneNo);
       console.log("errorrorrr", err);
       // setError(err.response.data);

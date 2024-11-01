@@ -71,7 +71,7 @@ export const loginUser = async (req, res) => {
         token,
       });
     } else {
-      throw new ExpressError("Email and password doesn't match", 400);
+      throw new ExpressError("Phone number and password doesn't match", 400);
     }
   } else {
     throw new ExpressError("User not found", 400);
