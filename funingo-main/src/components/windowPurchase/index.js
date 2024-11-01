@@ -162,6 +162,8 @@ const WindowPurchase = () => {
         }
         if (response.data.dob) {
           setDob(moment(response.data.dob).format("YYYY-MM-DD"));
+        } else {
+          setDob("");
         }
       } catch (error) {
         console.log(error.message, error);
