@@ -11,10 +11,25 @@ import { generatePresignedUrl } from "../../utilities/utils.js";
 export const revenueTransactionSplit = async (req, res) => {
   const { start_date, end_date } = req.query;
 
+  const endDate = new Date(end_date);
+
+  const endDateUTC =
+    new Date(
+      Date.UTC(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    ) ?? new Date();
+
   const filter = {
     fun_date: {
       $gte: new Date(start_date) ?? new Date(0),
-      $lte: new Date(end_date) ?? new Date(),
+      $lte: endDateUTC,
     },
   };
 
@@ -47,10 +62,25 @@ export const revenueTransactionSplit = async (req, res) => {
 export const activityUsage = async (req, res) => {
   const { start_date, end_date } = req.query;
 
+  const endDate = new Date(end_date);
+
+  const endDateUTC =
+    new Date(
+      Date.UTC(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    ) ?? new Date();
+
   const filter = {
     createdAt: {
       $gte: new Date(start_date) ?? new Date(0),
-      $lte: new Date(end_date) ?? new Date(),
+      $lte: endDateUTC,
     },
     activity: { $ne: null },
   };
@@ -104,11 +134,24 @@ export const userFrequency = async (req, res) => {
     max_age = 100,
     phone_no = "",
   } = req.query;
+  const endDate = new Date(end_date);
+  const endDateUTC =
+    new Date(
+      Date.UTC(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    ) ?? new Date();
 
   const all_filter = {
     fun_date: {
       $gte: new Date(start_date) ?? new Date(0),
-      $lte: new Date(end_date) ?? new Date(),
+      $lte: endDateUTC,
     },
     user: { $ne: null },
   };
@@ -231,11 +274,25 @@ export const userFrequency = async (req, res) => {
 
 export const downloadUserData = async (req, res) => {
   const { start_date, end_date } = req.query;
+  const endDate = new Date(end_date);
+
+  const endDateUTC =
+    new Date(
+      Date.UTC(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    ) ?? new Date();
 
   const all_filter = {
     fun_date: {
       $gte: new Date(start_date) ?? new Date(0),
-      $lte: new Date(end_date) ?? new Date(),
+      $lte: endDateUTC,
     },
     user: { $ne: null },
   };
@@ -321,13 +378,28 @@ export const downloadUserData = async (req, res) => {
 export const getCoinsPerPerson = async (req, res) => {
   const { start_date, end_date } = req.query;
 
+  const endDate = new Date(end_date);
+
+  const endDateUTC =
+    new Date(
+      Date.UTC(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    ) ?? new Date();
+
   const pipeline = [
     {
       $match: {
         type: "credit",
         createdAt: {
           $gte: new Date(start_date) ?? new Date(0),
-          $lte: new Date(end_date) ?? new Date(),
+          $lte: endDateUTC,
         },
       },
     },
@@ -355,10 +427,25 @@ export const getCoinsPerPerson = async (req, res) => {
 export const downlaodDailySales = async (req, res) => {
   const { start_date, end_date } = req.query;
 
+  const endDate = new Date(end_date);
+
+  const endDateUTC =
+    new Date(
+      Date.UTC(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    ) ?? new Date();
+
   const all_filter = {
     fun_date: {
       $gte: new Date(start_date) ?? new Date(0),
-      $lte: new Date(end_date) ?? new Date(),
+      $lte: endDateUTC,
     },
     user: { $ne: null },
   };

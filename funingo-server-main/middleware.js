@@ -58,7 +58,10 @@ export const authenticateWindowEmployee = async (req, res, next) => {
     const json_secret_key = process.env.JWT_SECRET_KEY;
     const user_id = jwt.verify(token, json_secret_key);
     const user = await User.findById(user_id);
-    if (user && user.user_type === "window_employee") {
+    if (
+      (user && user.user_type === "window_employee") ||
+      user.user_type === "admin"
+    ) {
       req.user = user;
       next();
     } else {
