@@ -24,6 +24,8 @@ import { HashLink } from "react-router-hash-link";
 import FreebiesMascot from "../freebies-modal/freebies-mascot";
 
 const Footer = () => {
+  const phones = useSelector((store) => store.appSlice.phone_numbers);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -50,12 +52,11 @@ const Footer = () => {
           textAlign={"center"}
         >
           <Typography className="heading">Contact Us</Typography>
-          <a href="tel:+917879333731">
-            <Typography>+91 787-9333-731</Typography>
-          </a>
-          <a href="tel:+919425850422">
-            <Typography>+91 942-5850-422</Typography>
-          </a>
+          {phones?.map((phone) => (
+            <a href={`tel:${phone.number.split(/[ -]/).join("")}`}>
+              <Typography>{phone.number}</Typography>
+            </a>
+          ))}
           <Typography>Funingo Adventure Park, 83/2/2,</Typography>
           <Typography>Manegaon, Nagpur Road, Jabalpur</Typography>
         </Grid>
